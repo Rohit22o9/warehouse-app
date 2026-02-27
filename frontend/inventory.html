@@ -425,6 +425,9 @@
 </head>
 
 <body>
+    <button class="mobile-menu-btn" onclick="document.querySelector('.sidebar').classList.toggle('active')">
+        <i class="fas fa-bars"></i>
+    </button>
     <div class="blob"></div>
     <div class="blob-2"></div>
 
@@ -519,7 +522,8 @@
 
         <!-- Feature B: Filters & Search -->
         <div class="glass-panel" style="padding: 20px; margin-bottom: 30px;">
-            <div style="display: grid; grid-template-columns: 2fr 1fr 1fr 1fr 1.5fr; gap: 15px; align-items: end;">
+            <div class="inventory-filter-grid"
+                style="display: grid; grid-template-columns: 2fr 1fr 1fr 1fr 1.5fr; gap: 15px; align-items: end;">
                 <div>
                     <label
                         style="display:block; font-size:0.7rem; font-weight:800; color:var(--text-secondary); margin-bottom:8px; text-transform:uppercase;">Search
@@ -917,7 +921,7 @@
             input.value = '';
 
             try {
-                const response = await fetch('http://localhost:5000/api/chat', {
+                const response = await fetch('/api/chat', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ message: text })

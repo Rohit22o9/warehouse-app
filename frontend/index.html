@@ -214,11 +214,16 @@
                 <i class="fas fa-leaf"></i>
             </div>
             <h2 style="font-weight: 800; font-size: 1.5rem; color: var(--primary); letter-spacing: -0.03em;">AgriFresh
-                <span style="font-weight: 300; color: var(--text-muted); font-size: 0.95rem; margin-left: 8px;">Business
+                <span class="desktop-only"
+                    style="font-weight: 300; color: var(--text-muted); font-size: 0.95rem; margin-left: 8px;">Business
                     Portal</span>
             </h2>
         </div>
-        <nav style="display: flex; gap: 35px; align-items: center;">
+        <button class="mobile-menu-btn" style="position: static; margin-left: auto;"
+            onclick="document.getElementById('mobile-nav').classList.toggle('active')">
+            <i class="fas fa-bars"></i>
+        </button>
+        <nav class="desktop-nav" style="display: flex; gap: 35px; align-items: center;">
             <a href="#features"
                 style="text-decoration: none; color: var(--text-primary); font-weight: 600; font-size: 0.95rem;">Profit
                 Roadmap</a>
@@ -233,6 +238,50 @@
                 Login</a>
         </nav>
     </header>
+
+    <!-- Mobile Navigation Overlay -->
+    <div id="mobile-nav"
+        style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: white; z-index: 1001; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 30px; transform: translateY(-100%); transition: transform 0.3s ease;">
+        <button onclick="document.getElementById('mobile-nav').classList.remove('active')"
+            style="position: absolute; top: 30px; right: 30px; background: none; border: none; font-size: 2rem; color: var(--primary);"><i
+                class="fas fa-times"></i></button>
+        <a href="#features" onclick="document.getElementById('mobile-nav').classList.remove('active')"
+            style="text-decoration: none; color: var(--text-primary); font-weight: 700; font-size: 1.5rem;">Profit
+            Roadmap</a>
+        <a href="#" onclick="document.getElementById('mobile-nav').classList.remove('active')"
+            style="text-decoration: none; color: var(--text-primary); font-weight: 700; font-size: 1.5rem;">For
+            Participants</a>
+        <a href="#" onclick="document.getElementById('mobile-nav').classList.remove('active')"
+            style="text-decoration: none; color: var(--text-primary); font-weight: 700; font-size: 1.5rem;">Yield
+            Simulator</a>
+        <a href="login.html" class="cta-button" style="padding: 15px 40px;">Partner Login</a>
+    </div>
+
+    <style>
+        #mobile-nav.active {
+            transform: translateY(0);
+        }
+
+        @media (min-width: 769px) {
+            .mobile-menu-btn {
+                display: none !important;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .desktop-nav {
+                display: none !important;
+            }
+
+            .desktop-only {
+                display: none !important;
+            }
+
+            header {
+                padding: 15px 20px !important;
+            }
+        }
+    </style>
 
 
     <section class="hero-section" style="position: relative; overflow: hidden; background: white;">
@@ -719,7 +768,7 @@
             input.value = '';
 
             try {
-                const response = await fetch('http://localhost:5000/api/chat', {
+                const response = await fetch('/api/chat', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ message: text })
