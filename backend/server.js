@@ -1,6 +1,12 @@
 const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
+const mongoose = require('mongoose');
+
+// Models
+const SensorLog = require('./models/SensorLog');
+const Inventory = require('./models/Inventory');
+// Add other models as needed
 
 dotenv.config();
 
@@ -10,47 +16,47 @@ const PORT = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 
-// Mock database for demo (until PostgreSQL is connected)
-const sensorLogs = [];
-const alerts = [];
+// MongoDB Connection
+mongoose.connect(process.env.MONGODB_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+}).then(() => {
+    console.log("Connected to MongoDB");
+}).catch(err => {
+    console.error("MongoDB connection error:", err);
+});
 
 // IoT Ingestion Endpoint
-app.post('/api/sensor-data', (req, res) => {
+app.post('/api/sensor-data', async (req, res) => {
     const { warehouse_id, zone_id, temperature, humidity, timestamp } = req.body;
 
-    if (!warehouse_id || !zone_id || temperature === undefined) {
+    if (!warehouse_id || temperature === undefined) {
         return res.status(400).json({ error: "Missing required fields" });
     }
 
-    const newData = {
-        warehouse_id,
-        zone_id,
-        temperature,
-        humidity,
-        timestamp: timestamp || new Date().toISOString()
-    };
-
-    sensorLogs.push(newData);
-
-    // Check for breaches
-    if (temperature > 18) {
-        alerts.push({
-            type: 'CRITICAL',
-            message: `Temperature spike in Zone ${zone_id}: ${temperature}°C`,
-            timestamp: new Date().toISOString()
+    try {
+        const newData = new SensorLog({
+            warehouse_id,
+            zone_name: zone_id, // Map zone_id to zone_name for now
+            temperature,
+            humidity,
+            timestamp: timestamp || new Date()
         });
-    }
 
-    res.status(201).json({
-        message: "Data logged successfully",
-        alert_triggered: temperature > 18
-    });
+        await newData.save();
+
+        res.status(201).json({
+            message: "Data logged successfully to MongoDB",
+            alert_triggered: temperature > 18
+        });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
 });
 
-// AI Insights Proxy (would connect to FastAPI)
+// AI Insights Proxy
 app.get('/api/ai/spoilage-risk/:batchId', async (req, res) => {
-    // In real app: fetch from FastAPI
-    // For now: Mocked response
+    // Mocked AI response
     const risk = Math.random() > 0.8 ? "High" : "Low";
     res.json({
         batchId: req.params.batchId,
@@ -60,8 +66,18 @@ app.get('/api/ai/spoilage-risk/:batchId', async (req, res) => {
     });
 });
 
-app.get('/api/alerts', (req, res) => {
-    res.json(alerts);
+app.get('/api/alerts', async (req, res) => {
+    try {
+        const highTempLogs = await SensorLog.find({ temperature: { $gt: 18 } }).sort({ timestamp: -1 }).limit(10);
+        const alerts = highTempLogs.map(log => ({
+            type: 'CRITICAL',
+            message: `Temperature spike in Zone ${log.zone_name}: ${log.temperature}°C`,
+            timestamp: log.timestamp
+        }));
+        res.json(alerts);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
 });
 
 // --- Analytics Endpoints ---
@@ -80,22 +96,28 @@ app.get('/api/analytics/demand-supply', (req, res) => {
 });
 
 // Section B: Stock Utilization
-app.get('/api/analytics/utilization', (req, res) => {
-    const baseUsed = 4200;
-    const currentUsed = baseUsed + (Math.floor(Math.random() * 100) - 50);
-    res.json({
-        total_capacity: 5000,
-        used_capacity: currentUsed,
-        remaining_capacity: 5000 - currentUsed,
-        produce: [
-            { name: 'Tomato', percentage: 38, value: Math.floor(currentUsed * 0.38) },
-            { name: 'Onion', percentage: 22, value: Math.floor(currentUsed * 0.22) },
-            { name: 'Potato', percentage: 15, value: Math.floor(currentUsed * 0.15) },
-            { name: 'Grapes', percentage: 10, value: Math.floor(currentUsed * 0.10) },
-            { name: 'Empty Space', percentage: 15, value: 5000 - currentUsed }
-        ],
-        smart_insight: "Storage optimization active. Current utilization: " + ((currentUsed / 5000) * 100).toFixed(1) + "%"
-    });
+app.get('/api/analytics/utilization', async (req, res) => {
+    try {
+        const total_capacity = 5000;
+        // In real app: fetch sum from Inventory
+        const baseUsed = 4200;
+        const currentUsed = baseUsed + (Math.floor(Math.random() * 100) - 50);
+        res.json({
+            total_capacity,
+            used_capacity: currentUsed,
+            remaining_capacity: total_capacity - currentUsed,
+            produce: [
+                { name: 'Tomato', percentage: 38, value: Math.floor(currentUsed * 0.38) },
+                { name: 'Onion', percentage: 22, value: Math.floor(currentUsed * 0.22) },
+                { name: 'Potato', percentage: 15, value: Math.floor(currentUsed * 0.15) },
+                { name: 'Grapes', percentage: 10, value: Math.floor(currentUsed * 0.10) },
+                { name: 'Empty Space', percentage: 15, value: total_capacity - currentUsed }
+            ],
+            smart_insight: "Storage optimization active. Current utilization: " + ((currentUsed / total_capacity) * 100).toFixed(1) + "%"
+        });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
 });
 
 // Section C: Spoilage Risk Distribution
@@ -115,7 +137,6 @@ app.get('/api/analytics/risk-distribution', (req, res) => {
 
 // Section E: Loss Reduction Over Time
 app.get('/api/analytics/loss-reduction', (req, res) => {
-    // Simulate progressing savings
     const baseSavings = 298000;
     const dynamicSavings = baseSavings + (Math.floor(Date.now() / 1000) % 10000);
     res.json({
@@ -133,9 +154,10 @@ app.get('/api/analytics/loss-reduction', (req, res) => {
 });
 
 app.get('/', (req, res) => {
-    res.send('AgriFresh API is running...');
+    res.send('AgriFresh MongoDB API is running...');
 });
 
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });
+
