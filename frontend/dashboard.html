@@ -193,7 +193,8 @@
                 <span style="font-weight: 700; color: var(--danger);">02</span>
             </div>
             <div style="margin-top: 15px;">
-                <button class="btn-premium" style="width: 100%; padding: 10px; font-size: 0.75rem;">Get Help</button>
+                <button id="getHelpBtn" class="btn-premium" style="width: 100%; padding: 10px; font-size: 0.75rem;">Get
+                    Help</button>
             </div>
         </div>
     </aside>
@@ -425,6 +426,27 @@
                 addMessage("I'm offline right now. Make sure the backend server is running!");
             }
         };
+
+        const getHelpBtn = document.getElementById('getHelpBtn');
+        const chatbotContainer = document.getElementById('chatbot-container');
+        if (getHelpBtn) {
+            getHelpBtn.addEventListener('click', () => {
+                windowChat.style.display = 'flex';
+                // Focus on input
+                if (input) input.focus();
+
+                // Ensure it's in view (redundant for fixed, but following hint)
+                if (chatbotContainer) chatbotContainer.scrollIntoView({ behavior: 'smooth' });
+
+                // Highlight border briefly
+                windowChat.style.borderColor = 'var(--primary)';
+                windowChat.style.boxShadow = '0 0 20px rgba(46, 125, 50, 0.3)';
+                setTimeout(() => {
+                    windowChat.style.borderColor = '';
+                    windowChat.style.boxShadow = '';
+                }, 1000);
+            });
+        }
 
         if (sendBtn) sendBtn.addEventListener('click', handleChat);
         if (input) input.addEventListener('keypress', (e) => {
