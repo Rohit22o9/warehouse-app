@@ -77,47 +77,62 @@
                 style="width: 60px; height: 60px; background: var(--primary); border-radius: 15px; display: inline-flex; align-items: center; justify-content: center; color: white; margin-bottom: 20px; font-size: 2rem;">
                 <i class="fas fa-leaf"></i>
             </div>
-            <h1 style="font-weight: 800; color: var(--text-primary); margin-bottom: 8px;">Welcome Back</h1>
-            <p style="color: var(--text-secondary); font-size: 0.9rem;">Access your Smart Warehouse Control Center</p>
+            <h1 style="font-weight: 800; color: var(--text-primary); margin-bottom: 8px;" data-i18n="login-welcome">
+                Welcome Back</h1>
+            <p style="color: var(--text-secondary); font-size: 0.9rem;" data-i18n="login-subtitle">Access your Smart
+                Warehouse Control Center</p>
         </div>
 
         <form onsubmit="event.preventDefault(); window.location.href='dashboard.html'">
 
             <!-- Demo Credentials Display -->
             <div class="demo-box">
-                <strong>Demo Login Credentials</strong><br>
+                <strong data-i18n="login-demo-title">Demo Login Credentials</strong><br>
                 Email: <b>manager@gmail.com</b><br>
                 Password: <b>manager123</b>
-                <small>(Any credentials will work in demo mode)</small>
+                <small data-i18n="login-demo-small">(Any credentials will work in demo mode)</small>
             </div>
 
             <div class="input-group">
-                <label>Registered Email</label>
+                <label data-i18n="login-email-label">Registered Email</label>
                 <input type="email" placeholder="farmer@agrifresh.in" required>
             </div>
             <div class="input-group">
-                <label>Password</label>
+                <label data-i18n="login-password-label">Password</label>
                 <input type="password" placeholder="••••••••" required>
             </div>
 
             <div style="display: flex; justify-content: space-between; margin-bottom: 30px; font-size: 0.85rem;">
                 <label
-                    style="display: flex; align-items: center; gap: 8px; cursor: pointer; color: var(--text-secondary);">
+                    style="display: flex; align-items: center; gap: 8px; cursor: pointer; color: var(--text-secondary);"
+                    data-i18n="login-remember">
                     <input type="checkbox"> Remember me
                 </label>
-                <a href="#" style="color: var(--primary); font-weight: 700; text-decoration: none;">Forgot Password?</a>
+                <a href="#" style="color: var(--primary); font-weight: 700; text-decoration: none;"
+                    data-i18n="login-forgot">Forgot Password?</a>
             </div>
 
-            <button type="submit" class="btn-premium" style="width: 100%; justify-content: center; padding: 16px;">
+            <button type="submit" class="btn-premium" style="width: 100%; justify-content: center; padding: 16px;"
+                data-i18n="login-signin">
                 Secure Sign In <i class="fas fa-sign-in-alt"></i>
             </button>
         </form>
 
         <div style="margin-top: 40px; text-align: center; font-size: 0.9rem; color: var(--text-secondary);">
-            New Hub Manager? <a href="#"
-                style="color: var(--primary); font-weight: 700; text-decoration: none;">Register Warehouse</a>
+            <span data-i18n="login-new-manager">New Hub Manager?</span> <a href="#"
+                style="color: var(--primary); font-weight: 700; text-decoration: none;"
+                data-i18n="login-register">Register Warehouse</a>
         </div>
     </div>
+    <div style="position: fixed; top: 20px; right: 20px; z-index: 1000;">
+        <select id="lang-select"
+            style="padding: 10px 15px; border-radius: 12px; border: 1px solid var(--card-border); background: white; color: var(--text-primary); font-weight: 600; cursor: pointer; outline: none;">
+            <option value="en">English</option>
+            <option value="hi">हिंदी (Hindi)</option>
+            <option value="mr">मराठी (Marathi)</option>
+        </select>
+    </div>
+    <script src="js/i18n.js"></script>
 </body>
 
 </html>

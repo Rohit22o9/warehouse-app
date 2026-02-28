@@ -351,23 +351,38 @@
         </div>
 
         <nav>
-            <a href="dashboard.html" class="nav-item"><i class="fas fa-table-cells-large"></i> Dashboard</a>
-            <a href="inventory.html" class="nav-item"><i class="fas fa-boxes-stacked"></i> Inventory</a>
-            <a href="analytics.html" class="nav-item"><i class="fas fa-chart-pie"></i> Analytics</a>
-            <a href="trace.html" class="nav-item active"><i class="fas fa-route"></i> Traceability</a>
+            <a href="dashboard.html" class="nav-item"><i class="fas fa-table-cells-large"></i> <span
+                    data-i18n="nav-dashboard">Dashboard</span></a>
+            <a href="inventory.html" class="nav-item"><i class="fas fa-boxes-stacked"></i> <span
+                    data-i18n="nav-inventory">Inventory</span></a>
+            <a href="analytics.html" class="nav-item"><i class="fas fa-chart-pie"></i> <span
+                    data-i18n="nav-analytics">Analytics</span></a>
+            <a href="trace.html" class="nav-item active"><i class="fas fa-route"></i> <span
+                    data-i18n="nav-traceability">Traceability</span></a>
         </nav>
+
+        <div style="margin: 20px 0; padding: 0 10px;">
+            <select id="lang-select"
+                style="width: 100%; padding: 10px 15px; border-radius: 12px; border: 1px solid var(--card-border); background: white; color: var(--text-primary); font-weight: 600; cursor: pointer; outline: none;">
+                <option value="en">English</option>
+                <option value="hi">हिंदी (Hindi)</option>
+                <option value="mr">मराठी (Marathi)</option>
+            </select>
+        </div>
     </aside>
 
     <main class="main-wrapper">
         <header style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px;">
             <div>
-                <h1 style="font-size: 2.4rem; font-weight: 800; color: var(--text-primary); letter-spacing: -1px;">
+                <h1 style="font-size: 2.4rem; font-weight: 800; color: var(--text-primary); letter-spacing: -1px;"
+                    data-i18n="trace-title">
                     Provenance Explorer</h1>
-                <p style="color: var(--text-secondary); font-weight: 500;">End-to-end supply chain transparency verified
+                <p style="color: var(--text-secondary); font-weight: 500;" data-i18n="trace-subtitle">End-to-end supply
+                    chain transparency verified
                     by Blockchain</p>
             </div>
             <button id="auditReportBtn" onclick="generateAuditReport()" class="btn-premium"
-                style="padding: 14px 28px; box-shadow: 0 4px 15px rgba(46, 125, 50, 0.2);">
+                style="padding: 14px 28px; box-shadow: 0 4px 15px rgba(46, 125, 50, 0.2);" data-i18n="generate-audit">
                 <i class="fas fa-file-shield"></i> Generate Audit Report
             </button>
         </header>
@@ -381,15 +396,17 @@
                     <!-- Options injected by JS -->
                 </select>
                 <button id="traceBtn" class="btn-premium"
-                    style="position: absolute; right: 8px; padding: 12px 28px; border-radius: 12px;">Trace
+                    style="position: absolute; right: 8px; padding: 12px 28px; border-radius: 12px;"
+                    data-i18n="trace-origin-btn">Trace
                     Origin</button>
             </div>
             <div class="glass-panel scanner-trigger" onclick="simulateScan()"
                 style="display: flex; align-items: center; justify-content: center; gap: 12px; cursor: pointer; border-radius: 16px; font-weight: 700;">
                 <i class="fas fa-qrcode fa-xl"></i>
                 <div>
-                    <div style="font-size: 0.95rem;">Scan QR Code</div>
-                    <div style="font-size: 0.65rem; font-weight: 500; opacity: 0.7;">Upload image or live scan</div>
+                    <div style="font-size: 0.95rem;" data-i18n="scan-qr">Scan QR Code</div>
+                    <div style="font-size: 0.65rem; font-weight: 500; opacity: 0.7;" data-i18n="scan-qr-desc">Upload
+                        image or live scan</div>
                 </div>
             </div>
         </div>
@@ -417,11 +434,13 @@
                         style="margin-top: 30px; text-align: left; background: var(--bg-light); padding: 20px; border-radius: 16px; border: 1px solid var(--card-border);">
                         <div
                             style="display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 0.9rem;">
-                            <span style="color: var(--text-secondary); font-weight: 600;">Status</span>
+                            <span style="color: var(--text-secondary); font-weight: 600;"
+                                data-i18n="batch-status-label">Status</span>
                             <span id="displayStatus" style="color: var(--active); font-weight: 800;">● In Storage</span>
                         </div>
                         <div style="display: flex; justify-content: space-between; font-size: 0.9rem;">
-                            <span style="color: var(--text-secondary); font-weight: 600;">Current Hub</span>
+                            <span style="color: var(--text-secondary); font-weight: 600;"
+                                data-i18n="current-hub-label">Current Hub</span>
                             <span id="displayHub" style="font-weight: 750; color: var(--text-primary);">Nashik
                                 Central</span>
                         </div>
@@ -432,7 +451,8 @@
                 <div class="glass-panel" style="padding: 24px;">
                     <h3
                         style="margin-bottom: 20px; font-size: 1.1rem; font-weight: 800; color: var(--primary); display: flex; align-items: center; gap: 10px;">
-                        <i class="fas fa-id-card-clip"></i> Farmer Professional Profile
+                        <i class="fas fa-id-card-clip"></i> <span data-i18n="farmer-profile-title">Farmer Professional
+                            Profile</span>
                     </h3>
                     <div id="farmerInfo">
                         <!-- Injected by JS -->
@@ -443,7 +463,8 @@
                 <div class="glass-panel" style="padding: 24px;">
                     <h3
                         style="margin-bottom: 20px; font-size: 1.1rem; font-weight: 800; color: var(--primary); display: flex; align-items: center; gap: 10px;">
-                        <i class="fas fa-clock-rotate-left"></i> Storage Asset History
+                        <i class="fas fa-clock-rotate-left"></i> <span data-i18n="storage-asset-history">Storage Asset
+                            History</span>
                     </h3>
 
                     <div id="historyPath" class="history-path">
@@ -469,8 +490,8 @@
                         <div style="flex:1; height: 85%; background: var(--primary); border-radius: 4px; opacity: 0.9;">
                         </div>
                     </div>
-                    <p
-                        style="font-size: 0.6rem; color: var(--text-secondary); text-align: center; margin-top: 8px; font-weight: 700;">
+                    <p style="font-size: 0.6rem; color: var(--text-secondary); text-align: center; margin-top: 8px; font-weight: 700;"
+                        data-i18n="telemetry-label">
                         LIVE ENVIRONMENTAL STABILITY TELEMETRY</p>
                 </div>
             </div>
@@ -478,9 +499,11 @@
             <!-- Feature 2: VERTICAL LIFECYCLE TIMELINE -->
             <div class="glass-panel" style="padding: 40px; border-radius: 24px;">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                    <h3 style="font-weight: 900; font-size: 1.5rem; color: var(--primary);">Lifecycle Provenance</h3>
+                    <h3 style="font-weight: 900; font-size: 1.5rem; color: var(--primary);"
+                        data-i18n="lifecycle-provenance">Lifecycle Provenance</h3>
                     <div style="display: flex; gap: 10px; align-items: center;">
-                        <span style="font-size: 0.75rem; font-weight: 700; color: var(--text-secondary);">Tracking ID:
+                        <span style="font-size: 0.75rem; font-weight: 700; color: var(--text-secondary);"><span
+                                data-i18n="tracking-id-label">Tracking ID:</span>
                             <span id="trackingId" style="color: var(--text-primary);">BT-NSK-4922110</span></span>
                     </div>
                 </div>
@@ -726,7 +749,7 @@
                 <div class="info-row">
                     <div class="info-icon"><i class="fas fa-user-circle"></i></div>
                     <div class="info-content">
-                        <div class="label">Primary Farmer</div>
+                        <div class="label" data-i18n="primary-farmer-label">Primary Farmer</div>
                         <div class="value">${data.farmer.name}</div>
                     </div>
                 </div>
@@ -740,19 +763,20 @@
                 <div class="info-row">
                     <div class="info-icon"><i class="fas fa-map-location-dot"></i></div>
                     <div class="info-content">
-                        <div class="label">Farm Location</div>
+                        <div class="label" data-i18n="farm-location-label">Farm Location</div>
                         <div class="value">${data.farmer.location}</div>
                     </div>
                 </div>
                 <div class="info-row">
                     <div class="info-icon"><i class="fas fa-phone-volume"></i></div>
                     <div class="info-content">
-                        <div class="label">Contact Endpoint</div>
+                        <div class="label" data-i18n="contact-endpoint-label">Contact Endpoint</div>
                         <div class="value">${data.farmer.contact}</div>
                     </div>
                 </div>
             `;
             document.getElementById('farmerInfo').innerHTML = farmerHtml;
+            if (window.i18n) window.i18n.updatePage();
 
             // Update Storage History
             let pathHtml = '';
@@ -772,11 +796,12 @@
                             <div style="font-weight: 800; font-size: 0.9rem; color: var(--text-primary);">${log.title}</div>
                             <div style="font-size: 0.75rem; color: var(--text-secondary); font-weight: 600;">${log.desc}</div>
                         </div>
-                        ${log.risk ? `<span class="risk-badge risk-${log.risk.toLowerCase()}">${log.risk} Risk</span>` : `<i class="fas ${log.icon}" style="color: ${log.color};"></i>`}
+                        ${log.risk ? `<span class="risk-badge risk-${log.risk.toLowerCase()}" data-i18n="risk-level-label">${log.risk} Risk</span>` : `<i class="fas ${log.icon}" style="color: ${log.color};"></i>`}
                     </div>
                 `;
             });
             document.getElementById('historyList').innerHTML = logHtml;
+            if (window.i18n) window.i18n.updatePage();
 
             /**
              * FEATURE 4: DYNAMIC TIMELINE GENERATION
@@ -794,6 +819,7 @@
                     metaHtml += `<div class="meta-item"><i class="fas ${m[0]}"></i> ${m[1]}</div>`;
                 });
 
+                const statusLabelKey = item.status === 'completed' ? 'verified-label' : (item.status === 'active' ? 'active-label' : 'queued-label');
                 const statusLabel = item.status === 'completed' ? 'Verified' : (item.status === 'active' ? 'Active' : 'Queued');
                 const cardStyle = item.status === 'active' ? 'style="border-left: 5px solid var(--active); background: #FFFBEE;"' : '';
                 const aiClass = item.isAi ? 'ai-highlight' : '';
@@ -803,10 +829,10 @@
                     <div class="stage-card ${aiClass}" ${cardStyle}>
                         <div class="stage-header">
                             <div>
-                                <h4 class="stage-title">${index + 1}. ${item.stage}</h4>
-                                <span class="stage-time">${item.time}</span>
+                                <div class="stage-time">${item.time}</div>
+                                <div class="stage-title">${item.stage}</div>
                             </div>
-                            <span class="badge-status status-${item.status}">${statusLabel}</span>
+                            <span class="badge-status status-${item.status}" data-i18n="${statusLabelKey}">${statusLabel}</span>
                         </div>
                         <div class="stage-meta">
                             ${metaHtml}
@@ -815,7 +841,7 @@
                 `;
                 timelineContainer.appendChild(stageEl);
             });
-
+            if (window.i18n) window.i18n.updatePage();
             // Re-apply hover listeners to new elements
             attachHoverListeners();
         }
@@ -932,6 +958,7 @@
         // Start
         window.onload = initBatchSelector;
     </script>
+    <script src="js/i18n.js"></script>
 </body>
 
 </html>

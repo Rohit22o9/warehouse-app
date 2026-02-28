@@ -167,33 +167,49 @@
                 <h2 style="font-weight: 800; font-size: 1.4rem; color: var(--primary); letter-spacing: -0.5px;">
                     AgriFresh
                 </h2>
-                <p
-                    style="font-size: 0.65rem; text-transform: uppercase; letter-spacing: 2px; color: var(--text-secondary); font-weight: 700;">
+                <p style="font-size: 0.65rem; text-transform: uppercase; letter-spacing: 2px; color: var(--text-secondary); font-weight: 700;"
+                    data-i18n="sidebar-ai-text">
                     AI Intelligence</p>
             </div>
         </div>
 
         <nav>
-            <a href="dashboard.html" class="nav-item active"><i class="fas fa-table-cells-large"></i> Dashboard</a>
-            <a href="inventory.html" class="nav-item"><i class="fas fa-boxes-stacked"></i> Inventory</a>
-            <a href="analytics.html" class="nav-item"><i class="fas fa-chart-pie"></i> Analytics</a>
-            <a href="trace.html" class="nav-item"><i class="fas fa-route"></i> Traceability</a>
+            <a href="dashboard.html" class="nav-item active"><i class="fas fa-table-cells-large"></i> <span
+                    data-i18n="nav-dashboard">Dashboard</span></a>
+            <a href="inventory.html" class="nav-item"><i class="fas fa-boxes-stacked"></i> <span
+                    data-i18n="nav-inventory">Inventory</span></a>
+            <a href="analytics.html" class="nav-item"><i class="fas fa-chart-pie"></i> <span
+                    data-i18n="nav-analytics">Analytics</span></a>
+            <a href="trace.html" class="nav-item"><i class="fas fa-route"></i> <span
+                    data-i18n="nav-traceability">Traceability</span></a>
         </nav>
+
+        <div style="margin: 20px 0; padding: 0 10px;">
+            <select id="lang-select"
+                style="width: 100%; padding: 10px 15px; border-radius: 12px; border: 1px solid var(--card-border); background: white; color: var(--text-primary); font-weight: 600; cursor: pointer; outline: none;">
+                <option value="en">English</option>
+                <option value="hi">हिंदी (Hindi)</option>
+                <option value="mr">मराठी (Marathi)</option>
+            </select>
+        </div>
 
         <!-- Farmer Side Panel -->
         <div class="farmer-panel">
-            <h4 style="margin-bottom: 15px; font-size: 0.85rem; color: var(--primary); font-weight: 800;"><i
-                    class="fas fa-user-tractor"></i> MY PRODUCE</h4>
+            <h4 style="margin-bottom: 15px; font-size: 0.85rem; color: var(--primary); font-weight: 800;"
+                data-i18n="farmer-panel-title"><i class="fas fa-user-tractor"></i> MY PRODUCE</h4>
             <div class="farmer-stat">
-                <span style="font-size: 0.8rem; color: var(--text-secondary);">Stored Batches</span>
+                <span style="font-size: 0.8rem; color: var(--text-secondary);" data-i18n="farmer-stat-batches">Stored
+                    Batches</span>
                 <span style="font-weight: 700;">12</span>
             </div>
             <div class="farmer-stat">
-                <span style="font-size: 0.8rem; color: var(--text-secondary);">Needs Attention</span>
+                <span style="font-size: 0.8rem; color: var(--text-secondary);" data-i18n="farmer-stat-attention">Needs
+                    Attention</span>
                 <span style="font-weight: 700; color: var(--danger);">02</span>
             </div>
             <div style="margin-top: 15px;">
-                <button id="getHelpBtn" class="btn-premium" style="width: 100%; padding: 10px; font-size: 0.75rem;">Get
+                <button id="getHelpBtn" class="btn-premium" style="width: 100%; padding: 10px; font-size: 0.75rem;"
+                    data-i18n="farmer-btn-help">Get
                     Help</button>
             </div>
         </div>
@@ -204,20 +220,23 @@
         <div class="ai-insight-bar" id="aiInsightBar">
             <div style="display: flex; align-items: center; gap: 10px; font-weight: 700;">
                 <i class="fas fa-robot"></i>
-                <span id="aiInsightText">Monitoring warehouse environment... Conditions are stable.</span>
+                <span id="aiInsightText" data-i18n="ai-insight-stable">Monitoring warehouse environment... Conditions
+                    are stable.</span>
             </div>
         </div>
 
         <section style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
             <div style="display: flex; align-items: center; gap: 20px;">
                 <div>
-                    <h1 style="font-size: 2.4rem; font-weight: 800; color: var(--text-primary); letter-spacing: -1px;">
+                    <h1 style="font-size: 2.4rem; font-weight: 800; color: var(--text-primary); letter-spacing: -1px;"
+                        data-i18n="dashboard-title">
                         Command Center</h1>
                     <p
                         style="color: var(--text-secondary); font-weight: 500; display: flex; align-items: center; gap: 10px;">
-                        Connected to <span id="currentHubText" style="color: var(--primary); font-weight: 700;">Nashik
+                        <span data-i18n="dashboard-connected">Connected to</span> <span id="currentHubText"
+                            style="color: var(--primary); font-weight: 700;" data-i18n="dashboard-hub">Nashik
                             Central Hub</span> •
-                        Live Intelligence •
+                        <span data-i18n="dashboard-live">Live Intelligence</span> •
                         <span id="liveClock"
                             style="font-family: 'Courier New', Courier, monospace; font-weight: 900; color: var(--primary);">00:00:00</span>
                     </p>
@@ -230,7 +249,7 @@
                 </select>
             </div>
             <div style="display: flex; gap: 16px;">
-                <button class="btn-premium" id="demoModeBtn">
+                <button class="btn-premium" id="demoModeBtn" data-i18n="dashboard-btn-simulation">
                     <i class="fas fa-bolt"></i> Run Simulation
                 </button>
                 <div class="glass-panel"
@@ -244,20 +263,25 @@
         <!-- 1. Smart Summary -->
         <div class="metrics-grid">
             <div class="glass-panel metric-card">
-                <p class="metric-label">Loss Prevented <i class="fas fa-info-circle"
+                <p class="metric-label"><span data-i18n="metric-loss-prevented">Loss Prevented</span> <i
+                        class="fas fa-info-circle" data-i18n-title="metric-loss-prevented-inf"
                         title="Revenue saved by AI-driven dispatches"></i></p>
                 <div class="metric-value" id="lossPrevented">₹0</div>
-                <div style="font-size:0.75rem; color:var(--primary); font-weight:700;"><i class="fas fa-chart-line"></i>
+                <div style="font-size:0.75rem; color:var(--primary); font-weight:700;" data-i18n="metric-ai-savings"><i
+                        class="fas fa-chart-line"></i>
                     Total AI Savings</div>
             </div>
             <div class="glass-panel metric-card" style="border-left-color: var(--danger);">
-                <p class="metric-label">Batches at Risk <i class="fas fa-info-circle"
+                <p class="metric-label"><span data-i18n="metric-batches-risk">Batches at Risk</span> <i
+                        class="fas fa-info-circle" data-i18n-title="metric-batches-risk-inf"
                         title="Number of batches needing attention"></i></p>
                 <div class="metric-value" id="atRiskCount" style="color:var(--danger);">0</div>
-                <div style="font-size:0.75rem; color:var(--text-secondary);">Needs urgent review</div>
+                <div style="font-size:0.75rem; color:var(--text-secondary);" data-i18n="metric-urgent-review">Needs
+                    urgent review</div>
             </div>
             <div class="glass-panel metric-card" style="border-left-color: var(--warning);">
-                <p class="metric-label">Utilization <i class="fas fa-info-circle"
+                <p class="metric-label"><span data-i18n="metric-utilization">Utilization</span> <i
+                        class="fas fa-info-circle" data-i18n-title="metric-utilization-inf"
                         title="Percentage of warehouse space used"></i></p>
                 <div class="metric-value" id="utilizationVal">0%</div>
                 <div
@@ -268,10 +292,12 @@
                 </div>
             </div>
             <div class="glass-panel metric-card" style="border-left-color: var(--info);">
-                <p class="metric-label">Env status <i class="fas fa-info-circle"
+                <p class="metric-label"><span data-i18n="metric-env-status">Env status</span> <i
+                        class="fas fa-info-circle" data-i18n-title="metric-env-status-inf"
                         title="Overall warehouse health status"></i></p>
                 <div class="metric-value" id="healthStatus" style="font-size:1.8rem; margin:15px 0;">--</div>
-                <div style="font-size:0.75rem; color:var(--text-secondary);">96% Accurate Monitoring</div>
+                <div style="font-size:0.75rem; color:var(--text-secondary);" data-i18n="metric-accurate-mon">96%
+                    Accurate Monitoring</div>
             </div>
         </div>
 
@@ -279,21 +305,26 @@
         <div class="glass-panel" style="padding: 35px; margin-bottom: 40px;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
                 <div>
-                    <h3 style="font-weight: 800; font-size: 1.5rem; color: var(--text-primary);">Warehouse Floor
+                    <h3 style="font-weight: 800; font-size: 1.5rem; color: var(--text-primary);"
+                        data-i18n="heatmap-title">Warehouse Floor
                         Intelligence</h3>
-                    <p style="color: var(--text-secondary); font-size: 0.9rem;">Interactive zone map with real-time
+                    <p style="color: var(--text-secondary); font-size: 0.9rem;" data-i18n="heatmap-desc">Interactive
+                        zone map with real-time
                         sensor feedback</p>
                 </div>
                 <div style="display: flex; gap: 15px; align-items: center;">
                     <div style="display:flex; align-items:center; gap:8px; font-size:0.75rem;"><span
                             style="width:12px; height:12px; border-radius:3px; background:var(--success-bg); border:1px solid #C8E6C9;"></span>
-                        Safe</div>
+                        <span data-i18n="heatmap-legend-safe">Safe</span>
+                    </div>
                     <div style="display:flex; align-items:center; gap:8px; font-size:0.75rem;"><span
                             style="width:12px; height:12px; border-radius:3px; background:var(--warning-bg); border:1px solid #FFF9C4;"></span>
-                        Warning</div>
+                        <span data-i18n="heatmap-legend-warning">Warning</span>
+                    </div>
                     <div style="display:flex; align-items:center; gap:8px; font-size:0.75rem;"><span
                             style="width:12px; height:12px; border-radius:3px; background:var(--danger-bg); border:1px solid #FFCDD2;"></span>
-                        Critical</div>
+                        <span data-i18n="heatmap-legend-critical">Critical</span>
+                    </div>
                 </div>
             </div>
             <div class="heatmap-grid" id="heatmapGrid">
@@ -307,8 +338,10 @@
                 <div
                     style="display:flex; justify-content:space-between; align-items:center; margin-bottom:24px; padding-bottom:15px; border-bottom:1px solid var(--bg-light);">
                     <h3 style="font-weight: 800; color:var(--text-primary);"><i class="fas fa-brain"
-                            style="color:var(--primary);"></i> AI Decision Center</h3>
-                    <span class="badge" style="background:var(--bg-light); color:var(--primary);">Live Analysis</span>
+                            style="color:var(--primary);"></i> <span data-i18n="decision-title">AI Decision
+                            Center</span></h3>
+                    <span class="badge" style="background:var(--bg-light); color:var(--primary);"
+                        data-i18n="decision-live">Live Analysis</span>
                 </div>
                 <div id="aiDecisionCenter">
                     <!-- Cards via ai_engine.js -->
@@ -320,12 +353,15 @@
                 <div
                     style="display:flex; justify-content:space-between; align-items:center; margin-bottom:24px; padding-bottom:15px; border-bottom:1px solid var(--bg-light);">
                     <h3 style="font-weight: 800; color:var(--text-primary);"><i class="fas fa-chart-area"
-                            style="color:var(--primary);"></i> Environmental Trends</h3>
+                            style="color:var(--primary);"></i> <span data-i18n="trends-title">Environmental
+                            Trends</span></h3>
                     <div style="display:flex; gap:8px;">
-                        <button id="btn24h" class="filter-select" style="font-size: 0.7rem; padding: 5px 12px;">24
+                        <button id="btn24h" class="filter-select" style="font-size: 0.7rem; padding: 5px 12px;"
+                            data-i18n="trends-24h">24
                             Hours</button>
                         <button id="btn7d" class="filter-select"
-                            style="font-size: 0.7rem; padding: 5px 12px; background: transparent;">7 Days</button>
+                            style="font-size: 0.7rem; padding: 5px 12px; background: transparent;"
+                            data-i18n="trends-7d">7 Days</button>
                     </div>
                 </div>
                 <div style="height: 350px;">
@@ -353,13 +389,14 @@
                     <i class="fas fa-robot"></i>
                 </div>
                 <div>
-                    <div style="font-weight: 800; font-size: 1.1rem;">Nari Shakti AI</div>
-                    <div style="font-size: 0.75rem; opacity: 0.9;">Connected to Smart Warehouse</div>
+                    <div style="font-weight: 800; font-size: 1.1rem;" data-i18n="bot-name">Nari Shakti AI</div>
+                    <div style="font-size: 0.75rem; opacity: 0.9;" data-i18n="bot-status">Connected to Smart Warehouse
+                    </div>
                 </div>
                 <i class="fas fa-times" id="close-chat" style="margin-left: auto; cursor: pointer;"></i>
             </div>
             <div class="chat-messages" id="chat-messages">
-                <div class="message bot-message">
+                <div class="message bot-message" data-i18n="bot-welcome">
                     Namaste! 🙏 I am your Smart Warehouse Assistant. Ask me about temperature, stock levels, or spoilage
                     risks.
                 </div>
@@ -453,6 +490,7 @@
             if (e.key === 'Enter') handleChat();
         });
     </script>
+    <script src="js/i18n.js"></script>
 </body>
 
 </html>

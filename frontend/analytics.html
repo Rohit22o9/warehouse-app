@@ -393,34 +393,49 @@
         </div>
 
         <nav>
-            <a href="dashboard.html" class="nav-item"><i class="fas fa-table-cells-large"></i> Dashboard</a>
-            <a href="inventory.html" class="nav-item"><i class="fas fa-boxes-stacked"></i> Inventory</a>
-            <a href="analytics.html" class="nav-item active"><i class="fas fa-chart-pie"></i> Analytics</a>
-            <a href="trace.html" class="nav-item"><i class="fas fa-route"></i> Traceability</a>
+            <a href="dashboard.html" class="nav-item"><i class="fas fa-table-cells-large"></i> <span
+                    data-i18n="nav-dashboard">Dashboard</span></a>
+            <a href="inventory.html" class="nav-item"><i class="fas fa-boxes-stacked"></i> <span
+                    data-i18n="nav-inventory">Inventory</span></a>
+            <a href="analytics.html" class="nav-item active"><i class="fas fa-chart-pie"></i> <span
+                    data-i18n="nav-analytics">Analytics</span></a>
+            <a href="trace.html" class="nav-item"><i class="fas fa-route"></i> <span
+                    data-i18n="nav-traceability">Traceability</span></a>
         </nav>
+
+        <div style="margin: 20px 0; padding: 0 10px;">
+            <select id="lang-select"
+                style="width: 100%; padding: 10px 15px; border-radius: 12px; border: 1px solid var(--card-border); background: white; color: var(--text-primary); font-weight: 600; cursor: pointer; outline: none;">
+                <option value="en">English</option>
+                <option value="hi">हिंदी (Hindi)</option>
+                <option value="mr">मराठी (Marathi)</option>
+            </select>
+        </div>
     </aside>
 
     <main class="main-wrapper">
         <header style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px;">
             <div>
-                <h1 style="font-size: 2.4rem; font-weight: 900; color: var(--text-primary); letter-spacing: -1px;">
+                <h1 style="font-size: 2.4rem; font-weight: 900; color: var(--text-primary); letter-spacing: -1px;"
+                    data-i18n="analytics-title">
                     Intelligence Hub</h1>
-                <p style="color: var(--text-secondary); font-weight: 500;">AI-driven predictive analytics & optimization
+                <p style="color: var(--text-secondary); font-weight: 500;" data-i18n="analytics-subtitle">AI-driven
+                    predictive analytics & optimization
                     metrics</p>
             </div>
             <div class="control-bar">
                 <select id="timeRangeSelect" class="filter-select" style="min-width: 140px;">
-                    <option value="7">Last 7 Days</option>
-                    <option value="30" selected>Last 30 Days</option>
-                    <option value="365">Year to Date</option>
+                    <option value="7" data-i18n="time-range-7">Last 7 Days</option>
+                    <option value="30" selected data-i18n="time-range-30">Last 30 Days</option>
+                    <option value="365" data-i18n="time-range-365">Year to Date</option>
                 </select>
                 <select id="cropTypeSelect" class="filter-select">
-                    <option value="all">All Crops</option>
-                    <option value="Tomato">Tomatoes</option>
-                    <option value="Onion">Onions</option>
-                    <option value="Potato">Potatoes</option>
+                    <option value="all" data-i18n="crop-all">All Crops</option>
+                    <option value="Tomato" data-i18n="crop-tomato">Tomatoes</option>
+                    <option value="Onion" data-i18n="crop-onion">Onions</option>
+                    <option value="Potato" data-i18n="crop-potato">Potatoes</option>
                 </select>
-                <button id="exportBtn" class="btn-premium">
+                <button id="exportBtn" class="btn-premium" data-i18n="export-report">
                     <i class="fas fa-file-export"></i> Export Report
                 </button>
             </div>
@@ -434,27 +449,29 @@
             <div style="flex: 1;">
                 <h2
                     style="font-size: 1.4rem; font-weight: 800; margin-bottom: 5px; display: flex; align-items: center; gap: 10px;">
-                    AI Intelligence Summary <span class="badge"
-                        style="background: rgba(255,255,255,0.2); color: white; font-size: 0.65rem;">Updated 2m
+                    <span data-i18n="ai-intel-summary">AI Intelligence Summary</span> <span class="badge"
+                        style="background: rgba(255,255,255,0.2); color: white; font-size: 0.65rem;"
+                        data-i18n="updated-ago">Updated 2m
                         ago</span>
                 </h2>
-                <p style="opacity: 0.9; margin-bottom: 20px; font-size: 0.95rem;">System detected 14% improvement in
+                <p style="opacity: 0.9; margin-bottom: 20px; font-size: 0.95rem;" data-i18n="ai-intel-desc">System
+                    detected 14% improvement in
                     storage efficiency. High spoilage risk in Zone C detected for Friday.</p>
                 <div class="insight-stats">
                     <div class="stat-box">
-                        <div class="stat-label">Loss Prevented</div>
+                        <div class="stat-label" data-i18n="stat-loss-prevented">Loss Prevented</div>
                         <div id="summaryLoss" class="stat-value">₹242,500</div>
                     </div>
                     <div class="stat-box">
-                        <div class="stat-label">Storage Efficiency</div>
+                        <div class="stat-label" data-i18n="stat-storage-eff">Storage Efficiency</div>
                         <div id="summaryEff" class="stat-value">94.2%</div>
                     </div>
                     <div class="stat-box">
-                        <div class="stat-label">Peak Perform Zone</div>
+                        <div class="stat-label" data-i18n="stat-peak-zone">Peak Perform Zone</div>
                         <div id="summaryZone" class="stat-value">Zone B</div>
                     </div>
                     <div class="stat-box">
-                        <div class="stat-label">Model Confidence</div>
+                        <div class="stat-label" data-i18n="stat-model-conf">Model Confidence</div>
                         <div id="summaryConf" class="stat-value">98.4%</div>
                     </div>
                 </div>
@@ -466,7 +483,8 @@
             <div class="impact-card glass-panel" style="border-bottom: 4px solid #10b981;">
                 <div class="impact-icon" style="background: #ecfdf5; color: #10b981;"><i class="fas fa-tree"></i></div>
                 <div>
-                    <div class="stat-label" style="color: var(--text-secondary);">Carbon Offset</div>
+                    <div class="stat-label" style="color: var(--text-secondary);" data-i18n="carbon-offset">Carbon
+                        Offset</div>
                     <div id="valCarbon" style="font-size: 1.4rem; font-weight: 800;">4.2T</div>
                     <div id="trendCarbon" style="font-size: 0.7rem; font-weight: 700; color: #10b981;"><i
                             class="fas fa-arrow-up"></i> 12.5%</div>
@@ -475,7 +493,8 @@
             <div class="impact-card glass-panel" style="border-bottom: 4px solid #7c3aed;">
                 <div class="impact-icon" style="background: #f5f3ff; color: #7c3aed;"><i class="fas fa-coins"></i></div>
                 <div>
-                    <div class="stat-label" style="color: var(--text-secondary);">Market Preserve</div>
+                    <div class="stat-label" style="color: var(--text-secondary);" data-i18n="market-preserve">Market
+                        Preserve</div>
                     <div id="valMarket" style="font-size: 1.4rem; font-weight: 800;">₹1.84M</div>
                     <div id="trendMarket" style="font-size: 0.7rem; font-weight: 700; color: #7c3aed;"><i
                             class="fas fa-arrow-up"></i> 8.2%</div>
@@ -485,7 +504,8 @@
                 <div class="impact-icon" style="background: #fef2f2; color: #ef4444;"><i class="fas fa-chart-pie"></i>
                 </div>
                 <div>
-                    <div class="stat-label" style="color: var(--text-secondary);">Loss Reduction</div>
+                    <div class="stat-label" style="color: var(--text-secondary);" data-i18n="loss-reduction">Loss
+                        Reduction</div>
                     <div id="valLoss" style="font-size: 1.4rem; font-weight: 800;">64.5%</div>
                     <div id="trendLoss" style="font-size: 0.7rem; font-weight: 700; color: #ef4444;"><i
                             class="fas fa-arrow-up"></i> 24% YoY</div>
@@ -495,9 +515,11 @@
                 <div class="impact-icon" style="background: #e0f2fe; color: #0288d1;"><i class="fas fa-truck-fast"></i>
                 </div>
                 <div>
-                    <div class="stat-label" style="color: var(--text-secondary);">Suggested Exit</div>
+                    <div class="stat-label" style="color: var(--text-secondary);" data-i18n="suggested-exit">Suggested
+                        Exit</div>
                     <div id="valExit" style="font-size: 1.4rem; font-weight: 800;">Zone C-4</div>
-                    <p style="font-size: 0.65rem; color: var(--text-secondary); margin-top: 2px;">Optimal ROI dispatch
+                    <p style="font-size: 0.65rem; color: var(--text-secondary); margin-top: 2px;"
+                        data-i18n="suggested-exit-desc">Optimal ROI dispatch
                     </p>
                 </div>
             </div>
@@ -512,12 +534,15 @@
                     <div
                         style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 25px;">
                         <div>
-                            <h3 style="font-weight: 800; font-size: 1.25rem;">Market Demand vs Stock Supply</h3>
-                            <p style="font-size: 0.85rem; color: var(--text-secondary);">Projected market equilibrium
+                            <h3 style="font-weight: 800; font-size: 1.25rem;" data-i18n="demand-vs-supply">Market Demand
+                                vs Stock Supply</h3>
+                            <p style="font-size: 0.85rem; color: var(--text-secondary);" data-i18n="demand-supply-desc">
+                                Projected market equilibrium
                                 for next 60 days</p>
                         </div>
                         <div style="text-align: right;">
-                            <div class="badge" style="background: var(--success-bg); color: var(--primary);">AI
+                            <div class="badge" style="background: var(--success-bg); color: var(--primary);"
+                                data-i18n="ai-rec-increase">AI
                                 Recommendation: INCREASE DISPATCH</div>
                         </div>
                     </div>
@@ -528,7 +553,8 @@
 
                 <!-- E. Loss Reduction Timeline -->
                 <div class="glass-panel" style="padding: 30px;">
-                    <h3 style="font-weight: 800; font-size: 1.25rem; margin-bottom: 20px;">Measurable AI Impact Timeline
+                    <h3 style="font-weight: 800; font-size: 1.25rem; margin-bottom: 20px;" data-i18n="impact-timeline">
+                        Measurable AI Impact Timeline
                     </h3>
                     <div style="height: 300px;">
                         <canvas id="lossReductionChart"></canvas>
@@ -540,13 +566,16 @@
                     <div
                         style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
                         <div>
-                            <h3 style="font-weight: 800; font-size: 1.2rem;">7-Day Spoilage Risk Forecast</h3>
-                            <p style="font-size: 0.85rem; color: var(--text-secondary);">Probability index based on
+                            <h3 style="font-weight: 800; font-size: 1.20rem;" data-i18n="spoilage-risk-forecast">7-Day
+                                Spoilage Risk Forecast</h3>
+                            <p style="font-size: 0.85rem; color: var(--text-secondary);" data-i18n="spoilage-risk-desc">
+                                Probability index based on
                                 humidity & ethylene datasets</p>
                         </div>
                         <div style="font-size: 0.75rem; font-weight: 700; color: var(--text-secondary);">
-                            <i class="fas fa-arrow-down-long" style="color: var(--primary);"></i> 18% Lower than last
-                            week
+                            <i class="fas fa-arrow-down-long" style="color: var(--primary);"></i> <span
+                                data-i18n="lower-than-last-week">18% Lower than last
+                                week</span>
                         </div>
                     </div>
                     <div class="thermal-grid" id="spoilageForecast">
@@ -558,14 +587,16 @@
             <div style="display: flex; flex-direction: column; gap: 24px;">
                 <!-- 2. Capacity Utilization by Commodity -->
                 <div class="glass-panel" style="padding: 30px;">
-                    <h3 style="font-weight: 800; font-size: 1.1rem; margin-bottom: 20px;">Warehouse Allocation</h3>
+                    <h3 style="font-weight: 800; font-size: 1.1rem; margin-bottom: 20px;"
+                        data-i18n="warehouse-allocation">Warehouse Allocation</h3>
                     <div style="height: 250px;">
                         <canvas id="utilizationPieChart"></canvas>
                     </div>
                     <div style="margin-top: 25px;">
                         <div
                             style="display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 0.85rem;">
-                            <span style="color: var(--text-secondary);">Available Capacity</span>
+                            <span style="color: var(--text-secondary);" data-i18n="available-capacity">Available
+                                Capacity</span>
                             <span style="font-weight: 800; color: var(--primary);">15.4%</span>
                         </div>
                         <div class="progress-container">
@@ -576,7 +607,8 @@
 
                 <!-- B. Zone Performance Analytics -->
                 <div class="glass-panel" style="padding: 30px;">
-                    <h3 style="font-weight: 800; font-size: 1.1rem; margin-bottom: 20px;">Zone Efficiency Index</h3>
+                    <h3 style="font-weight: 800; font-size: 1.1rem; margin-bottom: 20px;" data-i18n="zone-efficiency">
+                        Zone Efficiency Index</h3>
                     <div class="comparison-list">
                         <div class="comparison-item">
                             <div style="width: 60px; font-size: 0.8rem; font-weight: 700;">Zone A</div>
@@ -611,7 +643,8 @@
 
                 <!-- C. Crop Performance Comparison -->
                 <div class="glass-panel" style="padding: 30px;">
-                    <h3 style="font-weight: 800; font-size: 1.1rem; margin-bottom: 20px;">Commodity Insights</h3>
+                    <h3 style="font-weight: 800; font-size: 1.1rem; margin-bottom: 20px;"
+                        data-i18n="commodity-insights">Commodity Insights</h3>
                     <div style="display: flex; flex-direction: column; gap: 18px;">
                         <div
                             style="display: flex; align-items: center; gap: 12px; font-size: 0.85rem; padding-bottom: 12px; border-bottom: 1px dashed var(--card-border);">
@@ -620,7 +653,7 @@
                                 <i class="fas fa-triangle-exclamation"></i>
                             </div>
                             <div style="flex: 1;">
-                                <div style="font-weight: 800;">Highest Risk</div>
+                                <div style="font-weight: 800;" data-i18n="highest-risk-label">Highest Risk</div>
                                 <div style="color: var(--text-secondary); font-size: 0.75rem;">Tomatoes (Lot #EF-21)
                                 </div>
                             </div>
@@ -632,7 +665,7 @@
                                 <i class="fas fa-lock"></i>
                             </div>
                             <div style="flex: 1;">
-                                <div style="font-weight: 800;">Best Stability</div>
+                                <div style="font-weight: 800;" data-i18n="best-stability-label">Best Stability</div>
                                 <div style="color: var(--text-secondary); font-size: 0.75rem;">Onions (45 Days avg)
                                 </div>
                             </div>
@@ -643,8 +676,9 @@
                                 <i class="fas fa-hourglass-half"></i>
                             </div>
                             <div style="flex: 1;">
-                                <div style="font-weight: 800;">Avg. Duration</div>
-                                <div style="color: var(--text-secondary); font-size: 0.75rem;">18.4 Days across
+                                <div style="font-weight: 800;" data-i18n="avg-duration-label">Avg. Duration</div>
+                                <div style="color: var(--text-secondary); font-size: 0.75rem;"
+                                    data-i18n="avg-duration-desc">18.4 Days across
                                     inventory</div>
                             </div>
                         </div>
@@ -655,23 +689,23 @@
                 <div class="glass-panel"
                     style="padding: 30px; border: 1px solid rgba(126, 87, 194, 0.2); background: linear-gradient(135deg, white 0%, #f3f0fc 100%);">
                     <h3 style="font-weight: 800; font-size: 1.1rem; color: var(--ai-purple);">
-                        <i class="fas fa-microchip"></i> AI Model Health
+                        <i class="fas fa-microchip"></i> <span data-i18n="ai-model-health">AI Model Health</span>
                     </h3>
                     <div class="model-health-stats">
                         <div class="health-mini-card">
-                            <div class="stat-label">Prediction Accuracy</div>
+                            <div class="stat-label" data-i18n="pred-accuracy">Prediction Accuracy</div>
                             <div style="font-size: 1.2rem; font-weight: 800; color: var(--ai-purple);">98.4%</div>
                         </div>
                         <div class="health-mini-card">
-                            <div class="stat-label">Model Confidence</div>
+                            <div class="stat-label" data-i18n="stat-model-conf">Model Confidence</div>
                             <div style="font-size: 1.2rem; font-weight: 800; color: var(--ai-purple);">0.96</div>
                         </div>
                         <div class="health-mini-card">
-                            <div class="stat-label">False Positive Rate</div>
+                            <div class="stat-label" data-i18n="false-positive-rate">False Positive Rate</div>
                             <div style="font-size: 1.2rem; font-weight: 800; color: var(--ai-purple);">1.2%</div>
                         </div>
                         <div class="health-mini-card">
-                            <div class="stat-label">Inference Time</div>
+                            <div class="stat-label" data-i18n="inference-time">Inference Time</div>
                             <div style="font-size: 1.2rem; font-weight: 800; color: var(--ai-purple);">240ms</div>
                         </div>
                     </div>
@@ -690,13 +724,14 @@
                     <i class="fas fa-robot"></i>
                 </div>
                 <div>
-                    <div style="font-weight: 800; font-size: 1.1rem;">Nari Shakti AI</div>
-                    <div style="font-size: 0.75rem; opacity: 0.9;">Connected to Smart Warehouse</div>
+                    <div style="font-weight: 800; font-size: 1.1rem;" data-i18n="bot-name">Nari Shakti AI</div>
+                    <div style="font-size: 0.75rem; opacity: 0.9;" data-i18n="bot-status">Connected to Smart Warehouse
+                    </div>
                 </div>
                 <i class="fas fa-times" id="close-chat" style="margin-left: auto; cursor: pointer;"></i>
             </div>
             <div class="chat-messages" id="chat-messages">
-                <div class="message bot-message">
+                <div class="message bot-message" data-i18n="bot-welcome">
                     Namaste! 🙏 I am your Smart Warehouse Assistant. Ask me about temperature, stock levels, or spoilage
                     risks.
                 </div>
@@ -714,6 +749,7 @@
     </div>
 
     <script src="js/analytics.js"></script>
+    <script src="js/i18n.js"></script>
     <script>
         // Chatbot Logic
         const bubble = document.getElementById('chatbot-bubble');

@@ -443,11 +443,24 @@
         </div>
 
         <nav>
-            <a href="dashboard.html" class="nav-item"><i class="fas fa-table-cells-large"></i> Dashboard</a>
-            <a href="inventory.html" class="nav-item active"><i class="fas fa-boxes-stacked"></i> Inventory</a>
-            <a href="analytics.html" class="nav-item"><i class="fas fa-chart-pie"></i> Analytics</a>
-            <a href="trace.html" class="nav-item"><i class="fas fa-route"></i> Traceability</a>
+            <a href="dashboard.html" class="nav-item"><i class="fas fa-table-cells-large"></i> <span
+                    data-i18n="nav-dashboard">Dashboard</span></a>
+            <a href="inventory.html" class="nav-item active"><i class="fas fa-boxes-stacked"></i> <span
+                    data-i18n="nav-inventory">Inventory</span></a>
+            <a href="analytics.html" class="nav-item"><i class="fas fa-chart-pie"></i> <span
+                    data-i18n="nav-analytics">Analytics</span></a>
+            <a href="trace.html" class="nav-item"><i class="fas fa-route"></i> <span
+                    data-i18n="nav-traceability">Traceability</span></a>
         </nav>
+
+        <div style="margin: 20px 0; padding: 0 10px;">
+            <select id="lang-select"
+                style="width: 100%; padding: 10px 15px; border-radius: 12px; border: 1px solid var(--card-border); background: white; color: var(--text-primary); font-weight: 600; cursor: pointer; outline: none;">
+                <option value="en">English</option>
+                <option value="hi">हिंदी (Hindi)</option>
+                <option value="mr">मराठी (Marathi)</option>
+            </select>
+        </div>
     </aside>
 
     <main class="main-wrapper">
@@ -455,8 +468,9 @@
         <div id="alertSystem" class="alert-banner">
             <i class="fas fa-triangle-exclamation" style="font-size: 1.5rem;"></i>
             <div style="flex: 1;">
-                <strong style="display: block; margin-bottom: 2px;">AI Early Spoilage Warning</strong>
-                <span id="alertText">Loading AI prediction models...</span>
+                <strong style="display: block; margin-bottom: 2px;" data-i18n="alert-spoilage-title">AI Early Spoilage
+                    Warning</strong>
+                <span id="alertText" data-i18n="alert-spoilage-loading">Loading AI prediction models...</span>
             </div>
             <button onclick="document.getElementById('alertSystem').style.display='none'"
                 style="background:none; border:none; cursor:pointer;"><i class="fas fa-times"></i></button>
@@ -464,11 +478,13 @@
 
         <header style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
             <div>
-                <h1 style="font-size: 2.2rem; font-weight: 800; color: var(--text-primary);">📦 Inventory Management
+                <h1 style="font-size: 2.2rem; font-weight: 800; color: var(--text-primary);"
+                    data-i18n="inventory-title">📦 Inventory Management
                 </h1>
-                <p style="color: var(--text-secondary); font-weight: 500;">Batch Control & AI Optimization Center</p>
+                <p style="color: var(--text-secondary); font-weight: 500;" data-i18n="inventory-subtitle">Batch Control
+                    & AI Optimization Center</p>
             </div>
-            <button class="btn-premium" onclick="openAddModal()">
+            <button class="btn-premium" onclick="openAddModal()" data-i18n="inventory-btn-register">
                 <i class="fas fa-plus"></i> Register New Batch
             </button>
         </header>
@@ -478,8 +494,9 @@
             <div class="optimization-card glass-panel premium-hover">
                 <h4
                     style="color: var(--text-secondary); text-transform: uppercase; font-size: 0.75rem; letter-spacing: 1px; margin-bottom: 20px; display:flex; align-items:center; gap:8px;">
-                    <i class="fas fa-wand-magic-sparkles" style="color:var(--primary);"></i> Smart Dispatch
-                    Recommendations
+                    <i class="fas fa-wand-magic-sparkles" style="color:var(--primary);"></i> <span
+                        data-i18n="smart-dispatch-title">Smart Dispatch
+                        Recommendations</span>
                 </h4>
                 <div id="dispatchRecs" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;">
                     <!-- JS Injected Optimization Cards -->
@@ -490,14 +507,16 @@
             <div class="sensor-stream glass-panel premium-hover" style="background: #0f172a; border-color: #1e293b;">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
                     <span
-                        style="font-size: 0.7rem; color: #94a3b8; text-transform: uppercase; font-weight: 800; letter-spacing: 1px;">Live
+                        style="font-size: 0.7rem; color: #94a3b8; text-transform: uppercase; font-weight: 800; letter-spacing: 1px;"
+                        data-i18n="live-warehouse-feed">Live
                         Warehouse Feed</span>
                     <div class="live-tag"><span class="dot" style="margin:0;"></span> LIVE</div>
                 </div>
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
                     <div
                         style="background: rgba(255,255,255,0.03); padding: 15px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05);">
-                        <div style="font-size: 0.6rem; color: #64748b; margin-bottom: 5px; font-weight: 700;">
+                        <div style="font-size: 0.6rem; color: #64748b; margin-bottom: 5px; font-weight: 700;"
+                            data-i18n="live-temp-label">
                             TEMPERATURE</div>
                         <div id="liveTemp"
                             style="font-size: 2rem; font-weight: 900; color: #10b981; font-family: 'Inter', sans-serif;">
@@ -505,7 +524,8 @@
                     </div>
                     <div
                         style="background: rgba(255,255,255,0.03); padding: 15px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05);">
-                        <div style="font-size: 0.6rem; color: #64748b; margin-bottom: 5px; font-weight: 700;">HUMIDITY
+                        <div style="font-size: 0.6rem; color: #64748b; margin-bottom: 5px; font-weight: 700;"
+                            data-i18n="live-hum-label">HUMIDITY
                         </div>
                         <div id="liveHum"
                             style="font-size: 2rem; font-weight: 900; color: #3b82f6; font-family: 'Inter', sans-serif;">
@@ -526,31 +546,35 @@
                 style="display: grid; grid-template-columns: 2fr 1fr 1fr 1fr 1.5fr; gap: 15px; align-items: end;">
                 <div>
                     <label
-                        style="display:block; font-size:0.7rem; font-weight:800; color:var(--text-secondary); margin-bottom:8px; text-transform:uppercase;">Search
+                        style="display:block; font-size:0.7rem; font-weight:800; color:var(--text-secondary); margin-bottom:8px; text-transform:uppercase;"
+                        data-i18n="search-batches-label">Search
                         Batches</label>
                     <div style="position: relative;">
                         <i class="fas fa-search"
                             style="position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--text-secondary);"></i>
                         <input type="text" id="searchInput" placeholder="Search ID, Produce, or Zone..."
-                            class="filter-select" style="width: 100%; padding-left: 40px; height: 45px;">
+                            data-i18n="search-placeholder" class="filter-select"
+                            style="width: 100%; padding-left: 40px; height: 45px;">
                     </div>
                 </div>
                 <div>
                     <label
-                        style="display:block; font-size:0.7rem; font-weight:800; color:var(--text-secondary); margin-bottom:8px; text-transform:uppercase;">Risk
+                        style="display:block; font-size:0.7rem; font-weight:800; color:var(--text-secondary); margin-bottom:8px; text-transform:uppercase;"
+                        data-i18n="risk-level-label">Risk
                         Level</label>
                     <select id="riskFilter" class="filter-select" style="width: 100%; height: 45px;">
-                        <option value="all">All Levels</option>
-                        <option value="high">High Risk (>70%)</option>
-                        <option value="medium">Medium Risk (30-70%)</option>
-                        <option value="low">Low Risk (<30%)< /option>
+                        <option value="all" data-i18n="all-levels">All Levels</option>
+                        <option value="high" data-i18n="high-risk">High Risk (>70%)</option>
+                        <option value="medium" data-i18n="medium-risk">Medium Risk (30-70%)</option>
+                        <option value="low" data-i18n="low-risk">Low Risk (<30%)< /option>
                     </select>
                 </div>
                 <div>
                     <label
-                        style="display:block; font-size:0.7rem; font-weight:800; color:var(--text-secondary); margin-bottom:8px; text-transform:uppercase;">Zone</label>
+                        style="display:block; font-size:0.7rem; font-weight:800; color:var(--text-secondary); margin-bottom:8px; text-transform:uppercase;"
+                        data-i18n="zone-label">Zone</label>
                     <select id="zoneFilter" class="filter-select" style="width: 100%; height: 45px;">
-                        <option value="all">All Zones</option>
+                        <option value="all" data-i18n="all-zones">All Zones</option>
                         <option value="A">Zone A</option>
                         <option value="B">Zone B</option>
                         <option value="C">Zone C</option>
@@ -559,10 +583,11 @@
                 </div>
                 <div>
                     <label
-                        style="display:block; font-size:0.7rem; font-weight:800; color:var(--text-secondary); margin-bottom:8px; text-transform:uppercase;">Produce
+                        style="display:block; font-size:0.7rem; font-weight:800; color:var(--text-secondary); margin-bottom:8px; text-transform:uppercase;"
+                        data-i18n="produce-type-label">Produce
                         Type</label>
                     <select id="typeFilter" class="filter-select" style="width: 100%; height: 45px;">
-                        <option value="all">All Types</option>
+                        <option value="all" data-i18n="all-types">All Types</option>
                         <option value="Tomato">Tomato</option>
                         <option value="Onion">Onion</option>
                         <option value="Potato">Potato</option>
@@ -571,13 +596,14 @@
                 </div>
                 <div>
                     <label
-                        style="display:block; font-size:0.7rem; font-weight:800; color:var(--text-secondary); margin-bottom:8px; text-transform:uppercase;">Sort
+                        style="display:block; font-size:0.7rem; font-weight:800; color:var(--text-secondary); margin-bottom:8px; text-transform:uppercase;"
+                        data-i18n="sort-by-label">Sort
                         By</label>
                     <select id="sortOption" class="filter-select" style="width: 100%; height: 45px;">
-                        <option value="risk-desc">Highest Risk</option>
-                        <option value="expiry-asc">Earliest Expiry</option>
-                        <option value="qty-desc">Highest Quantity</option>
-                        <option value="id-asc">Batch ID</option>
+                        <option value="risk-desc" data-i18n="sort-highest-risk">Highest Risk</option>
+                        <option value="expiry-asc" data-i18n="sort-earliest-expiry">Earliest Expiry</option>
+                        <option value="qty-desc" data-i18n="sort-highest-qty">Highest Quantity</option>
+                        <option value="id-asc" data-i18n="sort-batch-id">Batch ID</option>
                     </select>
                 </div>
             </div>
@@ -588,15 +614,15 @@
             <table class="premium-table">
                 <thead>
                     <tr>
-                        <th>Batch ID</th>
-                        <th>Produce Type</th>
-                        <th>Zone</th>
-                        <th>Quantity</th>
-                        <th>Harvest Date</th>
-                        <th>Expiry Date</th>
-                        <th>Risk %</th>
-                        <th>Status</th>
-                        <th style="text-align: right;">Actions</th>
+                        <th data-i18n="table-id">Batch ID</th>
+                        <th data-i18n="table-type">Produce Type</th>
+                        <th data-i18n="table-zone">Zone</th>
+                        <th data-i18n="table-qty">Quantity</th>
+                        <th data-i18n="table-harvest">Harvest Date</th>
+                        <th data-i18n="table-expiry">Expiry Date</th>
+                        <th data-i18n="table-risk">Risk %</th>
+                        <th data-i18n="table-status">Status</th>
+                        <th style="text-align: right;" data-i18n="table-actions">Actions</th>
                     </tr>
                 </thead>
                 <tbody id="inventoryBody">
@@ -620,8 +646,8 @@
                     <span id="detStatus" class="badge">In Storage</span>
                 </div>
                 <div style="text-align:right">
-                    <div
-                        style="font-size:0.7rem; color:var(--text-secondary); text-transform:uppercase; font-weight:700;">
+                    <div style="font-size:0.7rem; color:var(--text-secondary); text-transform:uppercase; font-weight:700;"
+                        data-i18n="modal-health-score">
                         Health Score</div>
                     <div id="detHealthScore" style="font-size:2.4rem; font-weight:900; color:var(--primary);">92</div>
                 </div>
@@ -631,26 +657,28 @@
                 <div class="left-col">
                     <div class="detail-card">
                         <h4 style="margin-bottom:15px; display:flex; align-items:center; gap:10px;"><i
-                                class="fas fa-info-circle"></i> Batch Overview</h4>
+                                class="fas fa-info-circle"></i> <span data-i18n="modal-batch-overview">Batch
+                                Overview</span></h4>
                         <div style="display:grid; grid-template-columns:1fr 1fr; gap:15px;">
                             <div>
-                                <label
-                                    style="display:block; font-size:0.65rem; color:var(--text-secondary);">FARMER</label>
+                                <label style="display:block; font-size:0.65rem; color:var(--text-secondary);"
+                                    data-i18n="modal-farmer">FARMER</label>
                                 <div id="detFarmer" style="font-weight:700;">Ramesh Kumar</div>
                             </div>
                             <div>
-                                <label
-                                    style="display:block; font-size:0.65rem; color:var(--text-secondary);">PRODUCE</label>
+                                <label style="display:block; font-size:0.65rem; color:var(--text-secondary);"
+                                    data-i18n="table-type">PRODUCE</label>
                                 <div id="detProduce" style="font-weight:700;">Tomato (Hybrid)</div>
                             </div>
                             <div>
-                                <label style="display:block; font-size:0.65rem; color:var(--text-secondary);">STORAGE
+                                <label style="display:block; font-size:0.65rem; color:var(--text-secondary);"
+                                    data-i18n="table-zone">STORAGE
                                     ZONE</label>
                                 <div id="detZone" style="font-weight:700;">Zone C4</div>
                             </div>
                             <div>
-                                <label
-                                    style="display:block; font-size:0.65rem; color:var(--text-secondary);">QUANTITY</label>
+                                <label style="display:block; font-size:0.65rem; color:var(--text-secondary);"
+                                    data-i18n="table-qty">QUANTITY</label>
                                 <div id="detQty" style="font-weight:700;">450 Kg</div>
                             </div>
                         </div>
@@ -658,7 +686,8 @@
 
                     <div class="detail-card">
                         <h4 style="margin-bottom:15px; display:flex; align-items:center; gap:10px;"><i
-                                class="fas fa-history"></i> Storage Timeline</h4>
+                                class="fas fa-history"></i> <span data-i18n="modal-storage-timeline">Storage
+                                Timeline</span></h4>
                         <div id="storageTimeline">
                             <!-- Timeline Items -->
                         </div>
@@ -667,7 +696,8 @@
                     <div class="detail-card" style="border-left: 4px solid var(--warning);">
                         <h4
                             style="margin-bottom:10px; display:flex; align-items:center; gap:10px; color:var(--warning);">
-                            <i class="fas fa-brain"></i> AI Spoilage Prediction
+                            <i class="fas fa-brain"></i> <span data-i18n="modal-ai-prediction">AI Spoilage
+                                Prediction</span>
                         </h4>
                         <p id="detAIPredict" style="font-size:0.9rem; color:var(--text-secondary); margin-bottom:15px;">
                         </p>
@@ -675,7 +705,8 @@
                         <!-- AI Insight Expandable -->
                         <button onclick="toggleAIInsight()"
                             style="background:none; border:none; color:var(--info); font-size:0.75rem; font-weight:800; cursor:pointer; display:flex; align-items:center; gap:5px;">
-                            <i class="fas fa-chevron-down" id="insightChevron"></i> VIEW AI DEEP ANALYSIS
+                            <i class="fas fa-chevron-down" id="insightChevron"></i> <span
+                                data-i18n="modal-view-analysis">VIEW AI DEEP ANALYSIS</span>
                         </button>
 
                         <div id="aiInsightPanel" class="ai-insight-panel">
@@ -703,10 +734,12 @@
                     <div class="detail-card" style="background:var(--success-bg);">
                         <h4
                             style="margin-bottom:15px; display:flex; align-items:center; gap:10px; color:var(--primary);">
-                            <i class="fas fa-truck-fast"></i> AI Dispatch Simulator
+                            <i class="fas fa-truck-fast"></i> <span data-i18n="modal-dispatch-simulator">AI Dispatch
+                                Simulator</span>
                         </h4>
                         <button class="btn-premium" onclick="runDispatchSimulator()"
-                            style="width:100%; justify-content:center; margin-bottom:15px;">
+                            style="width:100%; justify-content:center; margin-bottom:15px;"
+                            data-i18n="modal-simulate-btn">
                             <i class="fas fa-play"></i> Simulate Dispatch
                         </button>
                         <div id="simulatorResults" style="display:none;">
@@ -740,7 +773,8 @@
                     <!-- AI Revenue Optimizer -->
                     <div class="detail-card">
                         <h4 style="margin-bottom:15px; display:flex; align-items:center; gap:10px;"><i
-                                class="fas fa-coins"></i> AI Revenue Optimizer</h4>
+                                class="fas fa-coins"></i> <span data-i18n="modal-revenue-optimizer">AI Revenue
+                                Optimizer</span></h4>
                         <div id="revenueOptions">
                             <!-- Revenue Options -->
                         </div>
@@ -749,7 +783,8 @@
                     <div style="text-align:center; padding:10px;">
                         <button class="btn-premium"
                             onclick="confirmDispatch(document.getElementById('detBatchID').innerText.replace('#', ''))"
-                            style="width:100%; justify-content:center; background:var(--primary-accent);">
+                            style="width:100%; justify-content:center; background:var(--primary-accent);"
+                            data-i18n="modal-execute-plan">
                             <i class="fas fa-paper-plane"></i> Execute Dispatch Plan
                         </button>
                     </div>
@@ -763,14 +798,16 @@
         <div class="modal-content" style="max-width: 600px;">
             <button onclick="closeModal('addBatchModal')"
                 style="position:absolute; right:20px; top:20px; background:none; border:none; font-size:1.5rem; cursor:pointer;">&times;</button>
-            <h2 id="addModalTitle" style="margin-bottom:30px; font-weight:800; color:var(--text-primary);">Register New
+            <h2 id="addModalTitle" style="margin-bottom:30px; font-weight:800; color:var(--text-primary);"
+                data-i18n="add-modal-title">Register New
                 Batch</h2>
 
             <form id="batchForm">
                 <div class="form-grid">
                     <div>
                         <label
-                            style="display:block; font-size:0.75rem; font-weight:700; color:var(--text-secondary); margin-bottom:8px;">PRODUCE
+                            style="display:block; font-size:0.75rem; font-weight:700; color:var(--text-secondary); margin-bottom:8px;"
+                            data-i18n="table-type">PRODUCE
                             TYPE</label>
                         <select id="formProduce" class="filter-select" style="width:100%; height:45px;" required>
                             <option value="Tomato">Tomato</option>
@@ -781,21 +818,24 @@
                     </div>
                     <div>
                         <label
-                            style="display:block; font-size:0.75rem; font-weight:700; color:var(--text-secondary); margin-bottom:8px;">QUANTITY
+                            style="display:block; font-size:0.75rem; font-weight:700; color:var(--text-secondary); margin-bottom:8px;"
+                            data-i18n="table-qty">QUANTITY
                             (KG)</label>
                         <input type="number" id="formQty" class="filter-select" style="width:100%; height:45px;"
                             placeholder="e.g. 500" required>
                     </div>
                     <div>
                         <label
-                            style="display:block; font-size:0.75rem; font-weight:700; color:var(--text-secondary); margin-bottom:8px;">HARVEST
+                            style="display:block; font-size:0.75rem; font-weight:700; color:var(--text-secondary); margin-bottom:8px;"
+                            data-i18n="table-harvest">HARVEST
                             DATE</label>
                         <input type="date" id="formHarvestDate" class="filter-select" style="width:100%; height:45px;"
                             required>
                     </div>
                     <div>
                         <label
-                            style="display:block; font-size:0.75rem; font-weight:700; color:var(--text-secondary); margin-bottom:8px;">STORAGE
+                            style="display:block; font-size:0.75rem; font-weight:700; color:var(--text-secondary); margin-bottom:8px;"
+                            data-i18n="table-zone">STORAGE
                             ZONE</label>
                         <select id="formZone" class="filter-select" style="width:100%; height:45px;" required>
                             <option value="A1">Zone A1 (Deep Cool)</option>
@@ -864,19 +904,20 @@
                     <i class="fas fa-robot"></i>
                 </div>
                 <div>
-                    <div style="font-weight: 800; font-size: 1.1rem;">Nari Shakti AI</div>
-                    <div style="font-size: 0.75rem; opacity: 0.9;">Connected to Smart Warehouse</div>
+                    <div style="font-weight: 800; font-size: 1.1rem;" data-i18n="bot-name">Nari Shakti AI</div>
+                    <div style="font-size: 0.75rem; opacity: 0.9;" data-i18n="bot-status">Connected to Smart Warehouse
+                    </div>
                 </div>
                 <i class="fas fa-times" id="close-chat" style="margin-left: auto; cursor: pointer;"></i>
             </div>
             <div class="chat-messages" id="chat-messages">
-                <div class="message bot-message">
+                <div class="message bot-message" data-i18n="bot-welcome">
                     Namaste! 🙏 I am your Smart Warehouse Assistant. Ask me about temperature, stock levels, or spoilage
                     risks.
                 </div>
             </div>
             <div class="chat-input-area">
-                <input type="text" id="chat-input" placeholder="Type your message...">
+                <input type="text" id="chat-input" placeholder="Type your message..." data-i18n="chat-placeholder">
                 <button class="send-btn" id="send-chat">
                     <i class="fas fa-paper-plane"></i>
                 </button>
@@ -887,6 +928,7 @@
         </div>
     </div>
 
+    <script src="js/i18n.js"></script>
     <script src="js/inventory.js" type="module"></script>
     <script>
         // Chatbot Logic
