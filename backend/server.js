@@ -3,6 +3,7 @@ const cors = require('cors');
 const dotenv = require('dotenv');
 const mongoose = require('mongoose');
 const path = require('path');
+const axios = require('axios');
 
 // Models
 const SensorLog = require('./models/SensorLog');
@@ -60,44 +61,68 @@ app.post('/api/sensor-data', async (req, res) => {
     }
 });
 
-// AI Insights Proxy
+// Health Check
+app.get('/api/health', (req, res) => {
+    res.json({
+        status: 'Online',
+        time: new Date(),
+        database: mongoose.connection.readyState === 1 ? 'Connected' : 'Disconnected'
+    });
+});
+
+// AI Insights Proxy - Integrated with Python Microservice
 app.post('/api/ai/analyze', async (req, res) => {
     const { batchId, produce, temperature, humidity, storage_days } = req.body;
 
-    // Simulate AI logic from the Python service
-    let risk = "Low";
-    let days = 15;
-    let priority = "P3";
-    let action = "Maintain Storage";
+    try {
+        // Try calling the actual Python AI service
+        const aiResponse = await axios.post('http://localhost:8000/analyze', {
+            batchId,
+            produce,
+            temperature: Number(temperature),
+            humidity: Number(humidity),
+            storage_days: Number(storage_days || 0)
+        }, { timeout: 2000 });
 
-    if (temperature > 17 || humidity > 70) {
-        risk = "Moderate";
-        days = 7;
-        priority = "P2";
-        action = "Monitor Closely";
+        return res.json(aiResponse.data);
+    } catch (err) {
+        console.log("AI Service unreachable, using fallback simulation.");
+        // Fallback Simulation logic
+        let risk = "Low";
+        let days = 15;
+        let priority = "P3";
+        let action = "Maintain Storage";
+
+        if (temperature > 17 || humidity > 70) {
+            risk = "Moderate";
+            days = 7;
+            priority = "P2";
+            action = "Monitor Closely";
+        }
+
+        if (temperature > 20) {
+            risk = "High";
+            days = 2;
+            priority = "P1";
+            action = "Dispatch Immediately";
+        }
+
+        if (produce && produce.toLowerCase() === "tomato" && temperature > 15) {
+            risk = "High";
+            days = 3;
+            priority = "P1";
+            action = "Dispatch to Local Market";
+        }
+
+        res.json({
+            spoilage_risk: risk,
+            remaining_days: days,
+            priority: priority,
+            recommended_action: action,
+            confidence: 0.88 + (Math.random() * 0.1),
+            source: "Simulation (Fallback)"
+        });
     }
-
-    if (temperature > 20) {
-        risk = "High";
-        days = 2;
-        priority = "P1";
-        action = "Dispatch Immediately";
-    }
-
-    if (produce && produce.toLowerCase() === "tomato" && temperature > 15) {
-        risk = "High";
-        days = 3;
-        priority = "P1";
-        action = "Dispatch to Local Market";
-    }
-
-    res.json({
-        spoilage_risk: risk,
-        remaining_days: days,
-        priority: priority,
-        recommended_action: action,
-        confidence: 0.88 + (Math.random() * 0.1)
-    });
 });
 
 app.get('/api/ai/spoilage-risk/:batchId', async (req, res) => {

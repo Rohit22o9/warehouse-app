@@ -314,7 +314,7 @@
                     <a href="dashboard.html" class="cta-button btn-primary-glow">
                         Launch Dashboard <i class="fas fa-arrow-right" style="transition: 0.3s transform;"></i>
                     </a>
-                    <a href="#" class="btn-outline-ghost">
+                    <a href="javascript:void(0)" class="btn-outline-ghost" id="watch-video-btn">
                         <i class="fas fa-play-circle"></i> Watch Video
                     </a>
                 </div>
@@ -737,6 +737,19 @@
         </div>
     </div>
 
+    <!-- Video Modal -->
+    <div id="video-modal" class="modal-overlay">
+        <div class="modal-content"
+            style="padding: 0; overflow: hidden; background: #000; max-width: 1000px; aspect-ratio: 16/9;">
+            <button id="close-video"
+                style="position: absolute; top: 15px; right: 20px; z-index: 10001; background: rgba(0,0,0,0.5); border: none; color: white; width: 40px; height: 40px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; transition: 0.3s; border: 1px solid rgba(255,255,255,0.2);">
+                <i class="fas fa-times"></i>
+            </button>
+            <iframe id="video-iframe" src="" style="width: 100%; height: 100%; border: none;" allow="autoplay"
+                allowfullscreen></iframe>
+        </div>
+    </div>
+
     <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
     <script>
         AOS.init({
@@ -843,6 +856,30 @@
         sendBtn.addEventListener('click', handleChat);
         input.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') handleChat();
+        });
+
+        // Video Modal Logic
+        const watchVideoBtn = document.getElementById('watch-video-btn');
+        const videoModal = document.getElementById('video-modal');
+        const closeVideo = document.getElementById('close-video');
+        const videoIframe = document.getElementById('video-iframe');
+        const videoUrl = "https://drive.google.com/file/d/1Ix0Js9_4lzxsixgwIcFtMnD16g46MtM_/preview";
+
+        watchVideoBtn.addEventListener('click', () => {
+            videoIframe.src = videoUrl;
+            videoModal.style.display = 'flex';
+            document.body.style.overflow = 'hidden'; // Prevent scrolling
+        });
+
+        const hideVideo = () => {
+            videoModal.style.display = 'none';
+            videoIframe.src = "";
+            document.body.style.overflow = 'auto'; // Re-enable scrolling
+        };
+
+        closeVideo.addEventListener('click', hideVideo);
+        videoModal.addEventListener('click', (e) => {
+            if (e.target === videoModal) hideVideo();
         });
     </script>
 </body>

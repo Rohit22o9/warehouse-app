@@ -4,11 +4,13 @@ import os
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
-clf_model = joblib.load(os.path.join(BASE_DIR, "models/xgboost_spoilage_model.pkl"))
-reg_model = joblib.load(os.path.join(BASE_DIR, "models/remaining_life_model.pkl"))
+MODEL_DIR = os.path.join(os.path.dirname(BASE_DIR), "AI Models")
 
-produce_encoder = joblib.load(os.path.join(BASE_DIR, "models/produce_encoder.pkl"))
-target_encoder = joblib.load(os.path.join(BASE_DIR, "models/target_encoder.pkl"))
+clf_model = joblib.load(os.path.join(MODEL_DIR, "xgboost_spoilage_model (1).pkl"))
+reg_model = joblib.load(os.path.join(MODEL_DIR, "remaining_life_model.pkl"))
+
+produce_encoder = joblib.load(os.path.join(MODEL_DIR, "produce_encoder (1).pkl"))
+target_encoder = joblib.load(os.path.join(MODEL_DIR, "target_encoder (1).pkl"))
 
 
 def predict_batch(temp, humidity, days, produce_type):
