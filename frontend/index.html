@@ -177,6 +177,71 @@
             color: white;
         }
 
+        /* ===== LOGIN DROPDOWN ===== */
+        .login-dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            right: 0;
+            top: calc(100% + 12px);
+            background: white;
+            min-width: 220px;
+            border-radius: 14px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
+            border: 1px solid rgba(27, 94, 32, 0.1);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(12px);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 1100;
+            padding: 8px;
+        }
+
+        .login-dropdown.active .dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .dropdown-item {
+            padding: 12px 18px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            text-decoration: none;
+            color: #4A5D4C;
+            font-weight: 600;
+            font-size: 0.92rem;
+            transition: all 0.2s ease;
+            border-radius: 10px;
+        }
+
+        .dropdown-item:hover {
+            background: rgba(27, 94, 32, 0.05);
+            color: #1B5E20;
+            transform: translateX(4px);
+        }
+
+        .dropdown-item i {
+            width: 24px;
+            height: 24px;
+            background: rgba(27, 94, 32, 0.08);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            color: #1B5E20;
+        }
+
+        .dropdown-item:hover i {
+            background: #1B5E20;
+            color: white;
+        }
+
         /* ===== MOBILE NAV ===== */
         .mobile-menu-btn {
             display: none;
@@ -1436,8 +1501,21 @@
                 <option value="hi">हिंदी</option>
                 <option value="mr">मराठी</option>
             </select>
-            <a href="login.html" class="btn-primary" data-i18n="nav-login">Partner Login <i
-                    class="fas fa-arrow-right"></i></a>
+            <div class="login-dropdown" id="login-dropdown">
+                <button class="btn-primary" id="login-trigger">
+                    Login <i class="fas fa-chevron-down" style="font-size: 0.8rem; margin-left: 4px;"></i>
+                </button>
+                <div class="dropdown-menu">
+                    <a href="farmer-login.html" class="dropdown-item">
+                        <i class="fas fa-tractor"></i>
+                        <span>Farmer Login</span>
+                    </a>
+                    <a href="login.html" class="dropdown-item">
+                        <i class="fas fa-warehouse"></i>
+                        <span>Partner Login</span>
+                    </a>
+                </div>
+            </div>
         </div>
         <button class="mobile-menu-btn" onclick="document.getElementById('mobile-nav').classList.toggle('active')">
             <i class="fas fa-bars"></i>
@@ -1453,6 +1531,7 @@
         <a href="#features" onclick="document.getElementById('mobile-nav').classList.remove('active')">Features</a>
         <a href="market.html" data-i18n="nav-marketplace">Marketplace</a>
         <a href="#roi" onclick="document.getElementById('mobile-nav').classList.remove('active')">ROI</a>
+        <a href="farmer-login.html" class="btn-primary" style="margin-bottom: 5px;">Farmer Login</a>
         <a href="login.html" class="btn-primary">Partner Login</a>
     </div>
 
@@ -1860,6 +1939,23 @@
         window.addEventListener('scroll', () => {
             document.getElementById('site-header').classList.toggle('scrolled', window.scrollY > 20);
         });
+
+        // Login Dropdown Toggle
+        const loginDropdown = document.getElementById('login-dropdown');
+        const loginTrigger = document.getElementById('login-trigger');
+
+        if (loginTrigger && loginDropdown) {
+            loginTrigger.addEventListener('click', (e) => {
+                e.stopPropagation();
+                loginDropdown.classList.toggle('active');
+            });
+
+            document.addEventListener('click', (e) => {
+                if (!loginDropdown.contains(e.target)) {
+                    loginDropdown.classList.remove('active');
+                }
+            });
+        }
 
         // Progress bars + counters on scroll
         const animObserver = new IntersectionObserver((entries) => {

@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Farmer Login | AgriFresh AI Portal</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .login-card {
+            width: 100%;
+            max-width: 450px;
+            padding: 50px;
+            margin: 100px auto;
+        }
+
+        .input-group {
+            margin-bottom: 24px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: 0.9rem;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 14px 20px;
+            border-radius: 12px;
+            border: 1px solid var(--card-border);
+            outline: none;
+            transition: var(--transition-smooth);
+        }
+
+        .input-group input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(46, 125, 50, 0.1);
+        }
+
+        .demo-box {
+            background: #f1f8e9;
+            border: 1px dashed #2e7d32;
+            padding: 14px 16px;
+            border-radius: 12px;
+            margin-bottom: 22px;
+            font-size: 0.9rem;
+            color: #1b5e20;
+            text-align: center;
+        }
+
+        .demo-box small {
+            display: block;
+            margin-top: 5px;
+            font-size: 0.75rem;
+            color: #558b2f;
+        }
+
+        @media (max-width: 480px) {
+            .login-card {
+                padding: 30px 20px;
+                margin: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body style="display: flex; align-items: center; justify-content: center; min-height: 100vh;">
+    <div class="blob"></div>
+
+    <div class="glass-panel login-card">
+        <div style="text-align: center; margin-bottom: 40px;">
+            <div
+                style="width: 60px; height: 60px; background: var(--primary); border-radius: 15px; display: inline-flex; align-items: center; justify-content: center; color: white; margin-bottom: 20px; font-size: 2rem;">
+                <i class="fas fa-tractor"></i>
+            </div>
+            <h1 style="font-weight: 800; color: var(--text-primary); margin-bottom: 8px;" data-i18n="login-welcome-farmer">
+                Farmer Portal</h1>
+            <p style="color: var(--text-secondary); font-size: 0.9rem;" data-i18n="login-subtitle-farmer">Access your harvest records and shelf-life predictions</p>
+        </div>
+
+        <form onsubmit="event.preventDefault(); window.location.href='farmer-dashboard.html'">
+
+            <!-- Demo Credentials Display -->
+            <div class="demo-box">
+                <strong data-i18n="login-demo-title">Demo Farmer Login</strong><br>
+                Email: <b>farmer@agrifresh.in</b><br>
+                Password: <b>farmer123</b>
+                <small data-i18n="login-demo-small">(Any credentials will work in demo mode)</small>
+            </div>
+
+            <div class="input-group">
+                <label data-i18n="login-email-label">Registered Mobile / Email</label>
+                <input type="text" placeholder="+91 98765 43210" required>
+            </div>
+            <div class="input-group">
+                <label data-i18n="login-password-label">Password</label>
+                <input type="password" placeholder="••••••••" required>
+            </div>
+
+            <div style="display: flex; justify-content: space-between; margin-bottom: 30px; font-size: 0.85rem;">
+                <label
+                    style="display: flex; align-items: center; gap: 8px; cursor: pointer; color: var(--text-secondary);"
+                    data-i18n="login-remember">
+                    <input type="checkbox"> Remember me
+                </label>
+                <a href="#" style="color: var(--primary); font-weight: 700; text-decoration: none;"
+                    data-i18n="login-forgot">Forgot Password?</a>
+            </div>
+
+            <button type="submit" class="btn-premium" style="width: 100%; justify-content: center; padding: 16px;"
+                data-i18n="login-signin">
+                Secure Farmer Login <i class="fas fa-sign-in-alt"></i>
+            </button>
+        </form>
+
+        <div style="margin-top: 40px; text-align: center; font-size: 0.9rem; color: var(--text-secondary);">
+            <span data-i18n="login-new-farmer">New Farmer?</span> <a href="#"
+                style="color: var(--primary); font-weight: 700; text-decoration: none;"
+                data-i18n="login-register-farmer">Join AgriFresh Network</a>
+        </div>
+    </div>
+    <div style="position: fixed; top: 20px; right: 20px; z-index: 1000;">
+        <select id="lang-select"
+            style="padding: 10px 15px; border-radius: 12px; border: 1px solid var(--card-border); background: white; color: var(--text-primary); font-weight: 600; cursor: pointer; outline: none;">
+            <option value="en">English</option>
+            <option value="hi">हिंदी (Hindi)</option>
+            <option value="mr">मराठी (Marathi)</option>
+        </select>
+    </div>
+    <script src="js/i18n.js"></script>
+</body>
+
+</html>
