@@ -1,6 +1,6 @@
 /**
  * market.js
- * All interactive logic for the Nari Shakti Marketplace page.
+ * All interactive logic for the NeuroNix Marketplace page.
  * Handles: Listings, Sell/Hold card, Quality Passport, Ticker, Negotiation Bot, Voice Search
  */
 
@@ -421,7 +421,7 @@ function applyFilters() {
 // Market-specific i18n translations
 window.marketTranslations = {
     en: {
-        'market-title': 'Nari Shakti Marketplace',
+        'market-title': 'NeuroNix Marketplace',
         'market-subtitle': 'AI-Verified Crop Listings from Smart Warehouses',
         'market-search-placeholder': 'Search crops, farmers...',
         'market-advisory-title': 'AI Sell vs Hold Advisor',
@@ -431,7 +431,7 @@ window.marketTranslations = {
         'market-ticker-label': 'LIVE MANDI PRICES',
     },
     hi: {
-        'market-title': 'नारी शक्ति बाज़ार',
+        'market-title': 'NeuroNix बाज़ार',
         'market-subtitle': 'स्मार्ट गोदामों से एआई-सत्यापित फसल सूचियाँ',
         'market-search-placeholder': 'फसल, किसान खोजें...',
         'market-advisory-title': 'एआई बेचें बनाम रखें सलाहकार',
@@ -441,7 +441,7 @@ window.marketTranslations = {
         'market-ticker-label': 'लाइव मंडी भाव',
     },
     mr: {
-        'market-title': 'नारी शक्ती बाजारपेठ',
+        'market-title': 'NeuroNix बाजारपेठ',
         'market-subtitle': 'स्मार्ट गोदामांमधून AI-सत्यापित पीक याद्या',
         'market-search-placeholder': 'पीक, शेतकरी शोधा...',
         'market-advisory-title': 'AI विका किंवा थांबा सल्लागार',

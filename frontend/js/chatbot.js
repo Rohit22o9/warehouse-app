@@ -1,5 +1,5 @@
 /**
- * AgriFresh Nari Shakti AI Chatbot
+ * AgriFresh NeuroNix AI Chatbot
  * Tries the backend /api/chat first.
  * If the backend is unreachable, falls back to a smart local response engine
  * so the chatbot never shows a raw "I'm offline" error.
@@ -11,7 +11,7 @@
         const m = msg.toLowerCase();
 
         if (m.match(/\b(hi|hello|hey|namaste|who are you)\b/)) {
-            return "Namaste! 🙏 I'm the Nari Shakti AI Assistant. I can help you with temperature status, inventory levels, spoilage risks, and more. (Running in demo mode — backend offline)";
+            return "Namaste! 🙏 I'm the NeuroNix AI Assistant. I can help you with temperature status, inventory levels, spoilage risks, and more. (Running in demo mode — backend offline)";
         }
 
         if (m.match(/\b(temp|temperature|hot|cold|zone|sensor)\b/)) {

@@ -419,7 +419,7 @@ app.post('/api/chat', async (req, res) => {
             response = "Based on AI analysis, the Tomato batch (QR-TOM-001) has a 14% risk increase due to recent temp humidity fluctuations. I recommend prioritizing it for the next dispatch.";
         }
         else if (lowerMsg.includes("hi") || lowerMsg.includes("hello") || lowerMsg.includes("who")) {
-            response = "Namaste! I am the Nari Shakti AI Assistant. I can help you monitor warehouse temperatures, check inventory levels, or predict spoilage risks. How can I assist you today?";
+            response = "Namaste! I am the NeuroNix AI Assistant. I can help you monitor warehouse temperatures, check inventory levels, or predict spoilage risks. How can I assist you today?";
         }
         else {
             response = "I'm not sure I understand. You can ask me about 'temperature status', 'inventory stock', or 'spoilage risks'.";
@@ -441,7 +441,7 @@ app.post('/api/chat', async (req, res) => {
 });
 
 // ─────────────────────────────────────────────────────
-// MARKETPLACE API ROUTES — Nari Shakti Market Module
+// MARKETPLACE API ROUTES — NeuroNix Market Module
 // ─────────────────────────────────────────────────────
 
 // GET /api/market/listings — All crop listings with sensor-linked quality data

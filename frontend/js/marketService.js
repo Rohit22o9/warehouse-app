@@ -1,6 +1,6 @@
 /**
  * marketService.js
- * Centralized API service layer for the Nari Shakti Marketplace Module.
+ * Centralized API service layer for the NeuroNix Marketplace Module.
  * All market-related API calls are routed through here for consistency.
  */
 
