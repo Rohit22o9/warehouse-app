@@ -361,14 +361,14 @@
       background: var(--green-primary)
     }
 
-    /* MAIN */
     .main {
       grid-area: main;
       overflow-y: auto;
-      padding: 20px 24px 40px;
+      padding: 24px 24px 32px;
       display: flex;
       flex-direction: column;
-      gap: 18px
+      gap: 24px;
+      min-height: 0;
     }
 
     /* Page Head */
@@ -657,13 +657,18 @@
       color: var(--text-primary)
     }
 
-    /* TABLE */
+
+
+    /* Table Wrap */
     .tbl-wrap {
       background: var(--card-bg);
       border: .5px solid var(--border);
       border-radius: var(--radius);
       box-shadow: var(--shadow-card);
-      overflow: hidden
+      overflow: auto; /* Allow both X and Y scrolling */
+      width: 100%;
+      height: 220px; /* Fixed height for ~2.5 rows */
+      flex-shrink: 0; /* Don't squash it */
     }
 
     .tbl {
@@ -680,7 +685,10 @@
       letter-spacing: .06em;
       color: var(--text-muted);
       border-bottom: 1px solid var(--border);
-      background: #FAFAF9
+      background: #FAFAF9;
+      position: sticky;
+      top: 0;
+      z-index: 10;
     }
 
     .tbl td {
