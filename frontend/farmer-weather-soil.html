@@ -190,10 +190,108 @@ function updateSoil(){const m=document.getElementById('sfMoist').value;document.
 
 /* Location dropdown */
 function toggleLocDD(e){e.stopPropagation();document.getElementById('locDD').classList.toggle('open');}
-function selectLoc(loc,e){e.stopPropagation();document.getElementById('locText').textContent=loc;document.getElementById('locDD').classList.remove('open');const toast=document.getElementById('toast');toast.textContent='📍 Location updated to '+loc;toast.classList.add('show');setTimeout(()=>toast.classList.remove('show'),2500);}
 document.addEventListener('click',()=>{const dd=document.getElementById('locDD');if(dd)dd.classList.remove('open');});
 
-document.addEventListener('DOMContentLoaded',()=>{renderFC();renderRain();});
+document.addEventListener('DOMContentLoaded',()=>{renderFC();renderRain();loadLiveData();});
+
+async function loadLiveData() {
+  try {
+    const loc = document.getElementById('locText').textContent;
+    const coords = {
+      'Sangli North, MH': {lat: 16.85, lon: 74.58},
+      'Pune East, MH': {lat: 18.52, lon: 73.85},
+      'Nashik Central, MH': {lat: 19.99, lon: 73.78}
+    }[loc.trim()] || {lat: 16.85, lon: 74.58};
+
+    // Update Date in UI
+    const now = new Date();
+    const dateStr = now.toLocaleDateString(lang === 'en' ? 'en-US' : lang === 'mr' ? 'mr-IN' : 'hi-IN', {
+      weekday: 'long', month: 'long', day: 'numeric'
+    });
+    document.querySelector('.today-card .td').textContent = t('todayLabel').split('·')[0] + ' · ' + dateStr;
+
+    // Detect API base URL (target port 5000 if not current)
+    const base = window.location.port !== '5000' ? 'http://localhost:5000' : '';
+
+    // Fetch weather
+    const wRes = await fetch(`${base}/api/weather?lat=${coords.lat}&lon=${coords.lon}`);
+    const w = await wRes.json();
+    document.querySelector('.today-card .temp').textContent = w.temp + '°C';
+    document.querySelector('.today-card .cond').textContent = w.description.charAt(0).toUpperCase() + w.description.slice(1);
+    document.querySelector('.today-card .fl').textContent = `Feels like ${w.feels_like}°C`;
+    const mi = document.querySelectorAll('.today-card .mi');
+    if (mi.length >= 4) {
+      mi[0].innerHTML = `💧 ${t('humLabel')}: ${w.humidity}%`;
+      mi[1].innerHTML = `💨 ${t('windLabel')}: ${w.wind_speed} km/h`;
+      mi[2].innerHTML = `🌧 ${t('rainLabel')}: ${w.rain} mm`;
+      mi[3].innerHTML = `👁 ${t('visLabel')}: 10 km`;
+    }
+    const pv = document.querySelectorAll('.aip .pv');
+    if (pv.length >= 3) {
+      pv[0].textContent = w.temp + '°C';
+      pv[1].textContent = w.humidity + '%';
+      pv[2].textContent = (w.rain > 0 ? 'High' : 'Low');
+    }
+
+    // Fetch Soil
+    const sRes = await fetch(`${base}/api/soil?lat=${coords.lat}&lon=${coords.lon}`);
+    const s = await sRes.json();
+    document.getElementById('moistVal').textContent = s.moisture + '%';
+    const soilCards = document.querySelectorAll('.soil-card .sv');
+    if (soilCards.length >= 4) {
+      soilCards[1].textContent = s.ph;
+      soilCards[2].textContent = s.nitrogen;
+      soilCards[3].textContent = Math.round(s.temperature) + '°C';
+    }
+    
+    // Fetch Forecast
+    const fRes = await fetch(`${base}/api/forecast?lat=${coords.lat}&lon=${coords.lon}`);
+    const fData = await fRes.json();
+    if (fData && fData.length > 0) {
+      const fcScroll = document.getElementById('fcScroll');
+      if (fcScroll) {
+        fcScroll.innerHTML = '';
+        fData.forEach((f, i) => {
+          const isBest = i === 1; // Simulation: Day 2 is "Best"
+          const hcls = f.cond === 'Rain' ? 'h-avoid' : 'h-good';
+          const hicon = f.cond === 'Rain' ? '✗' : '✓';
+          const iconMap = { 'Clear': '☀️', 'Clouds': '⛅', 'Rain': '🌧', 'Drizzle': '🌦', 'Thunderstorm': '⛈' };
+          const displayIcon = iconMap[f.cond] || '⛅';
+          
+          fcScroll.innerHTML += `
+            <div class="fc-card${isBest ? ' best' : ''}">
+              <div class="fd">${f.day}</div>
+              <div class="ficon">${displayIcon}</div>
+              <div class="ft">${f.hi}°/${f.lo}°</div>
+              <div class="fl">${f.cond}</div>
+              <span class="harv-pill ${hcls}">${hicon} ${t(hcls==='h-good'?'goodDay':'avoidDay')}</span>
+              ${isBest ? `<span class="best-badge">${t('bestDay')}</span>` : ''}
+            </div>`;
+        });
+      }
+    }
+    
+    // Update source info
+    const sourceLabel = document.querySelector('.ais .au');
+    if (sourceLabel) {
+      sourceLabel.textContent = `Live · ${w.source === 'Simulation (Fallback)' ? 'Simulated' : 'Official Data'}`;
+      sourceLabel.style.color = w.source === 'Simulation (Fallback)' ? 'var(--amber)' : '#fff';
+    }
+  } catch (err) {
+    console.warn("Live data fetch failed", err);
+  }
+}
+
+function selectLoc(loc, e) {
+  e.stopPropagation();
+  document.getElementById('locText').textContent = loc;
+  document.getElementById('locDD').classList.remove('open');
+  const toast = document.getElementById('toast');
+  toast.textContent = '📍 Location updated to ' + loc;
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 2500);
+  loadLiveData(); // Re-fetch on location change
+}
 </script>
 </body>
 </html>

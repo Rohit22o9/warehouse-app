@@ -10,7 +10,11 @@ MODEL_PATH = os.path.join(BASE_DIR, "Farmer_model")
 
 def load_with_fallback(path):
     if os.path.exists(path):
-        return joblib.load(path)
+        try:
+            return joblib.load(path)
+        except Exception as e:
+            print(f"Error loading model at {path}: {e}")
+            return None
     print(f"Warning: Model not found at {path}")
     return None
 
