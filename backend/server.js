@@ -4,6 +4,8 @@ const dotenv = require('dotenv');
 const mongoose = require('mongoose');
 const path = require('path');
 const axios = require('axios');
+import chatbotRoutes from "./routes/chatbot.js";
+
 
 // Models
 const SensorLog = require('./models/SensorLog');
@@ -22,6 +24,15 @@ app.use(express.json());
 
 // Serve static files from the frontend directory
 app.use(express.static(path.join(__dirname, '../frontend')));
+
+
+app.use("/api/chatbot", chatbotRoutes);
+
+const PORT = process.env.PORT || 5000;
+
+app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+});
 
 // MongoDB Connection
 mongoose.connect(process.env.MONGODB_URI, {
@@ -164,7 +175,7 @@ app.get('/api/warehouse/recommendations', async (req, res) => {
             const ageDays = (now - new Date(item.harvest_date)) / (1000 * 60 * 60 * 24);
             if (ageDays > 10) {
                 recommendations.push({
-                    id: `REC-INV-${item._id.toString().substring(0,4)}`,
+                    id: `REC-INV-${item._id.toString().substring(0, 4)}`,
                     target: `Batch #AF-${item.qr_code_uid.split('-')[2]} (${item.produce_type})`,
                     reason: `${(ageDays * 8).toFixed(0)}% Spoilage Risk predicted in Zone ${item.zone_name}`,
                     action: 'Dispatch Immediately',
@@ -181,7 +192,7 @@ app.get('/api/warehouse/recommendations', async (req, res) => {
         latestLogs.forEach(log => {
             if (log.temperature > 18) {
                 recommendations.push({
-                    id: `REC-ENV-${log._id.toString().substring(0,4)}`,
+                    id: `REC-ENV-${log._id.toString().substring(0, 4)}`,
                     target: `Zone ${log.zone_name}`,
                     reason: `High temperature anomaly detected (${log.temperature.toFixed(1)}°C)`,
                     action: 'Reduce Temp by 2°C',
@@ -305,7 +316,7 @@ app.get('/api/soil', async (req, res) => {
         const soilApiKey = process.env.Soil_API_KEY;
         const lat = req.query.lat || 16.8527;
         const lon = req.query.lon || 74.5815;
-        
+
         if (!soilApiKey || soilApiKey === 'YOUR_API_KEY_HERE') {
             throw new Error("Missing Soil API Key");
         }
@@ -334,14 +345,14 @@ app.get('/api/warehouse/zones', async (req, res) => {
         const zonesData = [];
         for (const zone of warehouse.zones) {
             // Get latest sensor log for this zone
-            const latestLog = await SensorLog.findOne({ 
-                warehouse_id: warehouse._id, 
-                zone_name: zone.name 
+            const latestLog = await SensorLog.findOne({
+                warehouse_id: warehouse._id,
+                zone_name: zone.name
             }).sort({ timestamp: -1 });
 
             // Count batches in this zone
-            const batchCount = await Inventory.countDocuments({ 
-                warehouse_id: warehouse._id, 
+            const batchCount = await Inventory.countDocuments({
+                warehouse_id: warehouse._id,
                 zone_name: zone.name,
                 status: 'STORED'
             });
@@ -420,7 +431,7 @@ app.get('/api/analytics/risk-distribution', async (req, res) => {
     try {
         const inventory = await Inventory.find({ status: 'STORED' });
         const total_batches = inventory.length;
-        
+
         // Simulating risk calculation based on harvest date (age)
         let highRisk = 0;
         let warning = 0;
@@ -438,9 +449,9 @@ app.get('/api/analytics/risk-distribution', async (req, res) => {
             total_batches,
             risk_score_summary: ((highRisk / total_batches) * 100).toFixed(0),
             distribution: [
-                { label: 'Safe', percentage: ((safe/total_batches)*100).toFixed(0), count: safe },
-                { label: 'Warning', percentage: ((warning/total_batches)*100).toFixed(0), count: warning },
-                { label: 'High Risk', percentage: ((highRisk/total_batches)*100).toFixed(0), count: highRisk }
+                { label: 'Safe', percentage: ((safe / total_batches) * 100).toFixed(0), count: safe },
+                { label: 'Warning', percentage: ((warning / total_batches) * 100).toFixed(0), count: warning },
+                { label: 'High Risk', percentage: ((highRisk / total_batches) * 100).toFixed(0), count: highRisk }
             ],
             insight: `${highRisk} batches are in high-risk category. AI recommends dispatch within 48 hours.`
         });
@@ -472,11 +483,11 @@ app.get('/api/sensors/history', async (req, res) => {
     try {
         const range = req.query.range || '24h';
         const hours = range === '7d' ? 168 : 24;
-        
+
         // In a real production system, you'd use MongoDB $group by time buckets
         // For now, we fetch recent logs and aggregate them in JS or provide a high-fidelity simulation 
         // that matches the warehouse_id
-        
+
         const logs = await SensorLog.find()
             .sort({ timestamp: -1 })
             .limit(100);
@@ -577,12 +588,12 @@ app.get('/api/market/listings', async (req, res) => {
         const humidity = latestSensor ? latestSensor.humidity : (55 + Math.random() * 30);
 
         const crops = [
-            { id: 'LST-001', name: 'Tomato',   icon: '🍅', qty: '1,200 kg', price: '₹28/kg',  zone: 'A1', humidity: parseFloat(humidity.toFixed(1)), gas: 38, daysLeft: 12, farmer: 'Sunita Devi',   location: 'Nashik' },
-            { id: 'LST-002', name: 'Onion',    icon: '🧅', qty: '800 kg',   price: '₹18/kg',  zone: 'B2', humidity: 68,                              gas: 45, daysLeft: 25, farmer: 'Rekha Patil',   location: 'Pune'   },
-            { id: 'LST-003', name: 'Potato',   icon: '🥔', qty: '2,000 kg', price: '₹15/kg',  zone: 'C1', humidity: 71,                              gas: 55, daysLeft: 30, farmer: 'Anita Rao',     location: 'Mumbai' },
-            { id: 'LST-004', name: 'Grapes',   icon: '🍇', qty: '500 kg',   price: '₹95/kg',  zone: 'A3', humidity: 60,                              gas: 28, daysLeft: 8,  farmer: 'Kavita Sharma', location: 'Nashik' },
-            { id: 'LST-005', name: 'Chilli',   icon: '🌶️', qty: '320 kg',   price: '₹62/kg',  zone: 'D2', humidity: 55,                              gas: 32, daysLeft: 20, farmer: 'Meena Joshi',   location: 'Pune'   },
-            { id: 'LST-006', name: 'Capsicum', icon: '🫑', qty: '410 kg',   price: '₹45/kg',  zone: 'B4', humidity: 73,                              gas: 60, daysLeft: 6,  farmer: 'Priya Nair',    location: 'Mumbai' },
+            { id: 'LST-001', name: 'Tomato', icon: '🍅', qty: '1,200 kg', price: '₹28/kg', zone: 'A1', humidity: parseFloat(humidity.toFixed(1)), gas: 38, daysLeft: 12, farmer: 'Sunita Devi', location: 'Nashik' },
+            { id: 'LST-002', name: 'Onion', icon: '🧅', qty: '800 kg', price: '₹18/kg', zone: 'B2', humidity: 68, gas: 45, daysLeft: 25, farmer: 'Rekha Patil', location: 'Pune' },
+            { id: 'LST-003', name: 'Potato', icon: '🥔', qty: '2,000 kg', price: '₹15/kg', zone: 'C1', humidity: 71, gas: 55, daysLeft: 30, farmer: 'Anita Rao', location: 'Mumbai' },
+            { id: 'LST-004', name: 'Grapes', icon: '🍇', qty: '500 kg', price: '₹95/kg', zone: 'A3', humidity: 60, gas: 28, daysLeft: 8, farmer: 'Kavita Sharma', location: 'Nashik' },
+            { id: 'LST-005', name: 'Chilli', icon: '🌶️', qty: '320 kg', price: '₹62/kg', zone: 'D2', humidity: 55, gas: 32, daysLeft: 20, farmer: 'Meena Joshi', location: 'Pune' },
+            { id: 'LST-006', name: 'Capsicum', icon: '🫑', qty: '410 kg', price: '₹45/kg', zone: 'B4', humidity: 73, gas: 60, daysLeft: 6, farmer: 'Priya Nair', location: 'Mumbai' },
         ];
 
         res.json(crops);
@@ -684,7 +695,7 @@ function getSimulatedMandiPrices() {
 app.get('/api/market/mandi-prices', async (req, res) => {
     try {
         const apiKey = process.env.DATA_GOV_API_KEY;
-        
+
         // 1. If we have a fresh cache, return it to avoid rate limiting
         const now = new Date().getTime();
         if (mandiPricesCache.data && (now - mandiPricesCache.last_updated < CACHE_TTL_MS)) {
@@ -701,20 +712,20 @@ app.get('/api/market/mandi-prices', async (req, res) => {
         // 3. Fetch real data from data.gov.in (Agmarknet Mandi Prices dataset)
         // Dataset ID: 9ef84268-d588-465a-a308-a864a43d0070 (Current Daily Prices of various commodities)
         const format = 'json';
-        const limit = 50; 
+        const limit = 50;
         const url = `https://api.data.gov.in/resource/9ef84268-d588-465a-a308-a864a43d0070?api-key=${apiKey}&format=${format}&limit=${limit}&filters[state]=Maharashtra`;
 
         const response = await axios.get(url, { timeout: 8000 });
-        
+
         if (response.data && response.data.records && response.data.records.length > 0) {
             // Map real data to our frontend format
             const realData = response.data.records.map(record => ({
                 city: record.district,
                 crop: record.commodity,
                 // The dataset provides 'modal_price' (usually in Rs/Quintal). Converting to Rs/Kg
-                price: (parseFloat(record.modal_price) / 100).toFixed(0), 
+                price: (parseFloat(record.modal_price) / 100).toFixed(0),
                 // Open data lacks daily change, simulating this metric for the UI ticker
-                change: ((Math.random() - 0.4) * 5).toFixed(1), 
+                change: ((Math.random() - 0.4) * 5).toFixed(1),
                 unit: 'per kg',
                 source: 'data.gov.in (Real)'
             }));
@@ -738,9 +749,9 @@ app.get('/api/market/mandi-prices', async (req, res) => {
 app.get('/api/market/sensor-status', async (req, res) => {
     try {
         const latest = await SensorLog.findOne().sort({ timestamp: -1 });
-        const humidity = latest ? latest.humidity   : Math.floor(50 + Math.random() * 40);
-        const temp     = latest ? latest.temperature : (18 + Math.random() * 8);
-        const gas_ppm  = Math.floor(20 + Math.random() * 70); // MQ2 simulated
+        const humidity = latest ? latest.humidity : Math.floor(50 + Math.random() * 40);
+        const temp = latest ? latest.temperature : (18 + Math.random() * 8);
+        const gas_ppm = Math.floor(20 + Math.random() * 70); // MQ2 simulated
 
         res.json({
             humidity: parseFloat(humidity.toFixed(1)),
@@ -760,11 +771,11 @@ app.get('/api/market/sensor-status', async (req, res) => {
 // POST /api/market/negotiate — AI Bhav-Taal negotiation bot
 app.post('/api/market/negotiate', (req, res) => {
     const { farmerPrice, buyerOffer, cropName, message } = req.body;
-    const crop   = cropName || 'produce';
+    const crop = cropName || 'produce';
     const farmer = parseFloat(farmerPrice) || 30;
-    const buyer  = parseFloat(buyerOffer)  || 22;
-    const mid    = ((farmer + buyer) / 2).toFixed(0);
-    const trend  = (Math.random() > 0.5) ? '+5.8%' : '-2.3%';
+    const buyer = parseFloat(buyerOffer) || 22;
+    const mid = ((farmer + buyer) / 2).toFixed(0);
+    const trend = (Math.random() > 0.5) ? '+5.8%' : '-2.3%';
 
     const responses = [
         `📊 Based on today's ${crop} prices across Nashik, Pune, and Mumbai mandis, a fair settlement rate is **₹${mid}/kg**. The 7-day demand trend shows ${trend} — the farmer's ask of ₹${farmer} is reasonable for Grade A quality.`,
