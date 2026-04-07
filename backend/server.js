@@ -508,6 +508,87 @@ app.get('/api/sensors/history', async (req, res) => {
     }
 });
 
+// Farmer-focused AI Chatbot: Kisan Mitra AI
+app.post('/api/farmer-chat', async (req, res) => {
+    const { message } = req.body;
+    if (!message) {
+        return res.status(400).json({ error: "No message provided." });
+    }
+
+    const apiKey = process.env.GEMINI_API_KEY || process.env.chatbot_api_key;
+    if (!apiKey) {
+        console.error("Gemini API key missing in environment.");
+        return res.status(500).json({ response: "AI Service is temporarily unavailable. Please try again later." });
+    }
+
+    // --- Grounding Context: Fetch live data to give REAL answers ---
+    let extraContext = "";
+    try {
+        // 1. Get live weather context
+        const weatherResp = await axios.get(`http://127.0.0.1:${PORT}/api/weather`, { timeout: 1000 }).catch(() => null);
+        if (weatherResp && weatherResp.data) {
+            const w = weatherResp.data;
+            extraContext += `LIVE WEATHER in ${w.city}: ${w.temp}°C, ${w.description}, Humidity: ${w.humidity}%, Rain info: ${w.rain}mm. `;
+        }
+
+        // 2. Get warehouse status
+        const warehouseResp = await Warehouse.findOne({ name: 'Nashik Central Hub' });
+        if (warehouseResp) {
+            const inventory = await Inventory.find({ warehouse_id: warehouseResp._id, status: 'STORED' });
+            const total = inventory.reduce((sum, item) => sum + item.quantity, 0);
+            extraContext += `WAREHOUSE STATUS (Nashik Central Hub): Total storage used: ${total}kg. `;
+        }
+
+        // 3. Get market price context
+        const marketResp = await axios.get(`http://127.0.0.1:${PORT}/api/market/mandi-prices`, { timeout: 5000 }).catch((e) => {
+            console.warn("Market API grounding timeout or error:", e.message);
+            return null;
+        });
+        if (marketResp && marketResp.data && Array.isArray(marketResp.data)) {
+            // Take the first 10 items (more variety)
+            const prices = marketResp.data.slice(0, 10).map(r => `${r.crop} in ${r.city}: ₹${r.price}/${r.unit}`).join(', ');
+            extraContext += `LIVE MARKET PRICES: ${prices}. `;
+        }
+    } catch (ctxErr) {
+        console.warn("Context fetch failed for chatbot:", ctxErr.message);
+    }
+
+    console.log(`[Chatbot Context]: ${extraContext}`);
+
+    const systemPrompt = `You are Kisan Mitra AI, an expert agriculture assistant for Indian farmers. 
+Current System Context: ${extraContext || "Live data unavailable."}
+
+Rules:
+1. Answer in the SAME language the user uses (Hindi, Marathi, English).
+2. Use the LIVE MARKET PRICES, LIVE WEATHER, and WAREHOUSE STATUS provided in the context for factual answers.
+3. If they ask about prices, mention the specific commodity price from the text above.
+4. Keep answers simple, practical, and highly accurate for the Indian agricultural context.`;
+
+    try {
+        const response = await axios.post(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`, {
+            contents: [
+                {
+                    parts: [
+                        { text: `${systemPrompt}\n\nUser: ${message}` }
+                    ]
+                }
+            ]
+        }, {
+            headers: { 'Content-Type': 'application/json' }
+        });
+
+        if (response.data && response.data.candidates && response.data.candidates[0].content && response.data.candidates[0].content.parts[0].text) {
+            let aiText = response.data.candidates[0].content.parts[0].text.trim();
+            res.json({ response: aiText });
+        } else {
+            throw new Error("Invalid response structure from Gemini API");
+        }
+    } catch (err) {
+        console.error("Gemini API error:", err.response ? JSON.stringify(err.response.data) : err.message);
+        res.status(500).json({ response: "I'm having trouble processing your query right now. Please try again." });
+    }
+});
+
 // --- Chatbot AI Endpoint ---
 app.post('/api/chat', async (req, res) => {
     const { message, userId } = req.body;
