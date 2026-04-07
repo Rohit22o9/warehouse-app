@@ -299,7 +299,8 @@ const translations = {
         "verification-level": "System verification level",
         "verified-label": "Verified",
         "active-label": "Active",
-        "queued-label": "Queued"
+        "queued-label": "Queued",
+        "nav-logout": "Logout"
     },
     hi: {
         "nav-roadmap": "प्रगति मानचित्र",
@@ -601,7 +602,8 @@ const translations = {
         "verification-level": "सिस्टम सत्यापन स्तर",
         "verified-label": "सत्यापित",
         "active-label": "सक्रिय",
-        "queued-label": "कतारबद्ध"
+        "queued-label": "कतारबद्ध",
+        "nav-logout": "लॉगआउट"
     },
     mr: {
         "nav-roadmap": "नफा रोडमॅप",
@@ -903,8 +905,15 @@ const translations = {
         "verification-level": "सिस्टम सत्यापन पातळी",
         "verified-label": "सत्यापित",
         "active-label": "सक्रिय",
-        "queued-label": "प्रतीक्षेत"
+        "queued-label": "प्रतीक्षेत",
+        "nav-logout": "लॉगआउट"
     }
+};
+
+window.logout = function() {
+    localStorage.clear();
+    sessionStorage.clear();
+    window.location.href = 'index.html';
 };
 
 function setLanguage(lang) {
