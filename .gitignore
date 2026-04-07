@@ -8,3 +8,7 @@ node_modules/
 # Logs
 logs
 *.log
+
+__pycache__/
+*.pyc
+.env
