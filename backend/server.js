@@ -4,7 +4,10 @@ const dotenv = require('dotenv');
 const mongoose = require('mongoose');
 const path = require('path');
 const axios = require('axios');
-import chatbotRoutes from "./routes/chatbot.js";
+const chatbotRoutes = require("./routes/chatbot.routes");
+const weatherRoutes = require("./routes/weather.routes");
+const marketRoutes = require("./routes/market.routes");
+
 
 
 // Models
@@ -26,13 +29,18 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname, '../frontend')));
 
 
-app.use("/api/chatbot", chatbotRoutes);
+// Modular Routes
+// Modular Routes
+app.use("/api/chat", chatbotRoutes);
+app.use("/api/farmer-chat", chatbotRoutes); // Compatibility for frontend
+app.use("/api/weather", weatherRoutes);
+app.use("/api/market-modular", marketRoutes);
 
-const PORT = process.env.PORT || 5000;
 
-app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
-});
+
+
+
+
 
 // MongoDB Connection
 mongoose.connect(process.env.MONGODB_URI, {
@@ -213,101 +221,8 @@ app.get('/api/warehouse/recommendations', async (req, res) => {
 
 // --- Weather & Soil Real-Time Endpoints ---
 
-// GET /api/weather — Live weather from OpenWeather
-app.get('/api/weather', async (req, res) => {
-    try {
-        const apiKey = process.env.OPENWEATHER_API_KEY;
-        const lat = req.query.lat || 16.8527; // Default: Sangli
-        const lon = req.query.lon || 74.5815;
+// Weather routes are now handled via /api/weather modular route
 
-        if (!apiKey || apiKey === 'YOUR_API_KEY_HERE') {
-            throw new Error("Missing OpenWeather API Key");
-        }
-
-        // Fetch current and forecast weather
-        const url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}&units=metric`;
-        const response = await axios.get(url);
-
-        const weatherData = {
-            city: response.data.name,
-            temp: Math.round(response.data.main.temp),
-            description: response.data.weather[0].description,
-            icon: response.data.weather[0].icon,
-            humidity: response.data.main.humidity,
-            wind_speed: response.data.wind.speed,
-            feels_like: Math.round(response.data.main.feels_like),
-            rain: response.data.rain ? response.data.rain['1h'] || 0 : 0,
-            timestamp: new Date().toISOString()
-        };
-
-        res.json(weatherData);
-
-    } catch (err) {
-        console.error("[Weather API] Error:", err.message);
-        // Fallback simulation
-        res.json({
-            city: "Sangli North (Simulated)",
-            temp: 28 + Math.floor(Math.random() * 5),
-            description: "partly cloudy",
-            icon: "02d",
-            humidity: 65,
-            wind_speed: 12.5,
-            feels_like: 31,
-            rain: 0,
-            timestamp: new Date().toISOString(),
-            source: "Simulation (Fallback)"
-        });
-    }
-});
-
-// GET /api/forecast — 5-day weather forecast
-app.get('/api/forecast', async (req, res) => {
-    try {
-        const apiKey = process.env.OPENWEATHER_API_KEY;
-        const lat = req.query.lat || 16.8527;
-        const lon = req.query.lon || 74.5815;
-
-        if (!apiKey || apiKey === 'YOUR_API_KEY_HERE') {
-            throw new Error("Missing OpenWeather API Key");
-        }
-
-        const url = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${apiKey}&units=metric`;
-        const response = await axios.get(url);
-
-        // Process 5-day/3-hour forecast into daily high/lows
-        const daily = {};
-        response.data.list.forEach(f => {
-            const date = f.dt_txt.split(' ')[0];
-            if (!daily[date]) {
-                daily[date] = { temp_max: f.main.temp_max, temp_min: f.main.temp_min, condition: f.weather[0].main, icon: f.weather[0].icon };
-            } else {
-                daily[date].temp_max = Math.max(daily[date].temp_max, f.main.temp_max);
-                daily[date].temp_min = Math.min(daily[date].temp_min, f.main.temp_min);
-            }
-        });
-
-        const forecast = Object.keys(daily).map(date => ({
-            day: new Date(date).toLocaleDateString('en-US', { weekday: 'short' }),
-            date: date,
-            hi: Math.round(daily[date].temp_max),
-            lo: Math.round(daily[date].temp_min),
-            cond: daily[date].condition,
-            icon: daily[date].icon
-        }));
-
-        res.json(forecast.slice(0, 7));
-
-    } catch (err) {
-        console.error("[Forecast API] Error:", err.message);
-        res.json([
-            { day: 'Mon', hi: 28, lo: 19, cond: 'Cloudy', icon: '03d' },
-            { day: 'Tue', hi: 27, lo: 18, cond: 'Sunny', icon: '01d' },
-            { day: 'Wed', hi: 28, lo: 20, cond: 'Clear', icon: '01d' },
-            { day: 'Thu', hi: 29, lo: 22, cond: 'Humid', icon: '04d' },
-            { day: 'Fri', hi: 24, lo: 19, cond: 'Rain', icon: '10d' }
-        ]);
-    }
-});
 
 
 // GET /api/soil — Real-time soil metrics
@@ -519,169 +434,8 @@ app.get('/api/sensors/history', async (req, res) => {
     }
 });
 
-// Farmer-focused AI Chatbot: Kisan Mitra AI
-app.post('/api/farmer-chat', async (req, res) => {
-    const { message } = req.body;
-    if (!message) {
-        return res.status(400).json({ error: "No message provided." });
-    }
+// Chatbot routes are now handled via /api/chat modular route
 
-    const apiKey = process.env.GEMINI_API_KEY || process.env.chatbot_api_key;
-    if (!apiKey) {
-        console.error("Gemini API key missing in environment.");
-        return res.status(500).json({ response: "AI Service is temporarily unavailable. Please try again later." });
-    }
-
-    // --- Grounding Context: Fetch live data to give REAL answers ---
-    let extraContext = "";
-    try {
-        // 1. Get live weather context (Sangli, Nashik, Pune)
-        const fetchWeather = async (lat, lon, cityName) => {
-            try {
-                const res = await axios.get(`http://127.0.0.1:${PORT}/api/weather?lat=${lat}&lon=${lon}`, { timeout: 1500 });
-                if (res && res.data) return `${cityName}: ${res.data.temp}°C, ${res.data.description}, Rain: ${res.data.rain || 0}mm`;
-            } catch (err) { }
-            return null;
-        };
-
-        const weatherResults = await Promise.all([
-            fetchWeather(16.8527, 74.5815, 'Sangli'),
-            fetchWeather(20.0, 73.78, 'Nashik'),
-            fetchWeather(18.52, 73.85, 'Pune')
-        ]);
-        
-        const validWeather = weatherResults.filter(Boolean);
-        if (validWeather.length > 0) {
-            extraContext += `LIVE WEATHER: ${validWeather.join(' | ')}. `;
-        }
-
-        // 2. Get warehouse status
-        const warehouseResp = await Warehouse.findOne({ name: 'Nashik Central Hub' });
-        if (warehouseResp) {
-            const inventory = await Inventory.find({ warehouse_id: warehouseResp._id, status: 'STORED' });
-            const total = inventory.reduce((sum, item) => sum + item.quantity, 0);
-            extraContext += `WAREHOUSE STATUS (Nashik Central Hub): Total storage used: ${total}kg. `;
-        }
-
-        // 3. Get market price context
-        const marketResp = await axios.get(`http://127.0.0.1:${PORT}/api/market/mandi-prices`, { timeout: 5000 }).catch((e) => {
-            console.warn("Market API grounding timeout or error:", e.message);
-            return null;
-        });
-        if (marketResp && marketResp.data && Array.isArray(marketResp.data)) {
-            // Prioritize relevant regional cities for this dashboard user (Sangli/Nashik/Pune)
-            const preferredCities = ['Nashik', 'Pune', 'Sangli', 'Mumbai', 'Kolhapur'];
-            let sortedData = marketResp.data.sort((a, b) => {
-                const aPref = preferredCities.includes(a.city) ? 1 : 0;
-                const bPref = preferredCities.includes(b.city) ? 1 : 0;
-                return bPref - aPref; // Put preferred cities first
-            });
-            
-            // Take top 40 results to give a much better statewide view, ensuring local hubs are first
-            const prices = sortedData.filter((val, i, arr) => arr.findIndex(t => t.crop === val.crop && t.city === val.city) === i) // unique
-                                     .slice(0, 40)
-                                     .map(r => `${r.crop} in ${r.city}: ₹${r.price}/${r.unit}`).join(', ');
-            extraContext += `LIVE MARKET PRICES: ${prices}. `;
-        }
-    } catch (ctxErr) {
-        console.warn("Context fetch failed for chatbot:", ctxErr.message);
-    }
-
-    console.log(`[Chatbot Context]: ${extraContext}`);
-
-    const systemPrompt = `You are Kisan Mitra AI, an expert agriculture assistant for Indian farmers.
-Current System Context: ${extraContext || "Live data unavailable."}
-
-Rules:
-1. Answer in the SAME language the user uses (Hindi, Marathi, English).
-2. Answer the user's specific question directly and concisely. Do ONLY what the user asks.
-3. You have live market prices, live weather (Sangli, Nashik, Pune), and Nashik Central Hub warehouse status. USE this data.
-4. If a user asks for weather outside Sangli/Nashik/Pune, politely say we are currently tracking only these core AgriFresh hubs.
-5. If the user asks for a price currently missing in the LIVE MARKET PRICES context, politely state that you only have current pricing for the items listed in the system. Do NOT makeup prices.`;
-
-    try {
-        const response = await axios.post(`https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`, {
-            contents: [
-                {
-                    parts: [
-                        { text: `${systemPrompt}\n\nUser: ${message}` }
-                    ]
-                }
-            ]
-        }, {
-            headers: { 'Content-Type': 'application/json' }
-        });
-
-        if (response.data && response.data.candidates && response.data.candidates[0].content && response.data.candidates[0].content.parts[0].text) {
-            let aiText = response.data.candidates[0].content.parts[0].text.trim();
-            console.log("[Chatbot Response Success]");
-            res.json({ response: aiText });
-        } else {
-            console.error("[Chatbot Error] Invalid response structure:", JSON.stringify(response.data));
-            throw new Error("Invalid response structure from Gemini API");
-        }
-    } catch (err) {
-        console.error("Gemini API error:", err.response ? JSON.stringify(err.response.data) : err.message);
-        res.status(500).json({ response: "I'm having trouble processing your query right now. Please try again.", debug_error: err.response ? err.response.data : err.message });
-    }
-});
-
-// --- Chatbot AI Endpoint ---
-app.post('/api/chat', async (req, res) => {
-    const { message, userId } = req.body;
-    let response = "";
-    let intent = "general";
-
-    const lowerMsg = message.toLowerCase();
-
-    try {
-        if (lowerMsg.includes("temperature") || lowerMsg.includes("temp") || lowerMsg.includes("status")) {
-            intent = "status_query";
-            const latestLogs = await SensorLog.find().sort({ timestamp: -1 }).limit(3);
-            if (latestLogs.length > 0) {
-                response = "Currently, " + latestLogs.map(l => `Zone ${l.zone_name} is at ${l.temperature}°C`).join(", ") + ". ";
-                if (latestLogs.some(l => l.temperature > 18)) {
-                    response += "⚠️ ALERT: Some zones are above the safe limit (18°C)!";
-                } else {
-                    response += "Everything looks safe and optimized. ✅";
-                }
-            } else {
-                response = "I couldn't find any recent sensor data. Please check if the IOT nodes are active.";
-            }
-        }
-        else if (lowerMsg.includes("inventory") || lowerMsg.includes("stock") || lowerMsg.includes("many")) {
-            intent = "inventory_query";
-            const inventory = await Inventory.find({ status: 'STORED' });
-            const total = inventory.reduce((acc, item) => acc + item.quantity, 0);
-            const types = [...new Set(inventory.map(item => item.produce_type))];
-            response = `We currently have ${total}kg of stock across ${types.length} types of produce: ${types.join(", ")}.`;
-        }
-        else if (lowerMsg.includes("expiry") || lowerMsg.includes("spoil") || lowerMsg.includes("risk")) {
-            intent = "risk_query";
-            const highRisk = await Inventory.find({ status: 'STORED' }).limit(2); // Simple mock for demo
-            response = "Based on AI analysis, the Tomato batch (QR-TOM-001) has a 14% risk increase due to recent temp humidity fluctuations. I recommend prioritizing it for the next dispatch.";
-        }
-        else if (lowerMsg.includes("hi") || lowerMsg.includes("hello") || lowerMsg.includes("who")) {
-            response = "Namaste! I am the NeuroNix AI Assistant. I can help you monitor warehouse temperatures, check inventory levels, or predict spoilage risks. How can I assist you today?";
-        }
-        else {
-            response = "I'm not sure I understand. You can ask me about 'temperature status', 'inventory stock', or 'spoilage risks'.";
-        }
-
-        // Log the chat
-        const newLog = new ChatLog({
-            user_id: userId || null,
-            message,
-            response,
-            intent
-        });
-        await newLog.save();
-
-        res.json({ response });
-    } catch (err) {
-        res.status(500).json({ error: err.message });
-    }
-});
 
 // ─────────────────────────────────────────────────────
 // MARKETPLACE API ROUTES — NeuroNix Market Module
@@ -819,11 +573,8 @@ app.get('/api/market/mandi-prices', async (req, res) => {
         // 3. Fetch real data from data.gov.in (Agmarknet Mandi Prices dataset)
         // Dataset ID: 9ef84268-d588-465a-a308-a864a43d0070 (Current Daily Prices of various commodities)
         const format = 'json';
-<<<<<<< HEAD
-        const limit = 50;
-=======
-        const limit = 1000; 
->>>>>>> a8bbc8e2df534d180bcc17e8e39295443d379cc8
+        const limit = 1000;
+
         const url = `https://api.data.gov.in/resource/9ef84268-d588-465a-a308-a864a43d0070?api-key=${apiKey}&format=${format}&limit=${limit}&filters[state]=Maharashtra`;
 
         const response = await axios.get(url, { timeout: 8000 });
