@@ -16,9 +16,7 @@ const Inventory = require('./models/Inventory');
 const ChatLog = require('./models/ChatLog');
 const User = require('./models/User');
 const Warehouse = require('./models/Warehouse');
-
-dotenv.config();
-
+dotenv.config({ path: path.join(__dirname, '../env') });
 const app = express();
 const PORT = process.env.PORT || 5000;
 
