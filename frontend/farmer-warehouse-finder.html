@@ -2,1595 +2,235 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Warehouse Finder | AgriFresh Farmer Dashboard</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link
-    href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700&family=Noto+Sans+Devanagari:wght@400;500;600&display=swap"
-    rel="stylesheet">
-  <style>
-    :root {
-      --green-primary: #1D9E75;
-      --green-dark: #27500A;
-      --green-light: #EAF3DE;
-      --green-mid: #3B6D11;
-      --page-bg: #F0F7F0;
-      --sidebar-bg: #FFF;
-      --card-bg: #FFF;
-      --text-primary: #1A1A1A;
-      --text-secondary: #5F5E5A;
-      --text-muted: #888780;
-      --amber: #BA7517;
-      --amber-light: #FAEEDA;
-      --red-primary: #E24B4A;
-      --red-light: #FCEBEB;
-      --blue: #3B82F6;
-      --blue-light: #EBF2FF;
-      --border: rgba(0, 0, 0, 0.08);
-      --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.06);
-      --radius: 12px
-    }
-
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box
-    }
-
-    body {
-      font-family: 'Noto Sans', 'Noto Sans Devanagari', 'Segoe UI', sans-serif;
-      background: var(--page-bg);
-      color: var(--text-primary);
-      line-height: 1.5;
-      overflow: hidden;
-      height: 100vh
-    }
-
-    .app {
-      display: grid;
-      grid-template: "header header" 60px "sidebar main" 1fr / 240px 1fr;
-      height: 100vh
-    }
-
-    /* HEADER */
-    .header {
-      grid-area: header;
-      background: #fff;
-      border-bottom: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      padding: 0 20px;
-      gap: 16px;
-      z-index: 100
-    }
-
-    .header-left {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      flex-shrink: 0
-    }
-
-    .logo-box {
-      width: 32px;
-      height: 32px;
-      background: var(--green-dark);
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center
-    }
-
-    .logo-box svg {
-      width: 18px;
-      height: 18px;
-      fill: #fff
-    }
-
-    .app-name {
-      font-size: 16px;
-      font-weight: 700;
-      color: var(--green-dark)
-    }
-
-    .app-sub {
-      font-size: 11px;
-      color: var(--text-muted)
-    }
-
-    .header-center {
-      display: flex;
-      gap: 8px;
-      flex: 1;
-      justify-content: center;
-      overflow-x: auto;
-      white-space: nowrap;
-      scrollbar-width: none
-    }
-
-    .header-center::-webkit-scrollbar {
-      display: none
-    }
-
-    .alert-pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      padding: 5px 12px;
-      border-radius: 20px;
-      font-size: 11px;
-      font-weight: 500;
-      flex-shrink: 0
-    }
-
-    .pill-green {
-      background: var(--green-light);
-      color: var(--green-dark)
-    }
-
-    .pill-amber {
-      background: var(--amber-light);
-      color: #633806
-    }
-
-    .pill-pink {
-      background: #F5E6FF;
-      color: #6B21A8
-    }
-
-    .header-right {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      flex-shrink: 0
-    }
-
-    .lang-pill {
-      padding: 5px 12px;
-      border-radius: 6px;
-      font-size: 11px;
-      font-weight: 500;
-      cursor: pointer;
-      border: 1px solid var(--border);
-      background: #fff;
-      color: var(--text-secondary);
-      transition: .15s
-    }
-
-    .lang-pill.active {
-      background: var(--green-dark);
-      color: #fff;
-      border-color: var(--green-dark)
-    }
-
-    .refresh-btn {
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
-      border: 1px solid var(--border);
-      background: #fff;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: .2s
-    }
-
-    .refresh-btn:hover {
-      background: var(--green-light)
-    }
-
-    .refresh-btn svg {
-      width: 14px;
-      height: 14px;
-      fill: var(--text-secondary)
-    }
-
-    .hamburger {
-      display: none;
-      width: 36px;
-      height: 36px;
-      border-radius: 8px;
-      border: none;
-      background: var(--green-dark);
-      color: #fff;
-      font-size: 16px;
-      cursor: pointer;
-      align-items: center;
-      justify-content: center
-    }
-
-    /* SIDEBAR */
-    .sidebar {
-      grid-area: sidebar;
-      background: var(--sidebar-bg);
-      border-right: 1px solid var(--border);
-      display: flex;
-      flex-direction: column;
-      overflow-y: auto;
-      padding: 16px 12px;
-      transition: width .3s
-    }
-
-    .sidebar-label {
-      font-size: 10px;
-      font-weight: 600;
-      color: var(--text-muted);
-      letter-spacing: .08em;
-      text-transform: uppercase;
-      padding: 0 12px;
-      margin-bottom: 4px
-    }
-
-    .sidebar-sub {
-      font-size: 10px;
-      color: var(--green-primary);
-      padding: 0 12px;
-      margin-bottom: 2px;
-      display: flex;
-      align-items: center;
-      gap: 5px
-    }
-
-    .sidebar-sub .dot {
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      background: var(--green-primary)
-    }
-
-    .sidebar-clock {
-      font-size: 11px;
-      font-weight: 600;
-      color: var(--text-primary);
-      padding: 0 12px;
-      margin-bottom: 16px;
-      font-variant-numeric: tabular-nums
-    }
-
-    .nav-items {
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-      margin-bottom: auto
-    }
-
-    .nav-item {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 10px 12px;
-      border-radius: 8px;
-      text-decoration: none;
-      color: var(--text-secondary);
-      font-size: 13px;
-      font-weight: 500;
-      border-left: 3px solid transparent;
-      transition: .15s
-    }
-
-    .nav-item svg {
-      width: 18px;
-      height: 18px;
-      fill: currentColor;
-      flex-shrink: 0
-    }
-
-    .nav-item:hover {
-      background: #F5F5F5;
-      color: var(--text-primary)
-    }
-
-    .nav-item.active {
-      background: var(--green-light);
-      color: var(--green-dark);
-      font-weight: 600;
-      border-left-color: var(--green-primary)
-    }
-
-    .nav-item .nav-text {
-      white-space: nowrap;
-      overflow: hidden
-    }
-
-    .sidebar-lang {
-      padding: 0 12px;
-      margin-bottom: 12px
-    }
-
-    .sidebar-lang select {
-      width: 100%;
-      padding: 8px 10px;
-      border-radius: 8px;
-      border: 1px solid var(--border);
-      font-size: 12px;
-      font-weight: 500;
-      background: #fff;
-      cursor: pointer;
-      outline: none
-    }
-
-    .sidebar-farm {
-      background: var(--page-bg);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 14px;
-      margin: 0 4px
-    }
-
-    .sidebar-farm .farm-label {
-      font-size: 10px;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: .06em;
-      color: var(--text-muted);
-      margin-bottom: 10px
-    }
-
-    .farm-row {
-      display: flex;
-      justify-content: space-between;
-      font-size: 12px;
-      padding: 4px 0
-    }
-
-    .farm-row .val {
-      font-weight: 600
-    }
-
-    .farm-row .val.red {
-      color: var(--red-primary)
-    }
-
-    .help-btn {
-      margin-top: 12px;
-      width: 100%;
-      padding: 8px;
-      background: var(--green-dark);
-      color: #fff;
-      border: none;
-      border-radius: 8px;
-      font-size: 12px;
-      font-weight: 500;
-      cursor: pointer;
-      transition: .2s
-    }
-
-    .help-btn:hover {
-      background: var(--green-primary)
-    }
-
-    .main {
-      grid-area: main;
-      overflow-y: auto;
-      padding: 24px 24px 32px;
-      display: flex;
-      flex-direction: column;
-      gap: 24px;
-      min-height: 0;
-    }
-
-    /* Page Head */
-    .pg-head {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      flex-wrap: wrap;
-      gap: 12px
-    }
-
-    .pg-head h1 {
-      font-size: 24px;
-      font-weight: 600
-    }
-
-    .pg-head .sub {
-      font-size: 13px;
-      color: var(--text-muted);
-      margin-top: 2px
-    }
-
-    .btn-dark {
-      padding: 8px 20px;
-      background: var(--green-dark);
-      color: #fff;
-      border: none;
-      border-radius: 8px;
-      font-size: 13px;
-      font-weight: 500;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      transition: .2s
-    }
-
-    .btn-dark:hover {
-      background: var(--green-primary)
-    }
-
-    /* Smart Rec */
-    .smart-section {
-      display: grid;
-      grid-template-columns: 1fr 260px;
-      gap: 14px
-    }
-
-    .smart-panel {
-      background: var(--card-bg);
-      border: .5px solid var(--border);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow-card);
-      position: relative;
-      overflow: hidden;
-      padding: 20px
-    }
-
-    .ribbon {
-      position: absolute;
-      top: 14px;
-      right: -30px;
-      background: var(--green-primary);
-      color: #fff;
-      font-size: 9px;
-      font-weight: 600;
-      padding: 3px 36px;
-      transform: rotate(45deg);
-      letter-spacing: .06em;
-      text-transform: uppercase
-    }
-
-    .smart-label {
-      font-size: 11px;
-      font-weight: 500;
-      text-transform: uppercase;
-      letter-spacing: .06em;
-      color: var(--text-muted);
-      margin-bottom: 14px
-    }
-
-    .rec-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 12px
-    }
-
-    .rec-card {
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 14px;
-      display: flex;
-      flex-direction: column;
-      gap: 8px
-    }
-
-    .rec-top {
-      display: flex;
-      justify-content: space-between;
-      align-items: center
-    }
-
-    .rec-id {
-      font-size: 11px;
-      font-weight: 600;
-      color: var(--text-muted)
-    }
-
-    .ai-tag {
-      background: var(--green-light);
-      color: var(--green-dark);
-      font-size: 9px;
-      padding: 2px 6px;
-      border-radius: 4px;
-      font-weight: 600
-    }
-
-    .rec-name {
-      font-size: 13px;
-      font-weight: 600
-    }
-
-    .rec-detail {
-      font-size: 11px;
-      color: var(--text-muted)
-    }
-
-    .rec-status {
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      font-size: 10px;
-      font-weight: 500;
-      padding: 3px 8px;
-      border-radius: 4px;
-      width: fit-content
-    }
-
-    .rec-status.avail {
-      background: var(--green-light);
-      color: var(--green-dark)
-    }
-
-    .rec-status.filling {
-      background: var(--amber-light);
-      color: #633806
-    }
-
-    .rec-conf {
-      font-size: 11px;
-      font-weight: 600;
-      color: var(--green-dark)
-    }
-
-    .rec-reason {
-      font-size: 11px;
-      color: var(--text-secondary);
-      line-height: 1.4
-    }
-
-    .book-ai-btn {
-      width: 100%;
-      padding: 8px;
-      background: var(--green-dark);
-      color: #fff;
-      border: none;
-      border-radius: 6px;
-      font-size: 12px;
-      font-weight: 500;
-      cursor: pointer;
-      margin-top: auto;
-      transition: .2s
-    }
-
-    .book-ai-btn:hover {
-      background: var(--green-primary)
-    }
-
-    /* Live Feed */
-    .live-panel {
-      background: #1A1A1A;
-      border-radius: var(--radius);
-      padding: 20px;
-      color: #fff;
-      display: flex;
-      flex-direction: column;
-      gap: 14px
-    }
-
-    .live-label {
-      font-size: 10px;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: .08em;
-      color: #888;
-      display: flex;
-      align-items: center;
-      gap: 6px
-    }
-
-    .live-dot {
-      width: 7px;
-      height: 7px;
-      border-radius: 50%;
-      background: #00E676;
-      animation: livePulse 1.5s infinite
-    }
-
-    @keyframes livePulse {
-
-      0%,
-      100% {
-        opacity: 1;
-        box-shadow: 0 0 0 0 rgba(0, 230, 118, .4)
-      }
-
-      50% {
-        opacity: .7;
-        box-shadow: 0 0 0 6px rgba(0, 230, 118, 0)
-      }
-    }
-
-    .live-stat {
-      display: flex;
-      flex-direction: column;
-      gap: 2px
-    }
-
-    .live-stat .ll {
-      font-size: 10px;
-      color: #888;
-      text-transform: uppercase;
-      letter-spacing: .04em
-    }
-
-    .live-stat .lv {
-      font-size: 22px;
-      font-weight: 700;
-      color: #4DD0E1
-    }
-
-    .live-stat .lv.small {
-      font-size: 14px
-    }
-
-    .live-meta {
-      font-size: 9px;
-      color: #555;
-      font-family: monospace;
-      letter-spacing: .04em
-    }
-
-    /* Filters */
-    .filters {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-      align-items: center
-    }
-
-    .search-input {
-      flex: 1;
-      min-width: 200px;
-      padding: 9px 14px;
-      border-radius: 8px;
-      border: 1px solid var(--border);
-      font-size: 13px;
-      outline: none;
-      background: #fff;
-      transition: .15s
-    }
-
-    .search-input:focus {
-      border-color: var(--green-primary)
-    }
-
-    .filter-sel {
-      padding: 9px 12px;
-      border-radius: 8px;
-      border: 1px solid var(--border);
-      font-size: 12px;
-      font-weight: 500;
-      background: #fff;
-      cursor: pointer;
-      outline: none;
-      color: var(--text-primary)
-    }
-
-
-
-
-    /* Table Wrap */
-    .tbl-wrap {
-      background: var(--card-bg);
-      border: .5px solid var(--border);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow-card);
-      overflow: auto; /* Allow both X and Y scrolling */
-      width: 100%;
-      height: 220px; /* Fixed height for ~2.5 rows */
-      flex-shrink: 0; /* Don't squash it */
-    }
-
-    .tbl {
-      width: 100%;
-      border-collapse: collapse
-    }
-
-    .tbl th {
-      padding: 12px 14px;
-      text-align: left;
-      font-size: 10px;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: .06em;
-      color: var(--text-muted);
-      border-bottom: 1px solid var(--border);
-      background: #FAFAF9;
-      position: sticky;
-      top: 0;
-      z-index: 10;
-    }
-
-    .tbl td {
-      padding: 12px 14px;
-      font-size: 13px;
-      border-bottom: 1px solid var(--border);
-      vertical-align: middle
-    }
-
-    .tbl tbody tr {
-      cursor: pointer;
-      transition: .15s
-    }
-
-    .tbl tbody tr:not(.expand-row):hover {
-      background: var(--green-light)
-    }
-
-    .wh-n {
-      font-weight: 600
-    }
-
-    .wh-c {
-      font-size: 11px;
-      color: var(--text-muted)
-    }
-
-    .crop-tag {
-      font-size: 10px;
-      font-weight: 500;
-      padding: 2px 8px;
-      border-radius: 4px;
-      display: inline-block
-    }
-
-    .crop-tomato {
-      background: #FCEBEB;
-      color: #791F1F
-    }
-
-    .crop-onion {
-      background: #F5E6FF;
-      color: #6B21A8
-    }
-
-    .crop-grapes {
-      background: #EBF2FF;
-      color: #1D4ED8
-    }
-
-    .crop-potato {
-      background: var(--amber-light);
-      color: #633806
-    }
-
-    .vac-bar {
-      width: 60px;
-      height: 5px;
-      background: #eee;
-      border-radius: 4px;
-      display: inline-block;
-      vertical-align: middle;
-      margin-right: 6px;
-      overflow: hidden
-    }
-
-    .vac-bar .fill {
-      height: 100%;
-      border-radius: 4px;
-      transition: width 1s ease-out
-    }
-
-    .temp-ok {
-      color: var(--green-dark)
-    }
-
-    .temp-warn {
-      color: var(--red-primary)
-    }
-
-    .risk-val {
-      font-weight: 600;
-      font-size: 12px
-    }
-
-    .risk-low {
-      color: var(--green-dark)
-    }
-
-    .risk-med {
-      color: var(--amber)
-    }
-
-    .risk-high {
-      color: var(--red-primary);
-      animation: pulse 2s infinite
-    }
-
-    @keyframes pulse {
-
-      0%,
-      100% {
-        opacity: 1
-      }
-
-      50% {
-        opacity: .6
-      }
-    }
-
-    .st-badge {
-      font-size: 10px;
-      font-weight: 500;
-      padding: 3px 8px;
-      border-radius: 6px
-    }
-
-    .st-avail {
-      background: var(--green-light);
-      color: var(--green-dark)
-    }
-
-    .st-filling {
-      background: var(--amber-light);
-      color: #633806
-    }
-
-    .st-full {
-      background: #E5E5E5;
-      color: var(--text-secondary)
-    }
-
-    .st-risk {
-      background: var(--red-light);
-      color: #791F1F
-    }
-
-    .act-btns {
-      display: flex;
-      gap: 4px
-    }
-
-    .act-btn {
-      width: 28px;
-      height: 28px;
-      border-radius: 6px;
-      border: 1px solid var(--border);
-      background: #fff;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 13px;
-      transition: .15s
-    }
-
-    .act-btn:hover {
-      background: var(--green-light)
-    }
-
-    /* Expand Row */
-    .expand-row {
-      display: none
-    }
-
-    .expand-row.open {
-      display: table-row !important
-    }
-
-    .expand-content {
-      padding: 16px 20px;
-      background: #FAFAF9;
-      border-bottom: 1px solid var(--border)
-    }
-
-    .exp-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      gap: 14px;
-      margin-bottom: 12px
-    }
-
-    .exp-zone {
-      padding: 10px;
-      border-radius: 8px;
-      border: 1px solid var(--border);
-      text-align: center;
-      font-size: 12px
-    }
-
-    .exp-zone.z-avail {
-      background: var(--green-light);
-      border-color: rgba(29, 158, 117, .2)
-    }
-
-    .exp-zone.z-full {
-      background: #E5E5E5
-    }
-
-    .exp-zone.z-warn {
-      background: var(--amber-light)
-    }
-
-    .exp-zone .zn {
-      font-weight: 600;
-      margin-bottom: 2px;
-      display: block
-    }
-
-    .exp-prices {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      font-size: 12px;
-      margin-bottom: 10px
-    }
-
-    .exp-prices span {
-      padding: 3px 8px;
-      border-radius: 4px;
-      background: #F5F5F5;
-      font-weight: 500
-    }
-
-    .exp-ai {
-      font-size: 12px;
-      color: var(--text-secondary);
-      line-height: 1.5;
-      margin-bottom: 12px
-    }
-
-    .book-full-btn {
-      width: 100%;
-      padding: 10px;
-      background: var(--green-dark);
-      color: #fff;
-      border: none;
-      border-radius: 8px;
-      font-size: 13px;
-      font-weight: 500;
-      cursor: pointer;
-      transition: .2s
-    }
-
-    .book-full-btn:hover {
-      background: var(--green-primary)
-    }
-
-    /* Toast */
-    .toast {
-      position: fixed;
-      bottom: 30px;
-      left: 50%;
-      transform: translateX(-50%) translateY(80px);
-      background: var(--green-dark);
-      color: #fff;
-      padding: 14px 28px;
-      border-radius: 10px;
-      font-size: 13px;
-      font-weight: 500;
-      z-index: 9999;
-      opacity: 0;
-      transition: all .3s ease;
-      pointer-events: none;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, .2)
-    }
-
-    .toast.show {
-      transform: translateX(-50%) translateY(0);
-      opacity: 1
-    }
-
-    /* AI Modal Styles */
-    .modal-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.5);
-      display: none;
-      align-items: center;
-      justify-content: center;
-      z-index: 2000;
-      padding: 20px
-    }
-
-    .modal-overlay.show {
-      display: flex
-    }
-
-    .modal-content {
-      background: #fff;
-      padding: 24px;
-      border-radius: 18px;
-      width: 100%;
-      max-width: 440px;
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
-      position: relative;
-      animation: modalUp 0.3s ease-out
-    }
-
-    @keyframes modalUp {
-      from {
-        transform: translateY(20px);
-        opacity: 0
-      }
-
-      to {
-        transform: translateY(0);
-        opacity: 1
-      }
-    }
-
-    .modal-close {
-      position: absolute;
-      top: 16px;
-      right: 16px;
-      cursor: pointer;
-      font-size: 24px;
-      color: var(--text-muted);
-      line-height: 1
-    }
-
-    /* Mobile cards */
-    .mobile-cards {
-      display: none
-    }
-
-    .mob-card {
-      background: var(--card-bg);
-      border: .5px solid var(--border);
-      border-radius: var(--radius);
-      padding: 14px;
-      box-shadow: var(--shadow-card);
-      display: flex;
-      flex-direction: column;
-      gap: 8px
-    }
-
-    .mob-card .mc-top {
-      display: flex;
-      justify-content: space-between;
-      align-items: center
-    }
-
-    .mob-card .mc-name {
-      font-size: 14px;
-      font-weight: 600
-    }
-
-    .mob-card .mc-dist {
-      font-size: 11px;
-      color: var(--text-muted)
-    }
-
-    .mob-card .mc-row {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-      font-size: 12px;
-      align-items: center
-    }
-
-    .mob-card .mc-row .tag {
-      padding: 2px 8px;
-      border-radius: 4px;
-      font-size: 10px;
-      font-weight: 500
-    }
-
-    /* Overlay */
-    .overlay {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, .3);
-      z-index: 150
-    }
-
-    .overlay.show {
-      display: block
-    }
-
-    /* RESPONSIVE */
-    @media(max-width:1023px) {
-      .app {
-        grid-template: "header header" 60px "sidebar main" 1fr / 64px 1fr
-      }
-
-      .sidebar .nav-text,
-      .sidebar-label,
-      .sidebar-sub,
-      .sidebar-clock,
-      .sidebar-lang,
-      .sidebar-farm {
-        display: none !important
-      }
-
-      .sidebar {
-        padding: 16px 6px;
-        align-items: center
-      }
-
-      .nav-item {
-        justify-content: center;
-        padding: 10px;
-        border-left: none !important
-      }
-
-      .smart-section {
-        grid-template-columns: 1fr
-      }
-
-      .rec-grid {
-        grid-template-columns: 1fr 1fr
-      }
-
-      .exp-grid {
-        grid-template-columns: 1fr 1fr
-      }
-    }
-
-    @media(max-width:767px) {
-      .app {
-        grid-template: "header" 60px "main" 1fr / 1fr
-      }
-
-      .sidebar {
-        position: fixed;
-        left: 0;
-        top: 60px;
-        bottom: 0;
-        width: 260px;
-        z-index: 200;
-        transform: translateX(-100%);
-        transition: transform .3s;
-        padding: 16px 12px;
-        box-shadow: 4px 0 20px rgba(0, 0, 0, .1)
-      }
-
-      .sidebar.open {
-        transform: translateX(0)
-      }
-
-      .sidebar .nav-text,
-      .sidebar-label,
-      .sidebar-sub,
-      .sidebar-clock,
-      .sidebar-lang,
-      .sidebar-farm {
-        display: block !important
-      }
-
-      .hamburger {
-        display: flex
-      }
-
-      .header-center {
-        display: none
-      }
-
-      .smart-section {
-        grid-template-columns: 1fr
-      }
-
-      .live-panel {
-        order: -1
-      }
-
-      .rec-grid {
-        grid-template-columns: 1fr
-      }
-
-      .tbl-wrap {
-        display: none
-      }
-
-      .mobile-cards {
-        display: flex;
-        flex-direction: column;
-        gap: 10px
-      }
-
-      .exp-grid {
-        grid-template-columns: 1fr
-      }
-
-      .filters {
-        flex-direction: column
-      }
-
-      .search-input {
-        min-width: 100%
-      }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>AgriFresh | Warehouse Finder</title>
+    
+    <!-- Icons and Fonts -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Custom Mobile Styles -->
+    <link rel="stylesheet" href="css/mobile-app.css">
+    
+    <style>
+        .finder-main {
+            padding-bottom: 100px;
+        }
+        
+        .search-container {
+            padding: 15px var(--app-spacing);
+            background: white;
+            position: sticky;
+            top: 70px; /* Below header */
+            z-index: 999;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.03);
+        }
+
+        .search-box {
+            background: var(--app-surface);
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            border-radius: 12px;
+            gap: 10px;
+        }
+
+        .search-box input {
+            border: none;
+            background: none;
+            outline: none;
+            width: 100%;
+            font-size: 0.9rem;
+            font-family: var(--app-font);
+        }
+
+        .warehouse-list {
+            padding: 20px var(--app-spacing);
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .w-card {
+            background: white;
+            border-radius: var(--app-radius);
+            padding: 20px;
+            box-shadow: var(--app-shadow);
+            border: 1px solid rgba(0,0,0,0.03);
+        }
+
+        .w-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 15px;
+        }
+
+        .w-name {
+            font-weight: 800;
+            font-size: 1.1rem;
+            color: var(--app-text);
+        }
+
+        .w-dist {
+            font-size: 0.75rem;
+            color: var(--app-muted);
+            font-weight: 600;
+        }
+
+        .w-tags {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 15px;
+        }
+
+        .w-tag {
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 0.7rem;
+            font-weight: 700;
+        }
+
+        .w-price { background: #E8F5E9; color: #2E7D32; }
+        .w-vacant { background: #E3F2FD; color: #1565C0; }
+
+        .w-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 15px;
+            border-top: 1px solid #f0f0f0;
+        }
+
+        .w-temp {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--app-text-dim);
+        }
+
+        .btn-book {
+            background: var(--app-primary);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-decoration: none;
+        }
+    </style>
 </head>
 
 <body>
-  <div class="overlay" id="overlay" onclick="closeSidebar()"></div>
-  <div class="toast" id="toast"></div>
-  <div class="app">
-    <!-- HEADER -->
-    <header class="header">
-      <button class="hamburger" onclick="toggleSidebar()">☰</button>
-      <div class="header-left">
-        <div class="logo-box"><svg viewBox="0 0 24 24">
-            <path
-              d="M17.8 2.8C16 2.09 13.86 2.36 12.1 3.66 10.34 2.36 8.2 2.09 6.4 2.8 4.09 3.72 2.73 6.08 3.05 8.58c.52 4.02 4.16 7.61 9.05 11.42 4.89-3.81 8.53-7.4 9.05-11.42.32-2.5-1.04-4.86-3.35-5.78z" />
-          </svg></div>
-        <span class="app-name" data-t="appName">AgriFresh</span>
-        <span class="app-sub" data-t="appSub">Farmer Intelligence</span>
-      </div>
-      <div class="header-center">
-        <span class="alert-pill pill-green">🌾 <span data-t="pillCrop">Crop Advisory Ready</span></span>
-        <span class="alert-pill pill-amber">⚠ <span data-t="pillRisk">1 Batch at Risk</span></span>
-        <span class="alert-pill pill-green">✓ <span data-t="pillPrice">₹180 Best Price</span></span>
-        <span class="alert-pill pill-pink">🤖 <span data-t="pillAI">AI: 94% Acc</span></span>
-      </div>
-      <div class="header-right">
-        <button class="lang-pill active" onclick="setLang('en')">EN</button>
-        <button class="lang-pill" onclick="setLang('mr')">मराठी</button>
-        <button class="lang-pill" onclick="setLang('hi')">हिंदी</button>
-        <button class="refresh-btn" title="Refresh"><svg viewBox="0 0 24 24">
-            <path
-              d="M17.65 6.35A7.96 7.96 0 0012 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0112 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z" />
-          </svg></button>
-      </div>
+
+    <!-- Header -->
+    <header class="app-header">
+        <div style="display: flex; align-items: center; gap: 10px;">
+             <a href="index.html" style="color: var(--app-text); font-size: 1.2rem;"><i class="fas fa-arrow-left"></i></a>
+             <span class="app-brand" style="font-size: 1.1rem;">Warehouse Finder</span>
+        </div>
+        <div class="app-profile">
+            <i class="fas fa-filter"></i>
+        </div>
     </header>
 
-    <!-- SIDEBAR -->
-    <aside class="sidebar" id="sidebar">
-      <div class="sidebar-label" data-t="sidebarLabel">FARMER COMMAND CENTER</div>
-      <div class="sidebar-sub"><span class="dot"></span><span data-t="sidebarConn">Connected to AgriFresh Network</span>
-      </div>
-      <div class="sidebar-clock" id="sidebarClock">--:--:--</div>
-      <nav class="nav-items">
-        <a href="farmer-dashboard.html" class="nav-item"><svg viewBox="0 0 24 24">
-            <path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z" />
-          </svg><span class="nav-text" data-t="nav1">Dashboard</span></a>
-        <a href="#" class="nav-item active"><svg viewBox="0 0 24 24">
-            <path
-              d="M20 6h-4V4c0-1.1-.9-2-2-2h-4c-1.1 0-2 .9-2 2v2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zM10 4h4v2h-4V4z" />
-          </svg><span class="nav-text" data-t="nav2">Warehouse Finder</span></a>
-
-        <a href="farmer-harvest-tracker.html" class="nav-item"><svg viewBox="0 0 24 24">
-            <path
-              d="M20 3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H4V5h16v14zM4 7h16v2H4zm0 4h6v6H4z" />
-          </svg><span class="nav-text" data-t="nav4">Harvest Tracker</span></a>
-        <a href="farmer-my-produce.html" class="nav-item"><svg viewBox="0 0 24 24">
-            <path
-              d="M20 2H4c-1 0-2 1-2 2v3.01c0 .72.43 1.34 1 1.69V20c0 1.1 1.1 2 2 2h14c.9 0 2-.9 2-2V8.7c.57-.35 1-.97 1-1.69V4c0-1-1-2-2-2zm-5 12H9v-2h6v2zm5-7H4V4h16v3z" />
-          </svg><span class="nav-text" data-t="nav6">My Produce</span></a>
-        <a href="market.html" class="nav-item"><svg viewBox="0 0 24 24">
-            <path d="M20 4H4v2h16V4zm1 10v-2l-1-5H4l-1 5v2h1v6h10v-6h4v6h2v-6h1zm-9 4H6v-4h6v4z" />
-          </svg><span class="nav-text" data-t="navMarket">Marketplace</span></a>
-      </nav>
-      <div class="sidebar-lang"><select onchange="setLang(this.value)" id="sidebarLangSelect">
-          <option value="en">English</option>
-          <option value="mr">मराठी</option>
-          <option value="hi">हिंदी</option>
-        </select></div>
-      <div class="sidebar-farm">
-        <div class="farm-label" data-t="myFarmLabel">MY FARM</div>
-        <div class="farm-row"><span data-t="farmCrops">Active Crops</span><span class="val">1</span></div>
-        <div class="farm-row"><span data-t="farmBatches">Stored Batches</span><span class="val">2</span></div>
-        <div class="farm-row"><span data-t="farmAttn">Needs Attention</span><span class="val red">01</span></div>
-        <button class="help-btn" data-t="helpBtn">Get Help</button>
-      </div>
-    </aside>
-
-    <!-- MAIN CONTENT -->
-    <div class="main">
-
-      <!-- Page Header -->
-      <div class="pg-head">
-        <div>
-          <h1 data-t="finderTitle">Warehouse Finder</h1>
-          <div class="sub" data-t="finderSub">Find best storage for your crop · Compare price, vacancy and AI risk score
-          </div>
-        </div>
-        <button class="btn-dark" data-t="registerBtn" onclick="location.href='farmer-harvest-tracker.html'">📦 Register
-          New Batch</button>
-      </div>
-
-      <!-- Smart Dispatch Recommendations -->
-      <div class="smart-section">
-        <div class="smart-panel">
-          <div class="ribbon" data-t="aiOptimized">AI OPTIMIZED</div>
-          <div class="smart-label" data-t="smartTitle">SMART BOOKING RECOMMENDATIONS</div>
-          <div class="rec-grid" id="recGrid"></div>
-        </div>
-        <div class="live-panel">
-          <div class="live-label"><span class="live-dot"></span> <span data-t="liveFeed">LIVE WAREHOUSE FEED</span>
-          </div>
-          <div class="live-stat"><span class="ll" data-t="nearestLabel">NEAREST AVAILABLE</span><span class="lv"
-              id="liveNearest">Kolhapur</span><span class="ll"><span id="liveDist">65</span> km</span></div>
-          <div class="live-stat"><span class="ll" data-t="bestPriceLabel">BEST PRICE</span><span class="lv"
-              id="livePrice">₹160/qtl</span></div>
-          <div class="live-meta">PACKET_RECEIVE: CRC_OK | LATENCY: <span id="liveLatency">18</span>ms</div>
-        </div>
-      </div>
-
-      <!-- Filters -->
-      <div class="filters">
-        <input class="search-input" type="text" id="searchInput" data-t-placeholder="searchPlaceholder"
-          placeholder="Search warehouses, city or zone... 🔍" oninput="filterTable()">
-        <select class="filter-sel" id="filterCrop" onchange="filterTable()">
-          <option value="" data-t="allCrops">All Crops</option>
-          <option value="Tomato">Tomato</option>
-          <option value="Onion">Onion</option>
-          <option value="Grapes">Grapes</option>
-          <option value="Potato">Potato</option>
-        </select>
-        <select class="filter-sel" id="filterRadius" onchange="filterTable()">
-          <option value="999">Any Radius</option>
-          <option value="50">50 km</option>
-          <option value="100">100 km</option>
-          <option value="150">150 km</option>
-        </select>
-        <select class="filter-sel" id="filterVacancy" onchange="filterTable()">
-          <option value="0" data-t="anyVac">Any Vacancy</option>
-          <option value="25">25%+</option>
-          <option value="50">50%+</option>
-          <option value="75">75%+</option>
-        </select>
-        <select class="filter-sel" id="filterSort" onchange="filterTable()">
-          <option value="vacancy" data-t="sortVacancy">Sort: Highest Vacancy</option>
-          <option value="price" data-t="sortPrice">Sort: Lowest Price</option>
-          <option value="dist" data-t="sortDist">Sort: Nearest</option>
-          <option value="risk" data-t="sortRisk">Sort: Lowest Risk</option>
-        </select>
-      </div>
-
-      <!-- Table -->
-      <div class="tbl-wrap">
-        <table class="tbl">
-          <thead>
-            <tr>
-              <th data-t="colName">WAREHOUSE NAME</th>
-              <th data-t="colDist">DISTANCE</th>
-              <th data-t="colCrop">CROP</th>
-              <th data-t="colVac">VACANCY</th>
-              <th data-t="colPrice">PRICE/QTL</th>
-              <th data-t="colTemp">TEMP</th>
-              <th data-t="colRisk">RISK%</th>
-              <th data-t="colStatus">STATUS</th>
-              <th data-t="colActions">ACTIONS</th>
-            </tr>
-          </thead>
-          <tbody id="tblBody"></tbody>
-        </table>
-      </div>
-
-      <!-- Mobile Cards -->
-      <div class="mobile-cards" id="mobCards"></div>
-
-    </div>
-  </div>
-
-  <script>
-    /* ═══ DATA ═══ */
-    let WH = [];
-    let RECS = [];
-    const API_BASE = "http://localhost:8000";
-
-    async function loadAIWarehouses() {
-      try {
-        const response = await fetch("http://127.0.0.1:8000/warehouses");
-        const data = await response.json();
-        WH = data;
-
-        // Generate top AI recommendations based on ai_score
-        RECS = data
-          .sort((a, b) => b.ai_score - a.ai_score)
-          .slice(0, 3)
-          .map((w, i) => ({
-            id: "AI-" + (i + 1),
-            name: w.name,
-            detail: w.city + " • " + w.dist + " km",
-            statusKey: w.status === "avail" ? "available" : "fillingFast",
-            bookDate: "Today",
-            conf: Math.round(w.ai_score * 100),
-            reason: w.aiText
-          }));
-
-        renderRecs();
-        renderTable();
-
-      } catch (err) {
-        console.error("Warehouse fetch failed", err);
-      }
-    }
-
-    /* ═══ i18n ═══ */
-    const T = {
-      en: { appName: 'AgriFresh', appSub: 'Farmer Intelligence', finderTitle: 'Warehouse Finder', finderSub: 'Find best storage for your crop · Compare price, vacancy and AI risk score', registerBtn: '📦 Register New Batch', smartTitle: 'SMART BOOKING RECOMMENDATIONS', aiOptimized: 'AI OPTIMIZED', liveFeed: 'LIVE WAREHOUSE FEED', nearestLabel: 'NEAREST AVAILABLE', bestPriceLabel: 'BEST PRICE', available: 'Available', fillingFast: 'Filling Fast', fullLabel: 'Full', highRiskLabel: 'High Risk', bookAI: 'BOOK AI', bookThisBtn: 'Book This Warehouse', colName: 'WAREHOUSE NAME', colDist: 'DISTANCE', colCrop: 'CROP', colVac: 'VACANCY', colPrice: 'PRICE/QTL', colTemp: 'TEMP', colRisk: 'RISK%', colStatus: 'STATUS', colActions: 'ACTIONS', searchPlaceholder: 'Search warehouses, city or zone... 🔍', allCrops: 'All Crops', anyVac: 'Any Vacancy', sortVacancy: 'Sort: Highest Vacancy', sortPrice: 'Sort: Lowest Price', sortDist: 'Sort: Nearest', sortRisk: 'Sort: Lowest Risk', nav1: 'Dashboard', nav2: 'Warehouse Finder', nav4: 'Harvest Tracker', nav5: 'Weather & Soil', nav6: 'My Produce', navMarket: 'Marketplace', myFarmLabel: 'MY FARM', farmCrops: 'Active Crops', farmBatches: 'Stored Batches', farmAttn: 'Needs Attention', helpBtn: 'Get Help', sidebarLabel: 'FARMER COMMAND CENTER', sidebarConn: 'Connected to AgriFresh Network', pillCrop: 'Crop Advisory Ready', pillRisk: '1 Batch at Risk', pillPrice: '₹180 Best Price', pillAI: 'AI: 94% Acc', expandZones: 'Zone Breakdown', expandPrice: 'Price per Crop', expandAI: 'AI Recommendation', bookBtn: 'Book Slot', toastMsg: 'Booking request sent to {name}. Confirmation on your registered number.' },
-      mr: { appName: 'एग्रीफ्रेश', appSub: 'शेतकरी बुद्धिमत्ता', finderTitle: 'गोदाम शोधा', finderSub: 'तुमच्या पिकासाठी सर्वोत्तम साठवणूक शोधा · किंमत, जागा आणि AI धोका स्कोअर तुलना करा', registerBtn: '📦 नवीन बॅच नोंदणी', smartTitle: 'स्मार्ट बुकिंग शिफारसी', aiOptimized: 'AI ऑप्टिमाइज्ड', liveFeed: 'थेट गोदाम फीड', nearestLabel: 'जवळचे उपलब्ध', bestPriceLabel: 'सर्वोत्तम किंमत', available: 'उपलब्ध', fillingFast: 'लवकर भरत आहे', fullLabel: 'भरलेले', highRiskLabel: 'जास्त धोका', bookAI: 'AI बुक करा', bookThisBtn: 'हे गोदाम बुक करा', colName: 'गोदाम नाव', colDist: 'अंतर', colCrop: 'पीक', colVac: 'जागा', colPrice: 'किंमत/क्विंटल', colTemp: 'तापमान', colRisk: 'धोका%', colStatus: 'स्थिती', colActions: 'कृती', searchPlaceholder: 'गोदाम, शहर किंवा झोन शोधा... 🔍', allCrops: 'सर्व पिके', anyVac: 'कोणतीही जागा', sortVacancy: 'क्रम: सर्वाधिक जागा', sortPrice: 'क्रम: कमी किंमत', sortDist: 'क्रम: जवळचे', sortRisk: 'क्रम: कमी धोका', nav1: 'डॅशबोर्ड', nav2: 'गोदाम शोधा', nav4: 'कापणी ट्रॅकर', nav5: 'हवामान आणि माती', nav6: 'माझा माल', navMarket: 'बाजारपेठ', myFarmLabel: 'माझी शेती', farmCrops: 'सक्रिय पिके', farmBatches: 'साठवलेले बॅचेस', farmAttn: 'लक्ष आवश्यक', helpBtn: 'मदत मिळवा', sidebarLabel: 'शेतकरी कमांड सेंटर', sidebarConn: 'एग्रीफ्रेश नेटवर्कशी जोडलेले', pillCrop: 'पीक सल्ला तयार', pillRisk: '१ बॅच धोक्यात', pillPrice: '₹१८० सर्वोत्तम किंमत', pillAI: 'AI: ९४% अचूक', expandZones: 'झोन तपशील', expandPrice: 'पीक निहाय किंमत', expandAI: 'AI शिफारस', bookBtn: 'जागा बुक करा', toastMsg: '{name} ला बुकिंग विनंती पाठवली. तुमच्या नोंदणीकृत नंबरवर पुष्टीकरण येईल.' },
-      hi: { appName: 'एग्रीफ्रेश', appSub: 'किसान बुद्धिमत्ता', finderTitle: 'गोदाम खोजें', finderSub: 'अपनी फसल के लिए सबसे अच्छा भंडारण खोजें · कीमत, जगह और AI जोखिम स्कोर की तुलना करें', registerBtn: '📦 नया बैच पंजीकृत करें', smartTitle: 'स्मार्ट बुकिंग सिफारिशें', aiOptimized: 'AI ऑप्टिमाइज़्ड', liveFeed: 'लाइव गोदाम फीड', nearestLabel: 'निकटतम उपलब्ध', bestPriceLabel: 'सबसे अच्छी कीमत', available: 'उपलब्ध', fillingFast: 'तेज़ी से भर रहा', fullLabel: 'भरा हुआ', highRiskLabel: 'उच्च जोखिम', bookAI: 'AI बुक करें', bookThisBtn: 'यह गोदाम बुक करें', colName: 'गोदाम नाम', colDist: 'दूरी', colCrop: 'फसल', colVac: 'जगह', colPrice: 'कीमत/क्विंटल', colTemp: 'तापमान', colRisk: 'जोखिम%', colStatus: 'स्थिति', colActions: 'कार्रवाई', searchPlaceholder: 'गोदाम, शहर या ज़ोन खोजें... 🔍', allCrops: 'सभी फसलें', anyVac: 'कोई भी जगह', sortVacancy: 'क्रम: सबसे ज़्यादा जगह', sortPrice: 'क्रम: कम कीमत', sortDist: 'क्रम: निकटतम', sortRisk: 'क्रम: कम जोखिम', nav1: 'डैशबोर्ड', nav2: 'गोदाम खोजें', nav4: 'कटाई ट्रैकर', nav5: 'मौसम और मिट्टी', nav6: 'मेरा माल', navMarket: 'बाज़ार', myFarmLabel: 'मेरी खेती', farmCrops: 'सक्रिय फसलें', farmBatches: 'संग्रहीत बैच', farmAttn: 'ध्यान चाहिए', helpBtn: 'मदद लें', sidebarLabel: 'किसान कमांड सेंटर', sidebarConn: 'एग्रीफ्रेश नेटवर्क से जुड़ा', pillCrop: 'फसल सलाह तैयार', pillRisk: '1 बैच जोखिम में', pillPrice: '₹180 सबसे अच्छी कीमत', pillAI: 'AI: 94% सटीक', expandZones: 'ज़ोन विवरण', expandPrice: 'फसल अनुसार कीमत', expandAI: 'AI सिफारिश', bookBtn: 'स्लॉट बुक करें', toastMsg: '{name} को बुकिंग अनुरोध भेजा गया। आपके पंजीकृत नंबर पर पुष्टि आएगी।' }
-    };
-    let lang = 'en';
-    function t(k) { return T[lang][k] || T.en[k] || k; }
-    function setLang(l) {
-      lang = l; document.querySelectorAll('[data-t]').forEach(el => el.textContent = t(el.dataset.t));
-      document.querySelectorAll('[data-t-placeholder]').forEach(el => el.placeholder = t(el.dataset.tPlaceholder || el.getAttribute('data-t-placeholder')));
-      document.querySelectorAll('.lang-pill').forEach(p => p.classList.toggle('active', p.textContent.trim() === (l === 'en' ? 'EN' : l === 'mr' ? 'मराठी' : 'हिंदी')));
-      document.getElementById('sidebarLangSelect').value = l;
-      document.documentElement.lang = l === 'mr' ? 'mr' : l === 'hi' ? 'hi' : 'en';
-      loadAIWarehouses();
-    }
-
-    /* ═══ CLOCK ═══ */
-    setInterval(() => { document.getElementById('sidebarClock').textContent = new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit' }); }, 1000);
-
-    /* ═══ SIDEBAR ═══ */
-    function toggleSidebar() { document.getElementById('sidebar').classList.toggle('open'); document.getElementById('overlay').classList.toggle('show'); }
-    function closeSidebar() { document.getElementById('sidebar').classList.remove('open'); document.getElementById('overlay').classList.remove('show'); }
-
-    /* ═══ TOAST ═══ */
-    function showToast(msg) { const el = document.getElementById('toast'); el.textContent = msg; el.classList.add('show'); setTimeout(() => el.classList.remove('show'), 3000); }
-
-    /* ═══ RENDER RECS ═══ */
-    function renderRecs() {
-      const g = document.getElementById('recGrid'); g.innerHTML = '';
-      RECS.forEach(r => {
-        const stCls = r.statusKey === 'available' ? 'avail' : 'filling';
-        g.innerHTML += `<div class="rec-card">
-      <div class="rec-top"><span class="rec-id">${r.id}</span><span class="ai-tag">AI</span></div>
-      <div class="rec-name">${r.name}</div><div class="rec-detail">${r.detail}</div>
-      <div class="rec-status ${stCls}">${t(r.statusKey)}</div>
-      <div style="font-size:10px;color:var(--text-muted);margin-top:2px">${r.bookDate}</div>
-      <div class="rec-conf">${r.conf}% Confidence</div>
-      <div class="rec-reason">${r.reason}</div>
-      <button class="book-ai-btn" onclick="bookWarehouse('${r.name}')">${t('bookAI')}</button>
-    </div>`;
-      });
-    }
-
-    /* ═══ RENDER TABLE ═══ */
-    function getFiltered() {
-      let d = [...WH]; const q = document.getElementById('searchInput').value.toLowerCase();
-      const crop = document.getElementById('filterCrop').value;
-      const rad = +document.getElementById('filterRadius').value;
-      const vac = +document.getElementById('filterVacancy').value;
-      const sort = document.getElementById('filterSort').value;
-      if (q) d = d.filter(w => (w.name + w.city + w.crop).toLowerCase().includes(q));
-      if (crop) d = d.filter(w => w.crop === crop);
-      d = d.filter(w => w.dist <= rad && w.vacancy >= vac);
-      if (sort === 'vacancy') d.sort((a, b) => b.vacancy - a.vacancy);
-      else if (sort === 'price') d.sort((a, b) => a.price - b.price);
-      else if (sort === 'dist') d.sort((a, b) => a.dist - b.dist);
-      else if (sort === 'risk') d.sort((a, b) => a.risk - b.risk);
-      return d;
-    }
-    function cropCls(c) { return c === 'Tomato' ? 'crop-tomato' : c === 'Onion' ? 'crop-onion' : c === 'Grapes' ? 'crop-grapes' : 'crop-potato'; }
-    function vacColor(v) { return v > 40 ? 'var(--green-primary)' : v > 10 ? 'var(--amber)' : 'var(--red-primary)'; }
-    function stBadge(s) { const m = { avail: ['st-avail', 'available'], filling: ['st-filling', 'fillingFast'], full: ['st-full', 'fullLabel'], risk: ['st-risk', 'highRiskLabel'] }; const x = m[s] || m.avail; return `<span class="st-badge ${x[0]}">${t(x[1])}</span>`; }
-    function riskCls(r) { return r > 60 ? 'risk-high' : r > 30 ? 'risk-med' : 'risk-low'; }
-    function zCls(s) { return s === 'avail' ? 'z-avail' : s === 'full' ? 'z-full' : 'z-warn'; }
-    function zLabel(s) { return s === 'avail' ? t('available') : s === 'full' ? t('fullLabel') : t('fillingFast'); }
-
-    function renderTable() {
-      const d = getFiltered(); const tb = document.getElementById('tblBody'); tb.innerHTML = '';
-      const mc = document.getElementById('mobCards'); mc.innerHTML = '';
-      d.forEach(w => {
-        tb.innerHTML += `<tr class="warehouse-row">
-      <td><span class="wh-n">${w.name}</span><br><span class="wh-c">${w.city}</span></td>
-      <td>${w.dist} km</td>
-      <td><span class="crop-tag ${cropCls(w.crop)}">${w.crop}</span></td>
-      <td><span class="vac-bar"><span class="fill" style="width:${w.vacancy}%;background:${vacColor(w.vacancy)}"></span></span>${w.vacancy}%</td>
-      <td>₹${w.price}<span style="color:var(--text-muted);font-size:11px">/qtl</span></td>
-      <td class="${w.tempOk ? 'temp-ok' : 'temp-warn'}">${w.temp}°C ${w.tempOk ? '✓' : '⚠'}</td>
-      <td><span class="risk-val ${riskCls(w.risk)}">${w.risk}%</span></td>
-      <td>${stBadge(w.status)}</td>
-      <td><div class="act-btns">
-          <button class="act-btn" onclick="event.stopPropagation();viewWarehouse(${w.id})" title="View Warehouse">👁</button>
-          <button class="act-btn" onclick="event.stopPropagation();toggleExpand(${w.id})" title="View Zones">📊</button>
-          <button class="act-btn" onclick="event.stopPropagation();bookWarehouse('${w.name}')" title="Book">🚛</button>
-      </div></td>
-    </tr>
-    <tr class="expand-row" id="exp-${w.id}"><td colspan="9"><div class="expand-content">
-      <div style="font-size:13px;font-weight:700;margin-bottom:12px;color:var(--green-dark)" data-t="expandZones">Zone Breakdown & Climate Control</div>
-      <div class="exp-grid">${w.zones.map(z => `<div class="exp-zone ${zCls(z.s)}"><span class="zn">${z.n}</span>${zLabel(z.s)}</div>`).join('')}</div>
-      
-      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:14px">
-          <div style="background:#fff;padding:10px;border-radius:8px;border:1px solid var(--border)">
-              <div style="font-size:10px;text-transform:uppercase;color:var(--text-muted)">Temp Stability</div>
-              <div style="font-weight:600;font-size:13px;color:var(--green-dark)">98.2% (High)</div>
-          </div>
-          <div style="background:#fff;padding:10px;border-radius:8px;border:1px solid var(--border)">
-              <div style="font-size:10px;text-transform:uppercase;color:var(--text-muted)">Humidity Ctrl</div>
-              <div style="font-weight:600;font-size:13px;color:var(--blue)">72% (Optimal)</div>
-          </div>
-          <div style="background:#fff;padding:10px;border-radius:8px;border:1px solid var(--border)">
-              <div style="font-size:10px;text-transform:uppercase;color:var(--text-muted)">AI Risk Index</div>
-              <div style="font-weight:600;font-size:13px;color:${w.risk > 50 ? 'var(--red-primary)' : 'var(--green-primary)'}">${w.risk < 20 ? 'Negligible' : w.risk < 40 ? 'Moderate' : 'High'}</div>
-          </div>
-      </div>
-
-      <div style="font-size:12px;font-weight:600;margin-bottom:6px" data-t="expandPrice">${t('expandPrice')}</div>
-      <div class="exp-prices">${Object.entries(w.prices).map(([c, p]) => `<span>${c} ₹${p}</span>`).join('')}</div>
-      <div style="font-size:12px;font-weight:600;margin-bottom:4px" data-t="expandAI">${t('expandAI')}</div>
-      <div class="exp-ai">${w.aiText}</div>
-      <button class="book-full-btn" onclick="event.stopPropagation();bookWarehouse('${w.name}')" data-t="bookThisBtn">${t('bookThisBtn')}</button>
-    </div></td></tr>`;
-        // Mobile card
-        mc.innerHTML += `<div class="mob-card">
-      <div class="mc-top"><span class="mc-name">${w.name}</span>${stBadge(w.status)}</div>
-      <div class="mc-dist">${w.city} · ${w.dist} km</div>
-      <div class="mc-row"><span class="tag ${cropCls(w.crop)}">${w.crop}</span><span>₹${w.price}/qtl</span><span>${w.temp}°C ${w.tempOk ? '✓' : '⚠'}</span><span class="risk-val ${riskCls(w.risk)}">${w.risk}% risk</span></div>
-      <div class="mc-row"><span class="vac-bar" style="width:80px"><span class="fill" style="width:${w.vacancy}%;background:${vacColor(w.vacancy)}"></span></span>${w.vacancy}% vacancy</div>
-      <button class="btn-dark" style="width:100%;justify-content:center;margin-top:4px" onclick="bookWarehouse('${w.name}')">${t('bookBtn')}</button>
-    </div>`;
-      });
-    }
-    function toggleExpand(id) {
-      const row = document.getElementById("exp-" + id)
-      if (!row) return
-      const alreadyOpen = row.classList.contains("open")
-
-      document.querySelectorAll(".expand-row").forEach(r => {
-        r.classList.remove("open")
-      })
-
-      if (!alreadyOpen) {
-        row.classList.add("open")
-      }
-    }
-    function viewWarehouse(id) {
-      const w = WH.find(x => x.id === id);
-      if (!w) return;
-
-      let insights = [];
-      if (w.temp < 18) insights.push("Optimal cold storage environment");
-      if (w.temp > 20) insights.push("Temperature slightly high — spoilage risk increases");
-      if (w.vacancy > 50) insights.push("High availability — good booking opportunity");
-      if (w.risk > 60) insights.push("Warning: storage spoilage risk detected");
-
-      const modalHTML = `
-    <div class="modal-overlay show" onclick="if(event.target===this)this.remove()">
-        <div class="modal-content">
-            <span class="modal-close" onclick="this.closest('.modal-overlay').remove()">×</span>
-            <div style="font-size:18px;font-weight:700;color:var(--green-dark);margin-bottom:16px">Warehouse AI Insights</div>
-            <div style="font-size:14px;margin-bottom:12px">
-                <b>Warehouse:</b> ${w.name}<br>
-                <b>Distance:</b> ${w.dist} km<br>
-                <b>Temperature:</b> ${w.temp}°C<br>
-                <b>Vacancy:</b> ${w.vacancy}%
+    <main class="finder-main">
+        
+        <!-- Search Area -->
+        <div class="search-container">
+            <div class="search-box">
+                <i class="fas fa-search" style="color: var(--app-muted);"></i>
+                <input type="text" placeholder="Search by city or area...">
             </div>
-            <div style="background:var(--page-bg);padding:14px;border-radius:12px;margin-bottom:16px">
-                <div style="font-size:12px;font-weight:700;color:var(--text-muted);text-transform:uppercase;margin-bottom:8px">AI Analysis</div>
-                <div style="font-size:13px;color:var(--text-primary);line-height:1.6">
-                    ${insights.map(i => `• ${i}`).join('<br>') || "• Conditions stable for storage"}
-                    <br>• Recommended storage duration: 18–24 days
+        </div>
+
+        <!-- Warehouse List -->
+        <div class="warehouse-list">
+            
+            <!-- Warehouse 1 -->
+            <div class="w-card" data-aos>
+                <div class="w-top">
+                    <div>
+                        <div class="w-name">Nashik Central Hub</div>
+                        <div class="w-dist">14.2 km away · Sangli North</div>
+                    </div>
+                    <div style="color: #4CAF50;"><i class="fas fa-check-circle"></i></div>
+                </div>
+                <div class="w-tags">
+                    <span class="w-tag w-price">₹180/qtl</span>
+                    <span class="w-tag w-vacant">21% Free Space</span>
+                    <span class="w-tag" style="background: #F5F5F5;">IoT Active</span>
+                </div>
+                <div class="w-footer">
+                    <div class="w-temp">Therm: 15.2°C</div>
+                    <a href="#" class="btn-book">Book Slot</a>
                 </div>
             </div>
-            <div style="display:flex;justify-content:space-between;align-items:center">
-                <span style="font-size:14px;font-weight:600">AI Suitability Score:</span>
-                <span style="font-size:20px;font-weight:700;color:var(--green-primary)">${Math.round((w.ai_score || 0.8) * 100)}%</span>
+
+            <!-- Warehouse 2 -->
+            <div class="w-card" data-aos data-aos-delay="50">
+                <div class="w-top">
+                    <div>
+                        <div class="w-name">Pune Agri Storage</div>
+                        <div class="w-dist">98 km away · Narayangaon</div>
+                    </div>
+                </div>
+                <div class="w-tags">
+                    <span class="w-tag w-price">₹240/qtl</span>
+                    <span class="w-tag w-vacant">54% Free Space</span>
+                    <span class="w-tag" style="background: #FFF3E0; color: #E65100;">High Demand</span>
+                </div>
+                <div class="w-footer">
+                    <div class="w-temp">Therm: 16.8°C</div>
+                    <a href="#" class="btn-book">Book Slot</a>
+                </div>
             </div>
+
+            <!-- Warehouse 3 -->
+            <div class="w-card" data-aos data-aos-delay="100">
+                <div class="w-top">
+                    <div>
+                        <div class="w-name">Kolhapur Cold Store</div>
+                        <div class="w-dist">65 km away · Shirol</div>
+                    </div>
+                </div>
+                <div class="w-tags">
+                    <span class="w-tag w-price">₹160/qtl</span>
+                    <span class="w-tag w-vacant">8% Free Space</span>
+                </div>
+                <div class="w-footer">
+                    <div class="w-temp">Therm: 12.1°C</div>
+                    <a href="#" class="btn-book" style="background: var(--app-muted);">Waitlist</a>
+                </div>
+            </div>
+
         </div>
-    </div>`;
-      document.body.insertAdjacentHTML('beforeend', modalHTML);
-    }
 
-    function bookWarehouse(name) {
-      const w = WH.find(x => x.name === name);
-      if (!w) return;
+    </main>
 
-      const modalHTML = `
-    <div class="modal-overlay show" onclick="if(event.target===this)this.remove()">
-        <div class="modal-content">
-             <span class="modal-close" onclick="this.closest('.modal-overlay').remove()">×</span>
-             <div style="font-size:18px;font-weight:700;color:var(--green-dark);margin-bottom:16px">AI Booking Recommendation</div>
-             <p style="font-size:14px;margin-bottom:16px;line-height:1.5">
-                Best time to store crop in <b>${name}</b>.<br>
-                Estimated storage cost <b>₹${w.price}/qtl</b>.<br>
-                AI recommends booking <b>Zone A1</b>.
-             </p>
-             <button class="book-full-btn" onclick="this.closest('.modal-overlay').remove();showToast('Booking request sent to ${name}')">Confirm AI Booking</button>
-        </div>
-    </div>`;
-      document.body.insertAdjacentHTML('beforeend', modalHTML);
-    }
-    function filterTable() {
-      const crop = document.getElementById('filterCrop').value;
-      // If crop changed, we might want to re-fetch AI scores
-      loadAIWarehouses();
-    }
+    <!-- Bottom Navigation Bar -->
+    <nav class="bottom-nav">
+        <a href="index.html" class="nav-item">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+        </a>
+        <a href="farmer-warehouse-finder.html" class="nav-item active">
+            <i class="fas fa-warehouse"></i>
+            <span>Find Cold Storage</span>
+        </a>
+        <a href="market.html" class="nav-item">
+            <i class="fas fa-chart-area"></i>
+            <span>Market</span>
+        </a>
+        <a href="trace.html" class="nav-item">
+            <i class="fas fa-search-location"></i>
+            <span>Trace</span>
+        </a>
+    </nav>
 
-    /* ═══ LIVE FEED ═══ */
-    setInterval(() => {
-      document.getElementById('liveDist').textContent = 65 + Math.floor(Math.random() * 5 - 2);
-      document.getElementById('livePrice').textContent = '₹' + (160 + Math.floor(Math.random() * 11 - 5)) + '/qtl';
-      document.getElementById('liveLatency').textContent = 15 + Math.floor(Math.random() * 8);
-    }, 8000);
-
-    /* ═══ INIT ═══ */
-    document.addEventListener("DOMContentLoaded", loadAIWarehouses);
-  </script>
-    <!-- Kisan Mitra AI Farmer Chatbot -->
-    <div id="farmer-chatbot-bubble">🌾</div>
-    <script src="js/farmer-chatbot.js"></script>
+    <script src="js/mobile-app.js"></script>
 </body>
 
 </html>

@@ -3,762 +3,311 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NeuroNix Marketplace | AgriFresh — Live Crop Listings & Price Intelligence</title>
-    <meta name="description"
-        content="NeuroNix Marketplace — AI-verified live crop listings from smart warehouses. Sensor-linked quality passports, real-time mandi prices, and AI negotiation tools for farmers.">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>AgriFresh | Marketplace</title>
+    
+    <!-- Icons and Fonts -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/style.css">
-
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Custom Mobile Styles -->
+    <link rel="stylesheet" href="css/mobile-app.css">
+    
     <style>
-        /* ============================================
-           MARKET PAGE — AGRI-FUTURISM DESIGN SYSTEM
-           Primary: #2E7D32 | Accent: #FFB300
-        ============================================ */
-
-        :root {
-            --mkt-green: #2E7D32;
-            --mkt-green-dark: #1B5E20;
-            --mkt-green-light: #4CAF50;
-            --mkt-gold: #FFB300;
-            --mkt-gold-dark: #E65100;
-            --mkt-glass: rgba(255, 255, 255, 0.92);
-            --mkt-glass-dark: rgba(27, 94, 32, 0.06);
-            --mkt-border: rgba(46, 125, 50, 0.14);
-            --mkt-shadow: 0 4px 30px rgba(46, 125, 50, 0.12);
-            --mkt-shadow-lg: 0 20px 60px rgba(46, 125, 50, 0.16);
+        .market-main {
+            padding-bottom: 150px; /* Extra space for ticker + nav */
+        }
+        
+        .market-filter-bar {
+            display: flex;
+            overflow-x: auto;
+            padding: 10px var(--app-spacing);
+            gap: 10px;
+            scrollbar-width: none;
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; }
+        .market-filter-bar::-webkit-scrollbar { display: none; }
 
-        body {
-            font-family: 'Outfit', sans-serif;
-            background: #f0f7f0;
-            color: #1A2E1C;
-            min-height: 100vh;
-            overflow-x: hidden;
+        .filter-pill {
+            padding: 8px 16px;
+            background: white;
+            border: 1px solid rgba(0,0,0,0.05);
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            white-space: nowrap;
+            color: var(--app-text-dim);
         }
 
-        /* ── Animated radial background ── */
-        body::before {
-            content: '';
-            position: fixed;
-            inset: 0;
-            background:
-                radial-gradient(ellipse at 10% 20%, rgba(46,125,50,0.08) 0%, transparent 50%),
-                radial-gradient(ellipse at 90% 80%, rgba(255,179,0,0.07) 0%, transparent 50%);
-            pointer-events: none;
-            z-index: 0;
+        .filter-pill.active {
+            background: var(--app-primary);
+            color: white;
+            border-color: var(--app-primary);
         }
 
-        /* ── Page layout (sidebar + main) matching existing pages ── */
-        .sidebar {
-            position: fixed;
-            left: 0; top: 0;
-            width: 260px;
-            height: 100vh;
-            background: var(--mkt-glass);
-            backdrop-filter: blur(24px);
-            border-right: 1px solid var(--mkt-border);
-            padding: 32px 20px;
+        .listing-grid {
+            padding: 0 var(--app-spacing);
             display: flex;
             flex-direction: column;
-            z-index: 100;
-            box-shadow: 4px 0 30px rgba(0,0,0,0.05);
+            gap: 15px;
         }
 
-        .market-main {
-            margin-left: 260px;
-            min-height: 100vh;
-            position: relative;
-            z-index: 1;
-            padding-bottom: 80px; /* space for ticker */
-        }
-
-        /* ── Sidebar Brand ── */
-        .sidebar-brand {
-            display: flex; align-items: center; gap: 12px;
-            margin-bottom: 36px; padding-left: 6px;
-        }
-        .sidebar-brand-icon {
-            width: 44px; height: 44px;
-            background: linear-gradient(135deg, var(--mkt-green-dark), var(--mkt-green-light));
-            border-radius: 12px;
-            display: flex; align-items: center; justify-content: center;
-            color: white; font-size: 1.2rem;
-            box-shadow: 0 4px 15px rgba(46,125,50,0.3);
-        }
-        .sidebar-brand-text { font-size: 1.35rem; font-weight: 800; color: var(--mkt-green-dark); letter-spacing: -0.5px; }
-        .sidebar-brand-sub  { font-size: 0.62rem; text-transform: uppercase; letter-spacing: 2px; color: #809683; font-weight: 700; }
-
-        /* ── Sidebar Nav ── */
-        .sidebar-nav a {
-            display: flex; align-items: center; gap: 12px;
-            padding: 12px 16px; border-radius: 14px;
-            font-weight: 600; font-size: 0.92rem;
-            color: #4A5D4C; text-decoration: none;
-            transition: all 0.25s ease;
-            margin-bottom: 4px;
-        }
-        .sidebar-nav a:hover { background: var(--mkt-glass-dark); color: var(--mkt-green-dark); transform: translateX(4px); }
-        .sidebar-nav a.active { background: rgba(46,125,50,0.12); color: var(--mkt-green-dark); font-weight: 700; }
-        .sidebar-nav a i { width: 18px; text-align: center; }
-
-        /* ── Language Selector in Sidebar ── */
-        .sidebar-lang {
-            margin-top: auto; padding-top: 20px;
-            border-top: 1px solid var(--mkt-border);
-        }
-        .sidebar-lang label { font-size: 0.75rem; font-weight: 700; color: #809683; text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 8px; }
-        #marketLangSelect {
-            width: 100%; padding: 10px 14px;
-            border-radius: 12px; border: 1px solid var(--mkt-border);
-            background: white; color: var(--mkt-green-dark);
-            font-weight: 600; font-size: 0.9rem; cursor: pointer; outline: none;
-        }
-
-        /* ── Header strip inside main ── */
-        .market-header {
-            padding: 28px 40px 24px;
-            background: linear-gradient(135deg, var(--mkt-green-dark) 0%, var(--mkt-green) 60%, #388E3C 100%);
-            color: white;
-            display: flex; justify-content: space-between; align-items: center;
-            position: relative; overflow: hidden;
-        }
-        .market-header::before {
-            content: '';
-            position: absolute; inset: 0;
-            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-            pointer-events: none;
-        }
-        .market-header-left h1 { font-size: 1.85rem; font-weight: 900; letter-spacing: -0.04em; }
-        .market-header-left p  { font-size: 0.9rem; opacity: 0.85; margin-top: 4px; }
-        .header-badge {
-            background: rgba(255,179,0,.2); color: var(--mkt-gold);
-            border: 1px solid rgba(255,179,0,.4);
-            padding: 6px 16px; border-radius: 50px;
-            font-size: 0.78rem; font-weight: 800;
-            display: inline-flex; align-items: center; gap: 6px;
-            margin-bottom: 10px;
-        }
-        .market-header-right {
-            display: flex; gap: 12px; align-items: center; flex-wrap: wrap;
-        }
-        .btn-header {
-            padding: 10px 22px; border-radius: 50px; font-weight: 700; font-size: 0.88rem;
-            border: none; cursor: pointer; display: inline-flex; align-items: center; gap: 8px;
-            transition: all 0.25s ease;
-        }
-        .btn-header-primary { background: white; color: var(--mkt-green-dark); }
-        .btn-header-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.2); }
-        .btn-header-ghost { background: rgba(255,255,255,0.15); color: white; border: 1px solid rgba(255,255,255,0.3); }
-        .btn-header-ghost:hover { background: rgba(255,255,255,0.25); }
-
-        /* ── Sensor Status Bar ── */
-        .sensor-status-bar {
-            padding: 10px 40px;
-            display: flex; align-items: center; gap: 16px;
-            font-size: 0.85rem; font-weight: 600;
-            flex-wrap: wrap;
-        }
-        .bar-green { background: rgba(46,125,50,0.08); border-bottom: 2px solid rgba(46,125,50,0.15); color: #1B5E20; }
-        .bar-yellow { background: rgba(255,179,0,0.08); border-bottom: 2px solid rgba(255,179,0,0.2); color: #795200; }
-        .sensor-bar-divider { color: #ccc; }
-        .sensor-bar-time { margin-left: auto; font-size: 0.75rem; opacity: 0.7; }
-
-        /* ── Sensor dots ── */
-        .sensor-dot, .sensor-bar-dot {
-            width: 8px; height: 8px; border-radius: 50%;
-            display: inline-block; flex-shrink: 0;
-        }
-        .dot-green { background: #4CAF50; box-shadow: 0 0 6px rgba(76,175,80,0.6); animation: dotPulse 2s ease infinite; }
-        .dot-yellow { background: #FFB300; box-shadow: 0 0 6px rgba(255,179,0,0.6); animation: dotPulse 2s ease infinite; }
-        @keyframes dotPulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.5); } }
-
-        /* ── Page Content Wrapper ── */
-        .market-content { padding: 28px 40px; }
-
-        /* ── Advisory + Stats Row ── */
-        .advisory-grid {
-            display: grid;
-            grid-template-columns: 1fr 320px;
-            gap: 24px;
-            margin-bottom: 28px;
-        }
-
-        /* ── Advisory Card ── */
-        .advisory-panel {
-            background: var(--mkt-glass);
-            border: 1px solid var(--mkt-border);
-            border-radius: 22px;
-            padding: 28px;
-            box-shadow: var(--mkt-shadow);
-        }
-        .advisory-panel-label {
-            font-size: 0.75rem; font-weight: 800; text-transform: uppercase;
-            letter-spacing: 1.5px; color: var(--mkt-green); margin-bottom: 16px;
-            display: flex; align-items: center; gap: 8px;
-        }
-        #advisoryCard { min-height: 180px; }
-
-        /* Advisory states */
-        .advisory-top { display: flex; align-items: center; gap: 16px; margin-bottom: 20px; }
-        .advisory-icon { width: 52px; height: 52px; border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; flex-shrink: 0; }
-        .advisory-label { font-size: 0.72rem; font-weight: 700; color: #809683; text-transform: uppercase; letter-spacing: 1px; }
-        .advisory-crop { font-size: 1.2rem; font-weight: 800; color: #1A2E1C; }
-        .advisory-conf { font-size: 0.78rem; font-weight: 600; color: #809683; }
-        .advisory-badge {
-            margin-left: auto; flex-shrink: 0;
-            padding: 8px 18px; border-radius: 50px; color: white;
-            font-size: 0.85rem; font-weight: 800;
-        }
-        .advisory-prices { display: flex; align-items: center; gap: 24px; margin-bottom: 18px; }
-        .price-col { flex: 1; }
-        .price-label { font-size: 0.72rem; font-weight: 700; color: #809683; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
-        .price-val { font-size: 2rem; font-weight: 900; color: #1A2E1C; }
-        .price-val span { font-size: 1rem; font-weight: 600; color: #809683; }
-        .price-arrow { color: #ccc; font-size: 1.2rem; }
-        .advisory-gain {
-            padding: 12px 16px; border-radius: 12px;
-            display: flex; align-items: center; gap: 10px;
-            font-size: 0.88rem; font-weight: 600; margin-bottom: 14px;
-        }
-        .advisory-reasoning { font-size: 0.88rem; color: #4A5D4C; line-height: 1.6; margin-bottom: 16px; }
-        .advisory-footer { display: flex; justify-content: space-between; align-items: center; font-size: 0.75rem; color: #809683; }
-        .btn-advisory-refresh {
-            background: none; border: 1px solid var(--mkt-border); border-radius: 8px;
-            padding: 6px 12px; font-size: 0.72rem; font-weight: 700;
-            color: var(--mkt-green); cursor: pointer; transition: 0.2s;
-        }
-        .btn-advisory-refresh:hover { background: var(--mkt-glass-dark); }
-        .advisory-loading { display: flex; align-items: center; gap: 12px; color: #809683; font-weight: 600; padding: 40px 0; justify-content: center; }
-
-        /* ── Quick Stats Panel ── */
-        .quick-stats {
-            display: flex; flex-direction: column; gap: 14px;
-        }
-        .q-stat {
-            background: var(--mkt-glass);
-            border: 1px solid var(--mkt-border);
-            border-radius: 16px; padding: 18px 20px;
-            box-shadow: var(--mkt-shadow);
-        }
-        .q-stat-label { font-size: 0.72rem; font-weight: 700; color: #809683; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
-        .q-stat-val { font-size: 1.6rem; font-weight: 900; color: var(--mkt-green-dark); }
-        .q-stat-sub { font-size: 0.78rem; color: #809683; font-weight: 600; margin-top: 3px; }
-
-        /* ── Controls Bar ── */
-        .controls-bar {
-            display: flex; align-items: center; gap: 14px;
-            margin-bottom: 22px; flex-wrap: wrap;
-        }
-        .search-wrapper {
-            flex: 1; min-width: 200px;
-            display: flex; align-items: center; gap: 0;
-            background: white; border: 1px solid var(--mkt-border);
-            border-radius: 14px; overflow: hidden;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.04);
-        }
-        .search-wrapper input {
-            flex: 1; padding: 12px 16px;
-            border: none; outline: none;
-            font-family: 'Outfit', sans-serif;
-            font-size: 0.92rem; color: #1A2E1C;
-        }
-        #voiceSearchBtn {
-            background: none; border: none; padding: 12px 14px;
-            cursor: pointer; color: var(--mkt-green); font-size: 1rem;
-            transition: 0.2s;
-        }
-        #voiceSearchBtn:hover { color: var(--mkt-green-dark); }
-        #voiceSearchBtn.voice-active { color: #e53935; animation: pulse-icon 1s ease infinite; }
-        @keyframes pulse-icon { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.25); } }
-
-        .market-select {
-            padding: 12px 18px; border-radius: 14px;
-            border: 1px solid var(--mkt-border);
-            background: white; font-family: 'Outfit', sans-serif;
-            font-size: 0.88rem; font-weight: 600;
-            color: #1A2E1C; cursor: pointer; outline: none;
-        }
-        .listings-count-bar {
-            display: flex; justify-content: space-between; align-items: center;
-            margin-bottom: 16px;
-        }
-        #listingsCount { font-size: 0.85rem; color: #809683; font-weight: 600; }
-
-        /* ── Listings Grid ── */
-        #listingsGrid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-            gap: 22px;
-        }
-
-        /* ── Listing Card ── */
-        .listing-card {
-            background: var(--mkt-glass);
-            border: 1px solid var(--mkt-border);
-            border-radius: 22px; padding: 24px;
-            box-shadow: var(--mkt-shadow);
-            transition: all 0.3s ease;
-            animation: fadeSlideIn 0.5s ease both;
-            position: relative; overflow: hidden;
-        }
-        .listing-card::before {
-            content: '';
-            position: absolute; top: 0; left: 0; right: 0; height: 3px;
-            background: linear-gradient(90deg, var(--mkt-green), var(--mkt-gold));
-            opacity: 0; transition: opacity 0.3s;
-        }
-        .listing-card:hover { transform: translateY(-6px); box-shadow: var(--mkt-shadow-lg); border-color: rgba(46,125,50,0.25); }
-        .listing-card:hover::before { opacity: 1; }
-
-        @keyframes fadeSlideIn {
-            from { opacity: 0; transform: translateY(16px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .listing-header { display: flex; align-items: flex-start; gap: 14px; margin-bottom: 14px; }
-        .listing-icon { font-size: 2.2rem; line-height: 1; margin-top: 2px; }
-        .listing-meta { flex: 1; }
-        .listing-name { font-size: 1.18rem; font-weight: 800; color: #1A2E1C; margin-bottom: 3px; }
-        .listing-farmer { font-size: 0.78rem; color: #809683; font-weight: 600; display: flex; align-items: center; gap: 5px; }
-        .listing-price { font-size: 1.4rem; font-weight: 900; color: var(--mkt-green-dark); white-space: nowrap; }
-
-        /* Quality Passport Badge */
-        .quality-badge {
-            display: inline-flex; align-items: center; gap: 6px;
-            border-radius: 50px; font-size: 0.74rem; font-weight: 800;
-            padding: 5px 14px; margin-bottom: 14px;
-        }
-        .grade-a { background: rgba(46,125,50,0.1); color: #1B5E20; border: 1px solid rgba(46,125,50,0.2); }
-        .grade-b { background: rgba(255,179,0,0.1); color: #795200; border: 1px solid rgba(255,179,0,0.2); }
-
-        /* Listing stat row */
-        .listing-stats { display: flex; gap: 16px; margin-bottom: 12px; flex-wrap: wrap; }
-        .lst-stat { display: flex; align-items: center; gap: 5px; font-size: 0.8rem; font-weight: 600; color: #4A5D4C; }
-        .lst-stat i { color: var(--mkt-green); font-size: 0.75rem; }
-
-        /* Sensor readout strip */
-        .sensor-readout {
-            background: var(--mkt-glass-dark);
-            border-radius: 10px; padding: 8px 12px;
-            display: flex; align-items: center; gap: 8px;
-            font-size: 0.78rem; color: #4A5D4C; margin-bottom: 16px;
-        }
-
-        /* Action buttons */
-        .listing-actions { display: flex; gap: 10px; }
-        .btn-deal, .btn-inspect {
-            flex: 1; padding: 10px; border-radius: 12px;
-            font-family: 'Outfit', sans-serif;
-            font-weight: 700; font-size: 0.82rem;
-            cursor: pointer; transition: all 0.25s ease;
-            display: flex; align-items: center; justify-content: center; gap: 6px;
-        }
-        .btn-deal { background: linear-gradient(135deg, var(--mkt-green-dark), var(--mkt-green)); color: white; border: none; }
-        .btn-deal:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(46,125,50,0.35); }
-        .btn-inspect { background: white; color: var(--mkt-green-dark); border: 1.5px solid var(--mkt-border); }
-        .btn-inspect:hover { background: var(--mkt-glass-dark); border-color: var(--mkt-green); }
-
-        /* ── Spinner ── */
-        .spinner {
-            display: inline-block; width: 18px; height: 18px;
-            border: 2px solid rgba(46,125,50,0.2);
-            border-top-color: var(--mkt-green);
-            border-radius: 50%;
-            animation: spin 0.7s linear infinite;
-        }
-        @keyframes spin { to { transform: rotate(360deg); } }
-
-        /* ── Section headings ── */
-        .section-heading {
-            display: flex; align-items: center; gap: 12px;
-            font-size: 1.3rem; font-weight: 800; color: #1A2E1C;
-            margin-bottom: 20px;
-        }
-        .section-heading i { color: var(--mkt-green); }
-        .section-tag {
-            font-size: 0.7rem; font-weight: 800;
-            text-transform: uppercase; letter-spacing: 1.5px;
-            background: rgba(46,125,50,0.1); color: var(--mkt-green);
-            padding: 3px 10px; border-radius: 50px;
-        }
-
-        /* ── MANDI TICKER (bottom fixed) ── */
-        .mandi-ticker-bar {
-            position: fixed; bottom: 0; left: 260px; right: 0;
-            height: 46px;
-            background: linear-gradient(90deg, var(--mkt-green-dark), #1A3A1D);
-            color: white;
-            display: flex; align-items: center;
-            z-index: 200; overflow: hidden;
-            box-shadow: 0 -4px 20px rgba(0,0,0,0.15);
-        }
-        .ticker-label {
-            background: var(--mkt-gold); color: #1B2500;
-            padding: 0 16px; height: 100%;
-            display: flex; align-items: center;
-            font-size: 0.7rem; font-weight: 900;
-            letter-spacing: 1.5px; text-transform: uppercase;
-            white-space: nowrap; flex-shrink: 0;
-        }
-        .ticker-viewport { flex: 1; overflow: hidden; }
-        #tickerTrack {
-            display: flex; align-items: center; height: 46px;
-            animation: tickerScroll 60s linear infinite;
-            white-space: nowrap;
-        }
-        #tickerTrack:hover { animation-play-state: paused; }
-        @keyframes tickerScroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
-        .ticker-item { display: inline-flex; align-items: center; gap: 6px; padding: 0 20px; font-size: 0.82rem; }
-        .ticker-city { font-size: 0.68rem; background: rgba(255,255,255,0.12); padding: 2px 8px; border-radius: 50px; font-weight: 700; }
-        .ticker-crop { font-weight: 600; }
-        .ticker-price { font-weight: 800; color: var(--mkt-gold); }
-        .ticker-change { font-size: 0.75rem; font-weight: 700; }
-        .ticker-sep { color: rgba(255,255,255,0.25); padding: 0 4px; }
-
-        /* ── AI NEGOTIATION BOT (floating) ── */
-        #negotiationBubble {
-            position: fixed; bottom: 60px; right: 30px;
-            width: 60px; height: 60px;
-            background: linear-gradient(135deg, var(--mkt-green-dark), var(--mkt-green-light));
-            border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            color: white; font-size: 1.5rem;
-            cursor: pointer; z-index: 300;
-            box-shadow: 0 8px 25px rgba(46,125,50,0.45);
-            transition: all 0.3s ease;
-            animation: botFloat 4s ease-in-out infinite;
-        }
-        #negotiationBubble:hover { transform: scale(1.12); box-shadow: 0 12px 35px rgba(46,125,50,0.55); }
-        @keyframes botFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
-        .neg-bubble-badge {
-            position: absolute; top: -4px; right: -4px;
-            background: var(--mkt-gold); color: white;
-            width: 20px; height: 20px; border-radius: 50%;
-            font-size: 0.6rem; font-weight: 900;
-            display: flex; align-items: center; justify-content: center;
-        }
-
-        #negotiationWindow {
-            position: fixed; bottom: 130px; right: 30px;
-            width: 380px; height: 520px;
+        .m-listing-card {
             background: white;
-            border-radius: 24px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.18);
-            display: none; flex-direction: column;
-            overflow: hidden; z-index: 300;
-            border: 1px solid var(--mkt-border);
-            animation: botSlideUp 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            border-radius: 16px;
+            padding: 15px;
+            box-shadow: var(--app-shadow);
+            border: 1px solid rgba(0,0,0,0.03);
+            display: flex;
+            gap: 15px;
         }
-        @keyframes botSlideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-        .neg-header {
-            background: linear-gradient(135deg, var(--mkt-green-dark), var(--mkt-green));
-            color: white; padding: 20px 22px;
-            display: flex; align-items: center; gap: 12px;
+        .m-listing-img {
+            width: 80px;
+            height: 80px;
+            background: var(--app-surface);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
             flex-shrink: 0;
         }
-        .neg-header-icon {
-            width: 38px; height: 38px;
-            background: rgba(255,255,255,0.2);
-            border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
+
+        .m-listing-info {
+            flex: 1;
+        }
+
+        .m-listing-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .m-listing-name {
+            font-weight: 800;
             font-size: 1rem;
+            color: var(--app-text);
         }
-        .neg-title { font-weight: 800; font-size: 1rem; }
-        .neg-subtitle { font-size: 0.72rem; opacity: 0.85; margin-top: 2px; }
-        #negotiationClose { margin-left: auto; background: none; border: none; color: white; font-size: 1.1rem; cursor: pointer; opacity: 0.8; }
-        #negotiationClose:hover { opacity: 1; }
 
-        #negotiationMessages {
-            flex: 1; overflow-y: auto;
-            padding: 16px; background: #f9fbf9;
-            display: flex; flex-direction: column; gap: 10px;
+        .m-listing-price {
+            font-weight: 900;
+            color: var(--app-primary);
+            font-size: 1.1rem;
         }
-        .neg-message {
-            max-width: 88%; padding: 10px 14px;
-            border-radius: 16px; font-size: 0.88rem; line-height: 1.5;
-        }
-        .neg-user { align-self: flex-end; background: var(--mkt-green); color: white; border-bottom-right-radius: 4px; }
-        .neg-bot  { align-self: flex-start; background: white; color: #1A2E1C; border: 1px solid #eee; box-shadow: 0 2px 8px rgba(0,0,0,0.05); border-bottom-left-radius: 4px; }
-        .neg-typing { display: flex; align-items: center; gap: 4px; padding: 12px 14px; }
-        .neg-typing span { width: 7px; height: 7px; background: #ccc; border-radius: 50%; animation: typingBounce 1.2s ease infinite; }
-        .neg-typing span:nth-child(2) { animation-delay: 0.2s; }
-        .neg-typing span:nth-child(3) { animation-delay: 0.4s; }
-        @keyframes typingBounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
 
-        .neg-input-area {
-            padding: 14px; border-top: 1px solid #eee;
-            display: flex; gap: 8px; flex-shrink: 0;
+        .m-listing-meta {
+            font-size: 0.75rem;
+            color: var(--app-muted);
+            margin-top: 4px;
+            display: flex;
+            gap: 10px;
         }
-        #negotiationInput {
-            flex: 1; padding: 10px 16px;
-            border-radius: 50px; border: 1px solid #ddd;
-            outline: none; font-family: 'Outfit', sans-serif;
-            font-size: 0.88rem;
-        }
-        #negotiationInput:focus { border-color: var(--mkt-green); }
-        #negotiationSend {
-            width: 40px; height: 40px;
-            background: var(--mkt-green); color: white;
-            border: none; border-radius: 50%; cursor: pointer;
-            display: flex; align-items: center; justify-content: center;
-            transition: 0.2s;
-        }
-        #negotiationSend:hover { background: var(--mkt-green-dark); }
 
-        /* ── Responsive ── */
-        @media (max-width: 900px) {
-            .sidebar { display: none; }
-            .market-main { margin-left: 0; }
-            .mandi-ticker-bar { left: 0; }
-            .advisory-grid { grid-template-columns: 1fr; }
-            #listingsGrid { grid-template-columns: 1fr; }
+        .grade-tag {
+            display: inline-block;
+            margin-top: 10px;
+            font-size: 0.65rem;
+            font-weight: 800;
+            padding: 3px 8px;
+            border-radius: 4px;
+            text-transform: uppercase;
         }
-        @media (max-width: 600px) {
-            .market-header { flex-direction: column; gap: 16px; padding: 22px 20px; }
-            .market-header-right { width: 100%; justify-content: flex-start; }
-            .market-content { padding: 20px; }
+
+        .grade-a { background: #E8F5E9; color: #2E7D32; }
+
+        .m-listing-btns {
+            display: flex;
+            gap: 8px;
+            margin-top: 15px;
+        }
+
+        .m-btn {
+            flex: 1;
+            padding: 8px;
+            border-radius: 8px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-align: center;
+            text-decoration: none;
+        }
+
+        .m-btn-primary { background: var(--app-primary); color: white; }
+        .m-btn-outline { border: 1px solid var(--app-primary); color: var(--app-primary); }
+
+        .mandi-ticker-mobile {
+            position: fixed;
+            bottom: 70px;
+            left: 0;
+            width: 100%;
+            height: 40px;
+            background: #06080F;
+            color: white;
+            display: flex;
+            align-items: center;
+            font-size: 0.75rem;
+            z-index: 1000;
+        }
+
+        .m-ticker-tag {
+            background: var(--app-accent);
+            color: #000;
+            padding: 0 10px;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            font-weight: 900;
+            font-size: 0.65rem;
+        }
+
+        .m-ticker-track {
+            padding-left: 15px;
+            white-space: nowrap;
+            overflow: hidden;
+            flex: 1;
+        }
+
+        #m-ticker-text {
+            display: inline-block;
+            animation: scrollTicker 20s linear infinite;
+        }
+
+        @keyframes scrollTicker {
+            from { transform: translateX(100%); }
+            to { transform: translateX(-100%); }
         }
     </style>
 </head>
 
 <body>
 
-    <!-- ══════════════ SIDEBAR ══════════════ -->
-    <aside class="sidebar">
-        <div class="sidebar-brand">
-            <div class="sidebar-brand-icon"><i class="fas fa-leaf"></i></div>
-            <div>
-                <div class="sidebar-brand-text">AgriFresh</div>
-                <div class="sidebar-brand-sub" data-i18n="sidebar-ai-text">AI Intelligence</div>
-            </div>
+    <!-- Header -->
+    <header class="app-header">
+        <div style="display: flex; align-items: center; gap: 10px;">
+             <a href="index.html" style="color: var(--app-text); font-size: 1.2rem;"><i class="fas fa-arrow-left"></i></a>
+             <span class="app-brand" style="font-size: 1.1rem;">Marketplace</span>
         </div>
-
-        <nav class="sidebar-nav">
-            <a href="dashboard.html">
-                <i class="fas fa-table-cells-large"></i>
-                <span data-i18n="nav-dashboard">Dashboard</span>
-            </a>
-            <a href="inventory.html">
-                <i class="fas fa-boxes-stacked"></i>
-                <span data-i18n="nav-inventory">Inventory</span>
-            </a>
-            <a href="analytics.html">
-                <i class="fas fa-chart-pie"></i>
-                <span data-i18n="nav-analytics">Analytics</span>
-            </a>
-            <a href="trace.html">
-                <i class="fas fa-route"></i>
-                <span data-i18n="nav-traceability">Traceability</span>
-            </a>
-            <a href="market.html" class="active">
-                <i class="fas fa-store"></i>
-                <span data-market-i18n="market-nav">Marketplace</span>
-            </a>
-            <a href="javascript:void(0)" onclick="logout()" class="nav-item logout-nav" style="margin-top: 20px; color: #d32f2f;">
-                <i class="fas fa-sign-out-alt"></i>
-                <span data-i18n="nav-logout">Logout</span>
-            </a>
-        </nav>
-
-        <div class="sidebar-lang">
-            <label><i class="fas fa-globe"></i> Language / भाषा / भाषा</label>
-            <select id="marketLangSelect">
-                <option value="en">🇬🇧 English</option>
-                <option value="hi">🇮🇳 हिंदी (Hindi)</option>
-                <option value="mr">🇮🇳 मराठी (Marathi)</option>
-            </select>
+        <div class="app-profile">
+            <i class="fas fa-search"></i>
         </div>
-    </aside>
+    </header>
 
-    <!-- ══════════════ MAIN CONTENT ══════════════ -->
     <main class="market-main">
+        
+        <!-- Search and Filters -->
+        <div class="market-filter-bar">
+            <div class="filter-pill active">All Crops</div>
+            <div class="filter-pill">Tomatoes</div>
+            <div class="filter-pill">Onions</div>
+            <div class="filter-pill">Potatoes</div>
+            <div class="filter-pill">Grapes</div>
+        </div>
 
-        <!-- ── PAGE HEADER ── -->
-        <div class="market-header">
-            <div class="market-header-left">
-                <div class="header-badge"><i class="fas fa-bolt"></i> AI-Powered Market Intelligence</div>
-                <h1 data-market-i18n="market-title">🌾 NeuroNix Marketplace</h1>
-                <p data-market-i18n="market-subtitle">Sensor-Verified Crop Listings · Live Mandi Prices · AI Negotiation</p>
-            </div>
-            <div class="market-header-right">
-                <button class="btn-header btn-header-ghost" onclick="refreshAdvisory()">
-                    <i class="fas fa-brain"></i> New Bhav Advice
-                </button>
-                <button class="btn-header btn-header-primary" onclick="document.getElementById('negotiationWindow').style.display='flex'">
-                    <i class="fas fa-handshake"></i> Open AI Negotiator
-                </button>
+        <!-- Section Label -->
+        <div class="app-section" style="padding-bottom: 10px;">
+            <div class="section-head" style="margin-bottom: 0;">
+                <span class="section-label">Live Listings</span>
+                <h2 class="section-title">Verified Inventories</h2>
             </div>
         </div>
 
-        <!-- ── SENSOR STATUS BAR ── -->
-        <div id="sensorBar" class="sensor-status-bar bar-green">
-            <span class="sensor-bar-dot dot-green"></span>
-            <strong>Loading sensor data...</strong>
+        <!-- Listing Grid -->
+        <div class="listing-grid">
+            
+            <!-- Card 1 -->
+            <div class="m-listing-card" data-aos>
+                <div class="m-listing-img">🍅</div>
+                <div class="m-listing-info">
+                    <div class="m-listing-top">
+                        <span class="m-listing-name">Premium Tomatoes</span>
+                        <span class="m-listing-price">₹184/qtl</span>
+                    </div>
+                    <div class="m-listing-meta">
+                        <span><i class="fas fa-map-marker-alt"></i> Nashik</span>
+                        <span><i class="fas fa-weight-hanging"></i> 450kg</span>
+                    </div>
+                    <span class="grade-tag grade-a">Grade A Verified</span>
+                    <div class="m-listing-btns">
+                        <a href="#" class="m-btn m-btn-primary">Buy Now</a>
+                        <a href="#" class="m-btn m-btn-outline">Negotiate</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 2 -->
+            <div class="m-listing-card" data-aos data-aos-delay="50">
+                <div class="m-listing-img">🧅</div>
+                <div class="m-listing-info">
+                    <div class="m-listing-top">
+                        <span class="m-listing-name">Red Onions</span>
+                        <span class="m-listing-price">₹210/qtl</span>
+                    </div>
+                    <div class="m-listing-meta">
+                        <span><i class="fas fa-map-marker-alt"></i> Pune</span>
+                        <span><i class="fas fa-weight-hanging"></i> 1200kg</span>
+                    </div>
+                    <span class="grade-tag grade-a">Grade A Verified</span>
+                    <div class="m-listing-btns">
+                        <a href="#" class="m-btn m-btn-primary">Buy Now</a>
+                        <a href="#" class="m-btn m-btn-outline">Negotiate</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 3 -->
+            <div class="m-listing-card" data-aos data-aos-delay="100">
+                <div class="m-listing-img">🥔</div>
+                <div class="m-listing-info">
+                    <div class="m-listing-top">
+                        <span class="m-listing-name">Farm Fresh Potato</span>
+                        <span class="m-listing-price">₹145/qtl</span>
+                    </div>
+                    <div class="m-listing-meta">
+                        <span><i class="fas fa-map-marker-alt"></i> Solapur</span>
+                        <span><i class="fas fa-weight-hanging"></i> 800kg</span>
+                    </div>
+                    <span class="grade-tag grade-a" style="background: #FFF3E0; color: #E65100;">Grade B</span>
+                    <div class="m-listing-btns">
+                        <a href="#" class="m-btn m-btn-primary">Buy Now</a>
+                        <a href="#" class="m-btn m-btn-outline">Negotiate</a>
+                    </div>
+                </div>
+            </div>
+
         </div>
 
-        <!-- ── MAIN CONTENT AREA ── -->
-        <div class="market-content">
+    </main>
 
-            <!-- ── ADVISORY CARD + QUICK STATS ── -->
-            <div class="advisory-grid">
-                <!-- Sell vs Hold Card -->
-                <div class="advisory-panel">
-                    <div class="advisory-panel-label">
-                        <i class="fas fa-robot"></i>
-                        <span data-market-i18n="market-advisory-title">AI Sell vs Hold Advisor</span>
-                        <span class="section-tag" style="margin-left:auto;">Live</span>
-                    </div>
-                    <div id="advisoryCard">
-                        <div class="advisory-loading">
-                            <span class="spinner"></span> Fetching live mandi Bhav data...
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Quick Market Stats -->
-                <div class="quick-stats">
-                    <div class="q-stat">
-                        <div class="q-stat-label"><i class="fas fa-store" style="color:var(--mkt-green);"></i> Active Listings</div>
-                        <div class="q-stat-val" id="qsListings">–</div>
-                        <div class="q-stat-sub">Crops available today</div>
-                    </div>
-                    <div class="q-stat">
-                        <div class="q-stat-label"><i class="fas fa-shield-check" style="color:#4CAF50;"></i> Grade A Verified</div>
-                        <div class="q-stat-val" id="qsGradeA" style="color:#2E7D32;">–</div>
-                        <div class="q-stat-sub">Sensor-verified batches</div>
-                    </div>
-                    <div class="q-stat">
-                        <div class="q-stat-label"><i class="fas fa-coins" style="color:var(--mkt-gold);"></i> Avg. Price Gain</div>
-                        <div class="q-stat-val" id="qsAvgGain" style="color:var(--mkt-gold);">–</div>
-                        <div class="q-stat-sub">vs. distress sale price</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- ── LISTINGS SECTION ── -->
-            <div>
-                <div class="section-heading">
-                    <i class="fas fa-seedling"></i>
-                    <span data-market-i18n="market-listings-title">Live Crop Listings</span>
-                </div>
-
-                <!-- Controls Bar -->
-                <div class="controls-bar">
-                    <div class="search-wrapper">
-                        <input type="text" id="cropSearch" placeholder="Search crops, farmers...">
-                        <button id="voiceSearchBtn" title="Voice Search (🎤)">
-                            <i class="fas fa-microphone"></i>
-                        </button>
-                    </div>
-                    <select class="market-select" id="locationFilter">
-                        <option value="all">All Locations</option>
-                        <option value="Nashik">Nashik</option>
-                        <option value="Pune">Pune</option>
-                        <option value="Mumbai">Mumbai</option>
-                    </select>
-                    <select class="market-select" id="sortSelect">
-                        <option value="default">Sort By</option>
-                        <option value="grade-a">Grade A First</option>
-                        <option value="price-high">Price: High→Low</option>
-                        <option value="price-low">Price: Low→High</option>
-                        <option value="days-left">Expiry: Soonest</option>
-                    </select>
-                </div>
-
-                <div class="listings-count-bar">
-                    <span id="listingsCount"></span>
-                    <span style="font-size:0.78rem; color:#809683;">
-                        <i class="fas fa-sync-alt" style="color:var(--mkt-green);"></i> Auto-refreshes every 30s
-                    </span>
-                </div>
-
-                <div id="listingsGrid">
-                    <!-- Injected by market.js -->
-                </div>
-            </div>
-
-        </div><!-- /market-content -->
-
-    </main><!-- /market-main -->
-
-    <!-- ══════════════ MANDI-SYNC LIVE TICKER ══════════════ -->
-    <div class="mandi-ticker-bar">
-        <div class="ticker-label" data-market-i18n="market-ticker-label">
-            📊 LIVE MANDI PRICES
-        </div>
-        <div class="ticker-viewport">
-            <div id="tickerTrack">
-                <span class="ticker-item">Loading live mandi prices...</span>
-            </div>
+    <!-- Mandi Ticker -->
+    <div class="mandi-ticker-mobile">
+        <div class="m-ticker-tag">LIVE MANDI</div>
+        <div class="m-ticker-track">
+            <span id="m-ticker-text">Nashik: Tomato ₹180 (+2%) · Pune: Onion ₹205 (+1%) · Mumbai: Potato ₹160 (-1%) · Sangli: Grapes ₹450 (+5%)</span>
         </div>
     </div>
 
-    <!-- ══════════════ AI BHAV-TAAL NEGOTIATION BOT ══════════════ -->
-    <div id="negotiationBubble" title="AI Negotiation Assistant">
-        <i class="fas fa-robot"></i>
-        <span class="neg-bubble-badge">AI</span>
-    </div>
+    <!-- Bottom Navigation Bar -->
+    <nav class="bottom-nav">
+        <a href="index.html" class="nav-item">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+        </a>
+        <a href="farmer-dashboard.html" class="nav-item">
+            <i class="fas fa-th-large"></i>
+            <span>Dashboard</span>
+        </a>
+        <a href="market.html" class="nav-item active">
+            <i class="fas fa-chart-area"></i>
+            <span>Market</span>
+        </a>
+        <a href="trace.html" class="nav-item">
+            <i class="fas fa-search-location"></i>
+            <span>Trace</span>
+        </a>
+    </nav>
 
-    <div id="negotiationWindow">
-        <div class="neg-header">
-            <div class="neg-header-icon"><i class="fas fa-robot"></i></div>
-            <div>
-                <div class="neg-title" data-market-i18n="market-bot-title">AI Negotiation Assistant</div>
-                <div class="neg-subtitle">Bhav-Taal · Market-Backed Deal Advisory</div>
-            </div>
-            <button id="negotiationClose" title="Close"><i class="fas fa-times"></i></button>
-        </div>
-        <div id="negotiationMessages"></div>
-        <div class="neg-input-area">
-            <input type="text" id="negotiationInput"
-                placeholder="e.g. Tomato asking ₹30, buyer offers ₹22..."
-                data-market-i18n-placeholder="market-bot-placeholder">
-            <button id="negotiationSend" title="Send"><i class="fas fa-paper-plane"></i></button>
-        </div>
-    </div>
-
-    <!-- ══════════════ SCRIPTS ══════════════ -->
-    <script src="js/i18n.js"></script>
-    <script src="js/marketService.js"></script>
-    <script src="js/market.js"></script>
-
-    <!-- Quick Stats Updater (runs after market.js initialises listings) -->
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            // Poll until listings are ready, then populate quick stats
-            const updateQuickStats = () => {
-                if (!window.currentListings || window.currentListings.length === 0) {
-                    setTimeout(updateQuickStats, 500);
-                    return;
-                }
-                const all = window.currentListings || [];
-                const gradeA = all.filter(c => c.humidity < 70 && c.gas < 50).length;
-                document.getElementById('qsListings').textContent = all.length;
-                document.getElementById('qsGradeA').textContent = gradeA;
-                document.getElementById('qsAvgGain').textContent = '+₹' + (Math.floor(8 + Math.random() * 12)) + '/kg';
-                document.getElementById('listingsCount').textContent = `${all.length} listings found`;
-            };
-            setTimeout(updateQuickStats, 1500);
-
-            // Apply market translations on load
-            const lang = localStorage.getItem('preferred_lang') || 'en';
-            if (lang !== 'en' && window.marketTranslations) {
-                const t = window.marketTranslations[lang];
-                if (t) {
-                    document.querySelectorAll('[data-market-i18n]').forEach(el => {
-                        const key = el.getAttribute('data-market-i18n');
-                        if (t[key]) el.innerHTML = t[key];
-                    });
-                }
-            }
-        });
-    </script>
-
+    <script src="js/mobile-app.js"></script>
 </body>
+
 </html>

@@ -3,2010 +3,242 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AgriFresh | Smart Warehouse - Connecting Farmers to Markets</title>
-    <meta name="description"
-        content="AgriFresh connects farmers to warehouses to markets using AI-powered smart storage, reducing post-harvest losses and maximizing profits.">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>AgriFresh App | Smart Warehouse Ecosystem</title>
+    <meta name="description" content="AI-powered smart agricultural ecosystem connecting farmers to warehouses and markets.">
+    
+    <!-- Icons and Fonts -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link
-        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Inter:wght@400;500;600;700&display=swap"
-        rel="stylesheet">
-    <link rel="stylesheet" href="css/style.css">
-    <style>
-        /* ===== HOMEPAGE SPECIFIC OVERRIDES ===== */
-
-        /* ---- FULL-PAGE BACKGROUND IMAGE ---- */
-        body {
-            background: #ffffff;
-            position: relative;
-        }
-
-        /* Fixed background image as a pseudo-layer — very low intensity so text stays readable */
-        body::before {
-            content: '';
-            position: fixed;
-            inset: 0;
-            background-image: url('img/hero-bg.png');
-            background-size: cover;
-            background-position: center center;
-            background-repeat: no-repeat;
-            opacity: 0.12;
-            /* 12% — subtle watermark, image peeks through */
-            z-index: 0;
-            pointer-events: none;
-        }
-
-        /* Make sure all direct children stack above the pseudo-bg */
-        body>* {
-            position: relative;
-            z-index: 1;
-        }
-
-
-        /* ===== NAVBAR ===== */
-        .site-header {
-            padding: 18px 60px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: fixed;
-            width: 100%;
-            top: 0;
-            z-index: 1000;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(27, 94, 32, 0.08);
-            transition: all 0.3s ease;
-        }
-
-        .site-header.scrolled {
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.08);
-        }
-
-        .brand {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            text-decoration: none;
-        }
-
-        .brand-icon {
-            width: 44px;
-            height: 44px;
-            background: linear-gradient(135deg, #1B5E20, #4CAF50);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 1.1rem;
-            box-shadow: 0 4px 15px rgba(27, 94, 32, 0.3);
-        }
-
-        .brand-text {
-            font-size: 1.45rem;
-            font-weight: 800;
-            color: #1B5E20;
-            letter-spacing: -0.03em;
-        }
-
-        .brand-sub {
-            font-size: 0.85rem;
-            font-weight: 400;
-            color: #809683;
-            margin-left: 6px;
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 32px;
-            align-items: center;
-        }
-
-        .nav-links a {
-            text-decoration: none;
-            color: #4A5D4C;
-            font-weight: 600;
-            font-size: 0.95rem;
-            transition: color 0.2s;
-        }
-
-        .nav-links a:hover {
-            color: #1B5E20;
-        }
-
-        .nav-right {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-        }
-
-        .lang-select {
-            padding: 9px 14px;
-            border-radius: 10px;
-            border: 1px solid rgba(27, 94, 32, 0.15);
-            background: white;
-            color: #1A2E1C;
-            font-weight: 600;
-            font-size: 0.88rem;
-            cursor: pointer;
-            outline: none;
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, #1B5E20, #2E7D32);
-            color: white;
-            padding: 11px 26px;
-            border-radius: 12px;
-            text-decoration: none;
-            font-weight: 700;
-            font-size: 0.92rem;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(27, 94, 32, 0.25);
-            border: none;
-            cursor: pointer;
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(27, 94, 32, 0.35);
-        }
-
-        .btn-outline {
-            background: transparent;
-            color: #1B5E20;
-            padding: 11px 26px;
-            border-radius: 12px;
-            border: 2px solid #1B5E20;
-            text-decoration: none;
-            font-weight: 700;
-            font-size: 0.92rem;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            transition: all 0.3s ease;
-        }
-
-        .btn-outline:hover {
-            background: #1B5E20;
-            color: white;
-        }
-
-        /* ===== LOGIN DROPDOWN ===== */
-        .login-dropdown {
-            position: relative;
-            display: inline-block;
-        }
-
-        .dropdown-menu {
-            position: absolute;
-            right: 0;
-            top: calc(100% + 12px);
-            background: white;
-            min-width: 220px;
-            border-radius: 14px;
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
-            border: 1px solid rgba(27, 94, 32, 0.1);
-            opacity: 0;
-            visibility: hidden;
-            transform: translateY(12px);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            z-index: 1100;
-            padding: 8px;
-        }
-
-        .login-dropdown.active .dropdown-menu {
-            opacity: 1;
-            visibility: visible;
-            transform: translateY(0);
-        }
-
-        .dropdown-item {
-            padding: 12px 18px;
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            text-decoration: none;
-            color: #4A5D4C;
-            font-weight: 600;
-            font-size: 0.92rem;
-            transition: all 0.2s ease;
-            border-radius: 10px;
-        }
-
-        .dropdown-item:hover {
-            background: rgba(27, 94, 32, 0.05);
-            color: #1B5E20;
-            transform: translateX(4px);
-        }
-
-        .dropdown-item i {
-            width: 24px;
-            height: 24px;
-            background: rgba(27, 94, 32, 0.08);
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.85rem;
-            color: #1B5E20;
-        }
-
-        .dropdown-item:hover i {
-            background: #1B5E20;
-            color: white;
-        }
-
-        /* ===== MOBILE NAV ===== */
-        .mobile-menu-btn {
-            display: none;
-            background: #1B5E20;
-            color: white;
-            width: 42px;
-            height: 42px;
-            border-radius: 10px;
-            border: none;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.1rem;
-            cursor: pointer;
-        }
-
-        #mobile-nav {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: white;
-            z-index: 1001;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 28px;
-            transform: translateY(-100%);
-            transition: transform 0.35s ease;
-        }
-
-        #mobile-nav.active {
-            transform: translateY(0);
-        }
-
-        #mobile-nav a {
-            font-size: 1.4rem;
-            font-weight: 700;
-            text-decoration: none;
-            color: #1A2E1C;
-        }
-
-        #mobile-nav-close {
-            position: absolute;
-            top: 25px;
-            right: 25px;
-            background: none;
-            border: none;
-            font-size: 1.8rem;
-            color: #1B5E20;
-            cursor: pointer;
-        }
-
-        /* ===== HERO SECTION ===== */
-        .hero {
-            position: relative;
-            background: linear-gradient(180deg, rgba(240, 247, 240, 0.80) 0%, rgba(232, 245, 233, 0.75) 40%, rgba(255, 255, 255, 0.65) 100%);
-            padding: 130px 60px 60px;
-            overflow: hidden;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-        }
-
-        .hero-bg-pattern {
-            position: absolute;
-            inset: 0;
-            z-index: 0;
-            background-image: radial-gradient(circle, rgba(27, 94, 32, 0.06) 1px, transparent 1px);
-            background-size: 36px 36px;
-            mask-image: radial-gradient(ellipse at center, white 30%, transparent 80%);
-        }
-
-        .hero-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background: rgba(27, 94, 32, 0.08);
-            color: #1B5E20;
-            padding: 8px 20px;
-            border-radius: 50px;
-            font-weight: 800;
-            font-size: 0.8rem;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            margin-bottom: 24px;
-            position: relative;
-            z-index: 1;
-        }
-
-        .hero h1 {
-            font-size: clamp(2.5rem, 5vw, 4.5rem);
-            font-weight: 900;
-            color: #1A2E1C;
-            letter-spacing: -0.04em;
-            line-height: 1.1;
-            margin-bottom: 20px;
-            position: relative;
-            z-index: 1;
-        }
-
-        .hero h1 .hl {
-            background: linear-gradient(120deg, #1B5E20, #4CAF50, #1B5E20);
-            background-size: 300%;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            animation: gradientFlow 6s ease infinite;
-        }
-
-        @keyframes gradientFlow {
-
-            0%,
-            100% {
-                background-position: 0% 50%;
-            }
-
-            50% {
-                background-position: 100% 50%;
-            }
-        }
-
-        .hero-sub {
-            font-size: 1.2rem;
-            color: #4A5D4C;
-            max-width: 680px;
-            margin: 0 auto 50px;
-            line-height: 1.7;
-            position: relative;
-            z-index: 1;
-        }
-
-        /* ===== FLOW PIPELINE (Core Visual) ===== */
-        .flow-pipeline {
-            position: relative;
-            z-index: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0;
-            width: 100%;
-            max-width: 1100px;
-            margin: 0 auto 60px;
-        }
-
-        .flow-node {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 20px;
-            flex: 1;
-        }
-
-        .flow-circle {
-            width: 200px;
-            height: 200px;
-            border-radius: 50%;
-            border: 3px solid rgba(27, 94, 32, 0.15);
-            background: white;
-            box-shadow: 0 20px 60px rgba(27, 94, 32, 0.12), 0 4px 20px rgba(0, 0, 0, 0.06);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            overflow: hidden;
-            transition: transform 0.4s ease, box-shadow 0.4s ease;
-            cursor: default;
-        }
-
-        .flow-circle::before {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 45%;
-            border-radius: 0 0 50% 50%;
-        }
-
-        .flow-node:nth-child(1) .flow-circle::before {
-            background: linear-gradient(180deg, rgba(76, 175, 80, 0.15), rgba(27, 94, 32, 0.25));
-        }
-
-        .flow-node:nth-child(3) .flow-circle::before {
-            background: linear-gradient(180deg, rgba(100, 181, 246, 0.15), rgba(13, 71, 161, 0.2));
-        }
-
-        .flow-node:nth-child(5) .flow-circle::before {
-            background: linear-gradient(180deg, rgba(255, 183, 77, 0.15), rgba(245, 127, 23, 0.2));
-        }
-
-        .flow-circle:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 30px 70px rgba(27, 94, 32, 0.18), 0 8px 30px rgba(0, 0, 0, 0.08);
-        }
-
-        .flow-icon {
-            font-size: 3rem;
-            z-index: 1;
-            margin-bottom: 6px;
-        }
-
-        .flow-node:nth-child(1) .flow-icon {
-            color: #2E7D32;
-        }
-
-        .flow-node:nth-child(3) .flow-icon {
-            color: #1565C0;
-        }
-
-        .flow-node:nth-child(5) .flow-icon {
-            color: #E65100;
-        }
-
-        .flow-label-main {
-            font-size: 1rem;
-            font-weight: 800;
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
-            z-index: 1;
-        }
-
-        .flow-node:nth-child(1) .flow-label-main {
-            color: #1B5E20;
-        }
-
-        .flow-node:nth-child(3) .flow-label-main {
-            color: #0D47A1;
-        }
-
-        .flow-node:nth-child(5) .flow-label-main {
-            color: #BF360C;
-        }
-
-        .flow-label-sub {
-            font-size: 0.78rem;
-            font-weight: 600;
-            color: #809683;
-            text-transform: uppercase;
-            letter-spacing: 0.08em;
-            z-index: 1;
-        }
-
-        /* Arrow connector */
-        .flow-arrow {
-            flex: 0 0 auto;
-            width: 80px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-        }
-
-        .flow-arrow-line {
-            width: 100%;
-            height: 3px;
-            background: linear-gradient(90deg, #1B5E20, #4CAF50);
-            border-radius: 3px;
-            position: relative;
-        }
-
-        .flow-arrow-line::after {
-            content: '';
-            position: absolute;
-            right: -1px;
-            top: 50%;
-            transform: translateY(-50%);
-            border: 8px solid transparent;
-            border-left-color: #4CAF50;
-        }
-
-        .flow-arrow-dot {
-            position: absolute;
-            width: 12px;
-            height: 12px;
-            background: #4CAF50;
-            border-radius: 50%;
-            left: 0;
-            top: 50%;
-            transform: translateY(-50%);
-            animation: travelDot 2s ease-in-out infinite;
-        }
-
-        @keyframes travelDot {
-            0% {
-                left: 0;
-                opacity: 1;
-            }
-
-            80% {
-                left: calc(100% - 12px);
-                opacity: 1;
-            }
-
-            100% {
-                left: calc(100% - 12px);
-                opacity: 0;
-            }
-        }
-
-        /* Node pills below pipe */
-        .flow-pill {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 10px 22px;
-            border-radius: 50px;
-            font-weight: 700;
-            font-size: 0.88rem;
-        }
-
-        .pill-green {
-            background: rgba(27, 94, 32, 0.1);
-            color: #1B5E20;
-        }
-
-        .pill-blue {
-            background: rgba(13, 71, 161, 0.1);
-            color: #0D47A1;
-        }
-
-        .pill-orange {
-            background: rgba(230, 81, 0, 0.1);
-            color: #BF360C;
-        }
-
-        /* Floating mini-badges on circles */
-        .flow-badge {
-            position: absolute;
-            background: white;
-            border-radius: 10px;
-            padding: 6px 12px;
-            font-size: 0.7rem;
-            font-weight: 800;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.12);
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            white-space: nowrap;
-            z-index: 10;
-            animation: floatBadge 4s ease-in-out infinite;
-        }
-
-        @keyframes floatBadge {
-
-            0%,
-            100% {
-                transform: translateY(0);
-            }
-
-            50% {
-                transform: translateY(-6px);
-            }
-        }
-
-        .badge-farmer {
-            top: -16px;
-            right: -20px;
-            color: #2E7D32;
-        }
-
-        .badge-warehouse {
-            top: -16px;
-            left: -30px;
-            color: #1565C0;
-            animation-delay: 1s;
-        }
-
-        .badge-market {
-            top: -16px;
-            right: -25px;
-            color: #E65100;
-            animation-delay: 2s;
-        }
-
-        /* ===== HERO CTA BUTTONS ===== */
-        .hero-cta {
-            display: flex;
-            gap: 16px;
-            align-items: center;
-            justify-content: center;
-            flex-wrap: wrap;
-            position: relative;
-            z-index: 1;
-        }
-
-        .btn-hero-primary {
-            background: linear-gradient(135deg, #1B5E20, #2E7D32);
-            color: white;
-            padding: 16px 36px;
-            border-radius: 50px;
-            text-decoration: none;
-            font-weight: 800;
-            font-size: 1.05rem;
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            transition: all 0.3s ease;
-            box-shadow: 0 8px 30px rgba(27, 94, 32, 0.35);
-        }
-
-        .btn-hero-primary:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 14px 40px rgba(27, 94, 32, 0.45);
-        }
-
-        .btn-hero-ghost {
-            background: white;
-            color: #1B5E20;
-            padding: 16px 36px;
-            border-radius: 50px;
-            text-decoration: none;
-            font-weight: 800;
-            font-size: 1.05rem;
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            border: 2px solid rgba(27, 94, 32, 0.2);
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
-        }
-
-        .btn-hero-ghost:hover {
-            border-color: #1B5E20;
-            transform: translateY(-4px);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-        }
-
-        /* ===== STATS STRIP ===== */
-        .stats-strip {
-            background: rgba(255, 255, 255, 0.88);
-            border-top: 1px solid rgba(27, 94, 32, 0.08);
-            border-bottom: 1px solid rgba(27, 94, 32, 0.08);
-            padding: 36px 60px;
-        }
-
-        .stats-inner {
-            max-width: 1100px;
-            margin: 0 auto;
-            display: flex;
-            align-items: center;
-            justify-content: space-around;
-            gap: 20px;
-            flex-wrap: wrap;
-        }
-
-        .stat-block {
-            text-align: center;
-        }
-
-        .stat-num {
-            font-size: 2rem;
-            font-weight: 900;
-            color: #1B5E20;
-            display: block;
-        }
-
-        .stat-lbl {
-            font-size: 0.78rem;
-            font-weight: 700;
-            color: #809683;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .stat-divider {
-            width: 1px;
-            height: 40px;
-            background: rgba(27, 94, 32, 0.1);
-        }
-
-        /* ===== HOW IT WORKS - VISUAL STEPS ===== */
-        .section {
-            padding: 100px 60px;
-            background: transparent;
-        }
-
-
-        .section-center {
-            text-align: center;
-        }
-
-        .section-tag {
-            display: inline-block;
-            color: #1B5E20;
-            font-weight: 800;
-            font-size: 0.82rem;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            margin-bottom: 14px;
-        }
-
-        .section-title {
-            font-size: clamp(1.8rem, 3vw, 2.8rem);
-            font-weight: 900;
-            color: #1A2E1C;
-            letter-spacing: -0.03em;
-            margin-bottom: 16px;
-        }
-
-        .section-desc {
-            color: #4A5D4C;
-            font-size: 1.1rem;
-            max-width: 620px;
-            margin: 0 auto 60px;
-            line-height: 1.7;
-        }
-
-        .steps-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 30px;
-            max-width: 1100px;
-            margin: 0 auto;
-        }
-
-        .step-card {
-            background: rgba(255, 255, 255, 0.9);
-            border-radius: 24px;
-            padding: 40px 32px;
-            text-align: center;
-            border: 1px solid rgba(27, 94, 32, 0.08);
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
-            transition: all 0.4s ease;
-            position: relative;
-        }
-
-        .step-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 20px 50px rgba(27, 94, 32, 0.1);
-            border-color: rgba(27, 94, 32, 0.2);
-        }
-
-        .step-num {
-            position: absolute;
-            top: 20px;
-            right: 24px;
-            font-size: 4rem;
-            font-weight: 900;
-            color: rgba(27, 94, 32, 0.06);
-            line-height: 1;
-        }
-
-        .step-icon-wrap {
-            width: 70px;
-            height: 70px;
-            margin: 0 auto 24px;
-            border-radius: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.8rem;
-        }
-
-        .step-card:nth-child(1) .step-icon-wrap {
-            background: rgba(27, 94, 32, 0.08);
-            color: #1B5E20;
-        }
-
-        .step-card:nth-child(2) .step-icon-wrap {
-            background: rgba(13, 71, 161, 0.08);
-            color: #1565C0;
-        }
-
-        .step-card:nth-child(3) .step-icon-wrap {
-            background: rgba(230, 81, 0, 0.08);
-            color: #E65100;
-        }
-
-        .step-title {
-            font-size: 1.2rem;
-            font-weight: 800;
-            color: #1A2E1C;
-            margin-bottom: 12px;
-        }
-
-        .step-desc {
-            color: #4A5D4C;
-            font-size: 0.95rem;
-            line-height: 1.6;
-        }
-
-        /* ===== FEATURE CARDS ===== */
-        .features-bg {
-            background: rgba(248, 250, 248, 0.85);
-        }
-
-
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 24px;
-            max-width: 1100px;
-            margin: 0 auto;
-        }
-
-        .feat-card {
-            background: rgba(255, 255, 255, 0.92);
-            border-radius: 20px;
-            padding: 36px 28px;
-            border: 1px solid rgba(27, 94, 32, 0.08);
-            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
-            transition: all 0.35s ease;
-        }
-
-        .feat-card:hover {
-            transform: translateY(-6px);
-            box-shadow: 0 16px 40px rgba(27, 94, 32, 0.1);
-            border-color: rgba(27, 94, 32, 0.15);
-        }
-
-        .feat-ico {
-            width: 52px;
-            height: 52px;
-            border-radius: 14px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.4rem;
-            margin-bottom: 20px;
-        }
-
-        .feat-card:nth-child(1) .feat-ico {
-            background: rgba(27, 94, 32, 0.08);
-            color: #1B5E20;
-        }
-
-        .feat-card:nth-child(2) .feat-ico {
-            background: rgba(245, 158, 11, 0.08);
-            color: #D97706;
-        }
-
-        .feat-card:nth-child(3) .feat-ico {
-            background: rgba(59, 130, 246, 0.08);
-            color: #2563EB;
-        }
-
-        .feat-card:nth-child(4) .feat-ico {
-            background: rgba(139, 92, 246, 0.08);
-            color: #7C3AED;
-        }
-
-        .feat-card:nth-child(5) .feat-ico {
-            background: rgba(16, 185, 129, 0.08);
-            color: #059669;
-        }
-
-        .feat-card:nth-child(6) .feat-ico {
-            background: rgba(239, 68, 68, 0.08);
-            color: #DC2626;
-        }
-
-        .feat-title {
-            font-size: 1.1rem;
-            font-weight: 800;
-            color: #1A2E1C;
-            margin-bottom: 10px;
-        }
-
-        .feat-desc {
-            color: #4A5D4C;
-            font-size: 0.9rem;
-            line-height: 1.65;
-        }
-
-        /* ===== ROI PANEL ===== */
-        .roi-section {
-            background: rgba(255, 255, 255, 0.82);
-            padding: 100px 60px;
-        }
-
-        .roi-inner {
-            max-width: 1100px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 70px;
-            align-items: center;
-        }
-
-        .roi-card {
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 24px;
-            padding: 40px;
-            border: 1px solid rgba(27, 94, 32, 0.1);
-            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.06);
-        }
-
-        .roi-card h3 {
-            font-size: 1.4rem;
-            font-weight: 900;
-            color: #1A2E1C;
-            margin-bottom: 28px;
-        }
-
-        .progress-row {
-            margin-bottom: 22px;
-        }
-
-        .progress-row-top {
-            display: flex;
-            justify-content: space-between;
-            font-size: 0.88rem;
-            font-weight: 700;
-            color: #4A5D4C;
-            margin-bottom: 8px;
-        }
-
-        .progress-track {
-            height: 9px;
-            background: #f0f4f0;
-            border-radius: 5px;
-            overflow: hidden;
-        }
-
-        .progress-fill {
-            height: 100%;
-            border-radius: 5px;
-            width: 0;
-            transition: width 1.6s cubic-bezier(0.1, 0, 0.2, 1);
-        }
-
-        .fill-green {
-            background: linear-gradient(90deg, #1B5E20, #4CAF50);
-        }
-
-        .fill-teal {
-            background: linear-gradient(90deg, #0D9488, #14B8A6);
-        }
-
-        .fill-blue {
-            background: linear-gradient(90deg, #1565C0, #42A5F5);
-        }
-
-        .roi-highlight {
-            background: linear-gradient(135deg, rgba(27, 94, 32, 0.06), rgba(76, 175, 80, 0.08));
-            border: 1px dashed rgba(27, 94, 32, 0.3);
-            border-radius: 16px;
-            padding: 24px;
-            margin-top: 28px;
-        }
-
-        .roi-hl-label {
-            font-size: 0.72rem;
-            font-weight: 800;
-            color: #1B5E20;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-        }
-
-        .roi-hl-value {
-            font-size: 2.4rem;
-            font-weight: 900;
-            color: #1B5E20;
-            margin: 6px 0 2px;
-        }
-
-        .roi-hl-note {
-            font-size: 0.78rem;
-            color: #809683;
-        }
-
-        .roi-benefit {
-            display: flex;
-            gap: 16px;
-            align-items: flex-start;
-            padding: 22px;
-            background: rgba(255, 255, 255, 0.9);
-            border-radius: 16px;
-            border: 1px solid rgba(27, 94, 32, 0.08);
-            margin-bottom: 16px;
-        }
-
-        .roi-ben-ico {
-            width: 46px;
-            height: 46px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.1rem;
-            flex-shrink: 0;
-        }
-
-        .ico-green {
-            background: rgba(27, 94, 32, 0.08);
-            color: #1B5E20;
-        }
-
-        .ico-blue {
-            background: rgba(13, 71, 161, 0.08);
-            color: #1565C0;
-        }
-
-        .roi-ben-title {
-            font-size: 1rem;
-            font-weight: 800;
-            color: #1A2E1C;
-            margin-bottom: 4px;
-        }
-
-        .roi-ben-desc {
-            font-size: 0.88rem;
-            color: #4A5D4C;
-            line-height: 1.55;
-        }
-
-        /* ===== DARK MARKET TICKER ===== */
-        .market-section {
-            background: #06080F;
-            color: white;
-            padding: 80px 60px;
-        }
-
-        .market-inner {
-            max-width: 1100px;
-            margin: 0 auto;
-            display: flex;
-            align-items: center;
-            gap: 60px;
-        }
-
-        .market-text {
-            flex: 1;
-        }
-
-        .market-text h2 {
-            font-size: 2.2rem;
-            font-weight: 900;
-            line-height: 1.2;
-            margin-bottom: 16px;
-        }
-
-        .market-text h2 span {
-            color: #4CAF50;
-        }
-
-        .market-text p {
-            color: #94a3b8;
-            line-height: 1.7;
-            font-size: 1rem;
-        }
-
-        .market-stats {
-            flex: 1.5;
-            display: flex;
-            gap: 20px;
-            flex-wrap: wrap;
-        }
-
-        .mstat {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 16px;
-            padding: 26px 22px;
-            flex: 1;
-            min-width: 130px;
-        }
-
-        .mstat-val {
-            font-size: 2rem;
-            font-weight: 900;
-            color: #4CAF50;
-        }
-
-        .mstat-lbl {
-            font-size: 0.72rem;
-            color: #94a3b8;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-top: 8px;
-        }
-
-        .ticker-wrap {
-            margin-top: 50px;
-            border-top: 1px solid rgba(255, 255, 255, 0.08);
-            padding-top: 28px;
-            overflow: hidden;
-        }
-
-        .ticker-inner {
-            display: flex;
-            gap: 60px;
-            white-space: nowrap;
-            animation: scrollTicker 30s linear infinite;
-        }
-
-        .ticker-item {
-            color: #94a3b8;
-            font-weight: 700;
-            font-size: 0.82rem;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .ticker-dot {
-            width: 8px;
-            height: 8px;
-            background: #10b981;
-            border-radius: 50%;
-            display: inline-block;
-        }
-
-        @keyframes scrollTicker {
-            0% {
-                transform: translateX(0);
-            }
-
-            100% {
-                transform: translateX(-50%);
-            }
-        }
-
-        /* ===== FOOTER ===== */
-        .site-footer {
-            background: #f8faf8;
-            border-top: 1px solid rgba(27, 94, 32, 0.08);
-            padding: 50px 60px;
-            text-align: center;
-        }
-
-        .footer-brand {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            justify-content: center;
-            margin-bottom: 18px;
-        }
-
-        .footer-copy {
-            color: #809683;
-            font-size: 0.88rem;
-        }
-
-        /* ===== CHATBOT (from original) ===== */
-        #chatbot-container {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            z-index: 9999;
-        }
-
-        #chatbot-bubble {
-            width: 62px;
-            height: 62px;
-            background: linear-gradient(135deg, #1B5E20, #2E7D32);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 1.6rem;
-            cursor: pointer;
-            box-shadow: 0 8px 25px rgba(27, 94, 32, 0.4);
-            transition: all 0.3s;
-        }
-
-        #chatbot-bubble:hover {
-            transform: scale(1.1);
-        }
-
-        #chatbot-window {
-            position: absolute;
-            bottom: 80px;
-            right: 0;
-            width: 370px;
-            height: 540px;
-            background: white;
-            border-radius: 24px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
-            display: none;
-            flex-direction: column;
-            overflow: hidden;
-            border: 1px solid rgba(27, 94, 32, 0.1);
-            animation: slideUp 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .chat-header {
-            padding: 22px;
-            background: linear-gradient(135deg, #1B5E20, #2E7D32);
-            color: white;
-            display: flex;
-            align-items: center;
-            gap: 14px;
-        }
-
-        .chat-avatar {
-            width: 38px;
-            height: 38px;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .chat-messages {
-            flex: 1;
-            padding: 18px;
-            overflow-y: auto;
-            background: #f9fbf9;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .message {
-            max-width: 85%;
-            padding: 11px 15px;
-            border-radius: 16px;
-            font-size: 0.93rem;
-            line-height: 1.45;
-        }
-
-        .user-message {
-            align-self: flex-end;
-            background: #1B5E20;
-            color: white;
-            border-bottom-right-radius: 4px;
-        }
-
-        .bot-message {
-            align-self: flex-start;
-            background: white;
-            color: #1A2E1C;
-            border-bottom-left-radius: 4px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-            border: 1px solid #eee;
-        }
-
-        .chat-input-area {
-            padding: 16px;
-            border-top: 1px solid #eee;
-            display: flex;
-            gap: 10px;
-        }
-
-        .chat-input-area input {
-            flex: 1;
-            padding: 11px 16px;
-            border-radius: 30px;
-            border: 1px solid #ddd;
-            outline: none;
-            font-size: 0.92rem;
-        }
-
-        .chat-input-area input:focus {
-            border-color: #1B5E20;
-        }
-
-        .send-btn {
-            width: 42px;
-            height: 42px;
-            background: #1B5E20;
-            color: white;
-            border: none;
-            border-radius: 50%;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: 0.3s;
-        }
-
-        .send-btn:hover {
-            background: #2E7D32;
-        }
-
-        /* ===== VIDEO MODAL ===== */
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 10000;
-            backdrop-filter: blur(4px);
-        }
-
-        .modal-content-video {
-            background: #000;
-            width: 92%;
-            max-width: 960px;
-            border-radius: 18px;
-            position: relative;
-            overflow: hidden;
-            aspect-ratio: 16/9;
-        }
-
-        #close-video {
-            position: absolute;
-            top: 14px;
-            right: 16px;
-            z-index: 10001;
-            background: rgba(0, 0, 0, 0.6);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            color: white;
-            width: 38px;
-            height: 38px;
-            border-radius: 50%;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.1rem;
-        }
-
-        /* ===== RESPONSIVE ===== */
-        @media (max-width: 1024px) {
-            .site-header {
-                padding: 16px 30px;
-            }
-
-            .hero {
-                padding: 110px 30px 60px;
-            }
-
-            .flow-circle {
-                width: 160px;
-                height: 160px;
-            }
-
-            .flow-icon {
-                font-size: 2.4rem;
-            }
-
-            .flow-arrow {
-                width: 50px;
-            }
-
-            .section {
-                padding: 70px 30px;
-            }
-
-            .steps-grid,
-            .features-grid {
-                grid-template-columns: 1fr 1fr;
-            }
-
-            .roi-inner {
-                grid-template-columns: 1fr;
-                gap: 40px;
-            }
-
-            .market-inner {
-                flex-direction: column;
-                gap: 40px;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .site-header {
-                padding: 14px 20px;
-            }
-
-            .nav-links,
-            .nav-right .lang-select,
-            .nav-right .btn-primary {
-                display: none;
-            }
-
-            .mobile-menu-btn {
-                display: flex;
-            }
-
-            .hero {
-                padding: 100px 20px 50px;
-            }
-
-            .flow-pipeline {
-                flex-direction: column;
-                gap: 20px;
-            }
-
-            .flow-arrow {
-                transform: rotate(90deg);
-            }
-
-            .flow-circle {
-                width: 180px;
-                height: 180px;
-            }
-
-            .steps-grid,
-            .features-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .stats-inner {
-                gap: 30px;
-            }
-
-            .stat-divider {
-                display: none;
-            }
-
-            .market-stats {
-                gap: 14px;
-            }
-
-            .section {
-                padding: 60px 20px;
-            }
-
-            .roi-section,
-            .market-section {
-                padding: 60px 20px;
-            }
-
-            .site-footer {
-                padding: 40px 20px;
-            }
-        }
-    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Custom Mobile Styles -->
+    <link rel="stylesheet" href="css/mobile-app.css">
+    
+    <!-- Manifest for PWA feel -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#1B5E20">
 </head>
 
 <body>
 
-    <!-- HEADER -->
-    <header class="site-header" id="site-header">
-        <a class="brand" href="#">
-            <div class="brand-icon"><i class="fas fa-leaf"></i></div>
-            <span class="brand-text">AgriFresh<span class="brand-sub">Smart Warehouse</span></span>
+    <!-- Splash Screen -->
+    <div id="splash-screen">
+        <div class="splash-logo"><i class="fas fa-leaf"></i></div>
+        <div class="splash-text">AgriFresh</div>
+        <div class="splash-loader"></div>
+    </div>
+
+    <!-- Sticky App Header -->
+    <header class="app-header">
+        <a href="index.html" class="app-brand">
+            <i class="fas fa-leaf"></i>
+            <span>AgriFresh</span>
         </a>
-        <nav class="nav-links">
-            <a href="#how-it-works">How It Works</a>
-            <a href="#features">Features</a>
-            <a href="market.html" data-i18n="nav-marketplace">Marketplace</a>
-            <a href="#roi">ROI</a>
-        </nav>
-        <div class="nav-right">
-            <select class="lang-select" id="lang-select">
-                <option value="en">English</option>
-                <option value="hi">हिंदी</option>
-                <option value="mr">मराठी</option>
-            </select>
-            <div class="login-dropdown" id="login-dropdown">
-                <button class="btn-primary" id="login-trigger">
-                    Login <i class="fas fa-chevron-down" style="font-size: 0.8rem; margin-left: 4px;"></i>
-                </button>
-                <div class="dropdown-menu">
-                    <a href="farmer-login.html" class="dropdown-item">
-                        <i class="fas fa-tractor"></i>
-                        <span>Farmer Login</span>
-                    </a>
-                    <a href="login.html" class="dropdown-item">
-                        <i class="fas fa-warehouse"></i>
-                        <span>Partner Login</span>
-                    </a>
-                </div>
-            </div>
+        <div class="app-profile" id="profile-trigger">
+            <i class="fas fa-user-circle"></i>
         </div>
-        <button class="mobile-menu-btn" onclick="document.getElementById('mobile-nav').classList.toggle('active')">
-            <i class="fas fa-bars"></i>
-        </button>
     </header>
 
-    <!-- MOBILE NAV -->
-    <div id="mobile-nav">
-        <button id="mobile-nav-close" onclick="document.getElementById('mobile-nav').classList.remove('active')"><i
-                class="fas fa-times"></i></button>
-        <a href="#how-it-works" onclick="document.getElementById('mobile-nav').classList.remove('active')">How It
-            Works</a>
-        <a href="#features" onclick="document.getElementById('mobile-nav').classList.remove('active')">Features</a>
-        <a href="market.html" data-i18n="nav-marketplace">Marketplace</a>
-        <a href="#roi" onclick="document.getElementById('mobile-nav').classList.remove('active')">ROI</a>
-        <a href="farmer-login.html" class="btn-primary" style="margin-bottom: 5px;">Farmer Login</a>
-        <a href="login.html" class="btn-primary">Partner Login</a>
-    </div>
-
-    <!-- ===== HERO ===== -->
-    <section class="hero">
-        <div class="hero-bg-pattern"></div>
-
-        <div class="hero-badge" data-aos="fade-down" data-i18n="home-hero-badge">
-            <i class="fas fa-satellite-dish"></i> AI-Powered Smart Agricultural Ecosystem
-        </div>
-
-        <h1 data-aos="fade-up" data-aos-delay="50" data-i18n="home-hero-title">
-            Connecting <span class="hl">Farmers</span> to<br>
-            <span class="hl">Warehouses</span> to <span class="hl">Markets</span>
-        </h1>
-
-        <p class="hero-sub" data-aos="fade-up" data-aos-delay="120" data-i18n="home-hero-sub">
-            Optimizing farm-to-market supply chains with smart AI technology &mdash; reducing post-harvest losses and
-            maximizing every farmer's income.
-        </p>
-
-        <!-- CORE VISUAL PIPELINE -->
-        <div class="flow-pipeline" data-aos="fade-up" data-aos-delay="200">
-
-            <!-- FARMERS NODE -->
-            <div class="flow-node">
-                <div class="flow-circle">
-                    <div class="flow-badge badge-farmer">
-                        <i class="fas fa-drone" style="color:#1B5E20"></i> <span data-i18n="home-flow-farmers-badge">IoT
-                            Active</span>
-                    </div>
-                    <div class="flow-icon">🌾</div>
-                    <span class="flow-label-main" data-i18n="home-flow-farmers">Farmers</span>
-                    <span class="flow-label-sub" data-i18n="home-flow-farmers-sub">Fresh Produce</span>
-                </div>
-                <span class="flow-pill pill-green">
-                    <i class="fas fa-users"></i> <span data-i18n="home-flow-farmers-pill">FPO &amp; Farmers</span>
-                </span>
-            </div>
-
-            <!-- ARROW 1 -->
-            <div class="flow-arrow">
-                <div class="flow-arrow-line">
-                    <div class="flow-arrow-dot"></div>
-                </div>
-            </div>
-
-            <!-- WAREHOUSE NODE -->
-            <div class="flow-node">
-                <div class="flow-circle">
-                    <div class="flow-badge badge-warehouse">
-                        <i class="fas fa-brain" style="color:#1565C0"></i> <span
-                            data-i18n="home-flow-warehouse-badge">AI Guard</span>
-                    </div>
-                    <div class="flow-icon">🏭</div>
-                    <span class="flow-label-main" data-i18n="home-flow-warehouse">Warehouse</span>
-                    <span class="flow-label-sub" data-i18n="home-flow-warehouse-sub">Smart Storage</span>
-                </div>
-                <span class="flow-pill pill-blue">
-                    <i class="fas fa-microchip"></i> <span data-i18n="home-flow-warehouse-pill">AI + IoT
-                        Monitoring</span>
-                </span>
-            </div>
-
-            <!-- ARROW 2 -->
-            <div class="flow-arrow">
-                <div class="flow-arrow-line">
-                    <div class="flow-arrow-dot" style="animation-delay:1s"></div>
-                </div>
-            </div>
-
-            <!-- MARKET NODE -->
-            <div class="flow-node">
-                <div class="flow-circle">
-                    <div class="flow-badge badge-market">
-                        <i class="fas fa-chart-line" style="color:#E65100"></i> <span
-                            data-i18n="home-flow-market-badge">Best Price</span>
-                    </div>
-                    <div class="flow-icon">🏪</div>
-                    <span class="flow-label-main" data-i18n="home-flow-market">Market</span>
-                    <span class="flow-label-sub" data-i18n="home-flow-market-sub">Best Price</span>
-                </div>
-                <span class="flow-pill pill-orange">
-                    <i class="fas fa-tags"></i> <span data-i18n="home-flow-market-pill">Peak Price Signal</span>
-                </span>
-            </div>
-        </div>
-
-        <!-- CTA BUTTONS -->
-        <div class="hero-cta" data-aos="fade-up" data-aos-delay="320">
-            <a href="dashboard.html" class="btn-hero-primary" data-i18n="home-cta-launch">
-                Launch Dashboard <i class="fas fa-arrow-right"></i>
+    <!-- Hero Section Card -->
+    <section class="hero-card" data-aos>
+        <h1>Connecting <span style="color: #69F0AE;">Farmers</span> to Markets</h1>
+        <p>Optimizing farm-to-market supply chains with AI technology &mdash; reducing losses and maximizing income.</p>
+        <div style="display: flex; gap: 10px;">
+            <a href="farmer-login.html" class="app-btn app-btn-white">
+                Farmer Login <i class="fas fa-tractor"></i>
             </a>
-            <a href="javascript:void(0)" class="btn-hero-ghost" id="watch-video-btn" data-i18n="home-cta-watch">
-                <i class="fas fa-play-circle"></i> Watch Video
+            <a href="login.html" class="app-btn" style="border: 1px solid rgba(255,255,255,0.3); color: white;">
+                Partner <i class="fas fa-warehouse"></i>
             </a>
         </div>
     </section>
 
-    <!-- STATS STRIP -->
-    <div class="stats-strip" id="credibility">
-        <div class="stats-inner">
-            <div class="stat-block" data-aos="fade-up">
-                <span class="stat-num" data-i18n="home-stat-acc">96%</span>
-                <span class="stat-lbl" data-i18n="home-stat-acc-lbl">Prediction Accuracy</span>
+    <!-- Visual Pipeline (Horizontal Scroll for App) -->
+    <section class="app-section">
+        <div class="section-head">
+            <span class="section-label">Smart Ecosystem</span>
+            <h2 class="section-title">The AgriFresh Cycle</h2>
+        </div>
+        <div class="horizontal-scroll" data-aos>
+            <div class="scroll-card">
+                <div class="card-icon">🌾</div>
+                <div class="card-title">Farmers Info</div>
+                <div class="card-sub">Fresh Produce</div>
             </div>
-            <div class="stat-divider"></div>
-            <div class="stat-block" data-aos="fade-up" data-aos-delay="80">
-                <span class="stat-num" data-i18n="home-stat-cycles">10K+</span>
-                <span class="stat-lbl" data-i18n="home-stat-cycles-lbl">Harvest Cycles Analyzed</span>
+            <div class="scroll-card">
+                <div class="card-icon">🏭</div>
+                <div class="card-title">Warehouse</div>
+                <div class="card-sub">Smart Storage</div>
             </div>
-            <div class="stat-divider"></div>
-            <div class="stat-block" data-aos="fade-up" data-aos-delay="160">
-                <span class="stat-num" data-i18n="home-stat-income">₹4.2L</span>
-                <span class="stat-lbl" data-i18n="home-stat-income-lbl">Avg. Income Per Season</span>
-            </div>
-            <div class="stat-divider"></div>
-            <div class="stat-block" data-aos="fade-up" data-aos-delay="240">
-                <span class="stat-num" data-i18n="home-stat-partners">500+</span>
-                <span class="stat-lbl" data-i18n="home-stat-partners-lbl">Partner Warehouses</span>
-            </div>
-            <div class="stat-divider"></div>
-            <div class="stat-block" data-aos="fade-up" data-aos-delay="320">
-                <span class="stat-num" data-i18n="home-stat-ns">NeuroNix</span>
-                <span class="stat-lbl" data-i18n="home-stat-ns-lbl">AgriTech</span>
+            <div class="scroll-card">
+                <div class="card-icon">🏪</div>
+                <div class="card-title">Market</div>
+                <div class="card-sub">Best Price</div>
             </div>
         </div>
-    </div>
+    </section>
 
-    <!-- HOW IT WORKS -->
-    <section class="section section-center" id="how-it-works">
-        <div style="max-width:1100px; margin:0 auto;">
-            <span class="section-tag" data-aos="fade-up" data-i18n="home-how-tag">The Journey</span>
-            <h2 class="section-title" data-aos="fade-up" data-aos-delay="60" data-i18n="home-how-title">From Field to
-                Final Sale &mdash; <br>Three Simple
-                Steps</h2>
-            <p class="section-desc" data-aos="fade-up" data-aos-delay="120" data-i18n="home-how-desc">AgriFresh bridges
-                the gap between farmers,
-                smart cold storage, and buyers &mdash; making every harvest more profitable and less wasteful.</p>
+    <!-- Stats Grid -->
+    <section class="app-section" style="background: var(--app-bg);">
+        <div class="stats-grid">
+            <div class="stat-card" data-aos>
+                <span class="stat-value">96%</span>
+                <span class="stat-label">Accuracy</span>
+            </div>
+            <div class="stat-card" data-aos data-aos-delay="50">
+                <span class="stat-value">10K</span>
+                <span class="stat-label">Cycles</span>
+            </div>
+            <div class="stat-card" data-aos data-aos-delay="100">
+                <span class="stat-value">₹4L</span>
+                <span class="stat-label">Income</span>
+            </div>
+            <div class="stat-card" data-aos data-aos-delay="150">
+                <span class="stat-value">500</span>
+                <span class="stat-label">Partners</span>
+            </div>
+        </div>
+    </section>
 
-            <div class="steps-grid">
-                <div class="step-card" data-aos="fade-up">
-                    <span class="step-num">01</span>
-                    <div class="step-icon-wrap"><i class="fas fa-tractor"></i></div>
-                    <h3 class="step-title" data-i18n="home-step1-title">Farmer Deposits Produce</h3>
-                    <p class="step-desc" data-i18n="home-step1-desc">Farmers bring their harvest to an AI-certified cold
-                        warehouse. Each batch is
-                        scanned, graded, and registered on the digital ledger instantly.</p>
+    <!-- How It Works (Simplified Steps) -->
+    <section class="app-section" id="how-it-works">
+        <div class="section-head">
+            <span class="section-label">Process</span>
+            <h2 class="section-title">Field to Final Sale</h2>
+        </div>
+        
+        <div class="feature-list">
+            <div class="feature-item" data-aos>
+                <div class="feature-icon-box" style="background: #E8F5E9; color: #1B5E20;">
+                    <i class="fas fa-tractor"></i>
                 </div>
-                <div class="step-card" data-aos="fade-up" data-aos-delay="100">
-                    <span class="step-num">02</span>
-                    <div class="step-icon-wrap"><i class="fas fa-warehouse"></i></div>
-                    <h3 class="step-title" data-i18n="home-step2-title">Smart Warehouse Protects</h3>
-                    <p class="step-desc" data-i18n="home-step2-desc">IoT sensors monitor temperature, moisture &amp;
-                        spoilage risk 24/7. AI alerts
-                        managers before losses happen and optimizes storage conditions automatically.</p>
+                <div class="feature-text">
+                    <h3>Deposit Produce</h3>
+                    <p>Scanned, graded, and registered on digital ledger instantly.</p>
                 </div>
-                <div class="step-card" data-aos="fade-up" data-aos-delay="200">
-                    <span class="step-num">03</span>
-                    <div class="step-icon-wrap"><i class="fas fa-store"></i></div>
-                    <h3 class="step-title" data-i18n="home-step3-title">Sell at Peak Market Price</h3>
-                    <p class="step-desc" data-i18n="home-step3-desc">AI monitors mandi prices and signals the perfect
-                        time to sell. Farmers earn
-                        25&ndash;40% more by dispatching at peak demand instead of distress selling.</p>
+            </div>
+            <div class="feature-item" data-aos>
+                <div class="feature-icon-box" style="background: #E3F2FD; color: #1565C0;">
+                    <i class="fas fa-warehouse"></i>
+                </div>
+                <div class="feature-text">
+                    <h3>Smart Protection</h3>
+                    <p>IoT sensors monitor conditions 24/7 with zero-waste AI.</p>
+                </div>
+            </div>
+            <div class="feature-item" data-aos>
+                <div class="feature-icon-box" style="background: #FFF3E0; color: #E65100;">
+                    <i class="fas fa-store"></i>
+                </div>
+                <div class="feature-text">
+                    <h3>Peak Price Sale</h3>
+                    <p>AI signals the perfect moment for maximum returns.</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- FEATURES -->
-    <section class="section section-center features-bg" id="features">
-        <div style="max-width:1100px; margin:0 auto;">
-            <span class="section-tag" data-aos="fade-up" data-i18n="home-feat-tag">Platform Capabilities</span>
-            <h2 class="section-title" data-aos="fade-up" data-aos-delay="60" data-i18n="home-feat-title">Smart
-                Infrastructure for Higher Profits
-            </h2>
-            <p class="section-desc" data-aos="fade-up" data-aos-delay="120" data-i18n="home-feat-desc">Every tool in
-                AgriFresh is designed to give
-                farmers, warehouse operators, and market buyers an unfair advantage.</p>
-
-            <div class="features-grid">
-                <div class="feat-card" data-aos="fade-up">
-                    <div class="feat-ico"><i class="fas fa-brain"></i></div>
-                    <h3 class="feat-title" data-i18n="home-feat1-title">AI Spoilage Prediction</h3>
-                    <p class="feat-desc" data-i18n="home-feat1-desc">Machine learning models predict spoilage risk days
-                        in advance, giving you time
-                        to act before losses occur.</p>
+    <!-- Features -->
+    <section class="app-section" id="features" style="background: var(--app-bg);">
+        <div class="section-head">
+            <span class="section-label">Capabilities</span>
+            <h2 class="section-title">Core App Features</h2>
+        </div>
+        
+        <div class="feature-list">
+            <div class="feature-item" data-aos>
+                <div class="feature-icon-box" style="background: rgba(27, 94, 32, 0.08); color: #1B5E20;">
+                    <i class="fas fa-brain"></i>
                 </div>
-                <div class="feat-card" data-aos="fade-up" data-aos-delay="80">
-                    <div class="feat-ico"><i class="fas fa-temperature-half"></i></div>
-                    <h3 class="feat-title" data-i18n="home-feat2-title">Real-Time IoT Monitoring</h3>
-                    <p class="feat-desc" data-i18n="home-feat2-desc">124+ sensors track temperature, humidity, and gas
-                        levels continuously across
-                        every warehouse zone.</p>
+                <div class="feature-text">
+                    <h3>Spoilage Prediction</h3>
+                    <p>ML models predict risk days in advance.</p>
                 </div>
-                <div class="feat-card" data-aos="fade-up" data-aos-delay="160">
-                    <div class="feat-ico"><i class="fas fa-chart-line"></i></div>
-                    <h3 class="feat-title" data-i18n="home-feat3-title">Live Market Price Feed</h3>
-                    <p class="feat-desc" data-i18n="home-feat3-desc">Real-time mandi price data from 200+ markets. AI
-                        signals the exact moment to
-                        dispatch for maximum returns.</p>
+            </div>
+            <div class="feature-item" data-aos>
+                <div class="feature-icon-box" style="background: rgba(245, 158, 11, 0.08); color: #D97706;">
+                    <i class="fas fa-temperature-half"></i>
                 </div>
-                <div class="feat-card" data-aos="fade-up" data-aos-delay="60">
-                    <div class="feat-ico"><i class="fas fa-file-invoice-dollar"></i></div>
-                    <h3 class="feat-title" data-i18n="home-feat4-title">Digital Storage Receipts</h3>
-                    <p class="feat-desc" data-i18n="home-feat4-desc">Tamper-proof digital receipts enable faster bank
-                        loans at lower interest rates,
-                        backed by certified AI quality reports.</p>
+                <div class="feature-text">
+                    <h3>Real-Time IoT</h3>
+                    <p>124+ sensors track every warehouse zone.</p>
                 </div>
-                <div class="feat-card" data-aos="fade-up" data-aos-delay="140">
-                    <div class="feat-ico"><i class="fas fa-route"></i></div>
-                    <h3 class="feat-title" data-i18n="home-feat5-title">End-to-End Traceability</h3>
-                    <p class="feat-desc" data-i18n="home-feat5-desc">Track every batch from farm to buyer with a full
-                        audit trail &mdash; building trust
-                        with premium market buyers.</p>
+            </div>
+            <div class="feature-item" data-aos>
+                <div class="feature-icon-box" style="background: rgba(59, 130, 246, 0.08); color: #2563EB;">
+                    <i class="fas fa-chart-line"></i>
                 </div>
-                <div class="feat-card" data-aos="fade-up" data-aos-delay="220">
-                    <div class="feat-ico"><i class="fas fa-venus"></i></div>
-                    <h3 class="feat-title" data-i18n="home-feat6-title">NeuroNix Empowerment</h3>
-                    <p class="feat-desc" data-i18n="home-feat6-desc">Designed to uplift women-led FPOs with multilingual
-                        support (Hindi, Marathi)
-                        and simplified dashboards.</p>
+                <div class="feature-text">
+                    <h3>Market Price Feed</h3>
+                    <p>Live mandi data from 200+ markets.</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- ROI SECTION -->
-    <section class="roi-section" id="roi">
-        <div class="roi-inner">
-            <div data-aos="fade-right">
-                <span class="section-tag" data-i18n="home-roi-tag">The Economic Advantage</span>
-                <h2 class="section-title" style="margin: 14px 0 20px; text-align:left;" data-i18n="home-roi-title">
-                    Turning Harvest Waste into <span style="color:#1B5E20;">Wealth</span></h2>
-                <p style="color:#4A5D4C; font-size:1rem; line-height:1.75; margin-bottom:32px;"
-                    data-i18n="home-roi-desc">Traditional storage
-                    loses up to 30% of harvest value. AgriFresh's smart model redistributes that lost value back to
-                    farmers and operators.</p>
-
-                <div class="roi-benefit">
-                    <div class="roi-ben-ico ico-green"><i class="fas fa-users"></i></div>
-                    <div>
-                        <div class="roi-ben-title" data-i18n="home-roi-ben1-title">For FPOs &amp; Farmers</div>
-                        <div class="roi-ben-desc" data-i18n="home-roi-ben1-desc">Direct access to premium markets when
-                            prices are at their peak, backed
-                            by AI quality certification and digital records.</div>
-                    </div>
-                </div>
-                <div class="roi-benefit">
-                    <div class="roi-ben-ico ico-blue"><i class="fas fa-building"></i></div>
-                    <div>
-                        <div class="roi-ben-title" data-i18n="home-roi-ben2-title">For Storage Operators</div>
-                        <div class="roi-ben-desc" data-i18n="home-roi-ben2-desc">Run your facility with zero stress. AI
-                            manages monitoring, alerts, and
-                            dispatch logs &mdash; reducing manual overhead by 70%.</div>
-                    </div>
-                </div>
+    <!-- ROI Highlight -->
+    <section class="app-section" id="roi">
+        <div class="section-head">
+            <span class="section-label">Advantages</span>
+            <h2 class="section-title">Wealth from Waste</h2>
+        </div>
+        
+        <div class="roi-mobile-card" data-aos>
+            <div class="widget-row">
+                <span>Value Recovery</span>
+                <span style="color: var(--app-primary);">85%</span>
             </div>
-
-            <div data-aos="fade-left">
-                <div class="roi-card">
-                    <h3 data-i18n="home-roi-card-title">Profitability Roadmap <span
-                            style="background:#1B5E20;color:white;font-size:0.7rem;padding:3px 10px;border-radius:50px;margin-left:8px;vertical-align:middle;">2026</span>
-                    </h3>
-
-                    <div class="progress-row">
-                        <div class="progress-row-top"><span data-i18n="home-roi-ret-lbl">Harvest Value
-                                Retention</span><span style="color:#1B5E20;font-weight:800;"
-                                data-i18n="home-roi-ret-val">+98%</span></div>
-                        <div class="progress-track">
-                            <div class="progress-fill fill-green progress-bar-fill" data-target="98"></div>
-                        </div>
-                    </div>
-                    <div class="progress-row">
-                        <div class="progress-row-top"><span data-i18n="home-roi-timing-lbl">Market Timing
-                                Gains</span><span style="color:#0D9488;font-weight:800;"
-                                data-i18n="home-roi-timing-val">+18% AVG</span></div>
-                        <div class="progress-track">
-                            <div class="progress-fill fill-teal progress-bar-fill" data-target="75"></div>
-                        </div>
-                    </div>
-                    <div class="progress-row">
-                        <div class="progress-row-top"><span data-i18n="home-roi-spoilage-lbl">Spoilage
-                                Reduction</span><span style="color:#1565C0;font-weight:800;"
-                                data-i18n="home-roi-spoilage-val">-85%</span></div>
-                        <div class="progress-track">
-                            <div class="progress-fill fill-blue progress-bar-fill" data-target="85"></div>
-                        </div>
-                    </div>
-
-                    <div class="roi-highlight">
-                        <div class="roi-hl-label" data-i18n="home-roi-est-lbl">Estimated ROI per Participant</div>
-                        <div class="roi-hl-value"><span data-i18n="home-roi-est-val">₹4.2 Lakh</span> <span
-                                style="font-size:1rem;color:#809683;font-weight:600;" data-i18n="home-roi-est-season">/
-                                Season</span></div>
-                        <div class="roi-hl-note" data-i18n="home-roi-disclaimer">*Based on average 50-ton batch
-                            optimization using AI spoilage models.
-                        </div>
-                    </div>
-
-                    <a href="dashboard.html" class="btn-primary"
-                        style="width:100%;justify-content:center;margin-top:24px;padding:16px;border-radius:14px;font-size:1rem;"
-                        data-i18n="home-roi-btn">
-                        Launch Dashboard <i class="fas fa-arrow-right"></i>
-                    </a>
-                </div>
+            <div class="widget-bar">
+                <div class="widget-fill" style="width: 85%;"></div>
+            </div>
+            
+            <div class="widget-row" style="margin-top: 20px;">
+                <span>Waste Reduction</span>
+                <span style="color: var(--app-primary);">92%</span>
+            </div>
+            <div class="widget-bar">
+                <div class="widget-fill" style="width: 92%;"></div>
+            </div>
+            
+            <div style="margin-top: 25px; display: flex; align-items: center; gap: 15px;">
+                <div style="font-size: 2.2rem; font-weight: 800; color: var(--app-primary);">₹4.2L</div>
+                <div style="font-size: 0.8rem; color: var(--app-muted); font-weight: 600; line-height: 1.2;">Average Farmer<br>Income / Season</div>
             </div>
         </div>
     </section>
 
-    <!-- MARKET TICKER / TRUST -->
-    <section class="market-section">
-        <div class="market-inner">
-            <div class="market-text" data-aos="fade-right">
-                <h2 data-i18n="home-market-title">Built for Scalable <span>Agricultural Wealth</span></h2>
-                <p data-i18n="home-market-desc">Our platform connects local warehouses to national and global markets,
-                    ensuring Indian produce
-                    fetches the price it deserves &mdash; from farm to final sale.</p>
-            </div>
-            <div class="market-stats" data-aos="fade-left">
-                <div class="mstat">
-                    <div class="mstat-val">₹<span class="counter" data-count="12.4">0</span>Cr+</div>
-                    <div class="mstat-lbl" data-i18n="home-market-stat1-lbl">Total Income Generated</div>
-                </div>
-                <div class="mstat">
-                    <div class="mstat-val"><span class="counter" data-count="500">0</span>+</div>
-                    <div class="mstat-lbl" data-i18n="home-market-stat2-lbl">Partner Warehouses</div>
-                </div>
-                <div class="mstat">
-                    <div class="mstat-val"><span class="counter" data-count="4">0</span> <span
-                            data-i18n="home-market-hrs">Hrs</span></div>
-                    <div class="mstat-lbl" data-i18n="home-market-stat3-lbl">AI Payout Settlement</div>
-                </div>
-            </div>
-        </div>
+    <!-- Bottom Navigation Bar -->
+    <nav class="bottom-nav">
+        <a href="index.html" class="nav-item active">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+        </a>
+        <a href="farmer-warehouse-finder.html" class="nav-item">
+            <i class="fas fa-warehouse"></i>
+            <span>Find Cold Storage</span>
+        </a>
+        <a href="market.html" class="nav-item">
+            <i class="fas fa-chart-area"></i>
+            <span>Market</span>
+        </a>
+        <a href="trace.html" class="nav-item">
+            <i class="fas fa-search-location"></i>
+            <span>Trace</span>
+        </a>
+    </nav>
 
-        <div class="ticker-wrap">
-            <div class="ticker-inner">
-                <span class="ticker-item"><span class="ticker-dot"></span>TOMATO (Mandi A): +₹120/qtl</span>
-                <span class="ticker-item"><span class="ticker-dot"></span>ONION (Export Hub): +₹85/qtl</span>
-                <span class="ticker-item"><span class="ticker-dot"></span>WHEAT (NCDEX): +2.4% ARRIVAL</span>
-                <span class="ticker-item"><span class="ticker-dot"></span>POTATO (Premium): LOW STOCK SIGNAL</span>
-                <span class="ticker-item"><span class="ticker-dot"></span>MANGO (Export): +₹240/qtl</span>
-                <span class="ticker-item"><span class="ticker-dot"></span>SOYBEAN: MARKET OPEN</span>
-                <!-- Loop duplicates -->
-                <span class="ticker-item"><span class="ticker-dot"></span>TOMATO (Mandi A): +₹120/qtl</span>
-                <span class="ticker-item"><span class="ticker-dot"></span>ONION (Export Hub): +₹85/qtl</span>
-                <span class="ticker-item"><span class="ticker-dot"></span>WHEAT (NCDEX): +2.4% ARRIVAL</span>
-                <span class="ticker-item"><span class="ticker-dot"></span>POTATO (Premium): LOW STOCK SIGNAL</span>
-            </div>
-        </div>
-    </section>
-
-    <!-- FOOTER -->
-    <footer class="site-footer">
-        <div class="footer-brand">
-            <div class="brand-icon"><i class="fas fa-leaf"></i></div>
-            <span style="font-size:1.3rem;font-weight:800;color:#1B5E20;">AgriFresh</span>
-        </div>
-        <p class="footer-copy" data-i18n="home-footer-copy">&copy; 2026 AgriFresh AI Intelligence &mdash; NeuroNix
-            Smart Warehouse. Built for Sustainable
-            Agriculture in India.</p>
-    </footer>
-
-    <!-- CHATBOT -->
-    <div id="chatbot-container">
-        <div id="chatbot-window">
-            <div class="chat-header">
-                <div class="chat-avatar"><i class="fas fa-robot"></i></div>
-                <div>
-                    <div style="font-weight:800;font-size:1rem;" data-i18n="bot-name">NeuroNix AI</div>
-                    <div style="font-size:0.72rem;opacity:0.9;" data-i18n="bot-status">Connected to Smart Warehouse
-                    </div>
-                </div>
-                <i class="fas fa-times" id="close-chat" style="margin-left:auto;cursor:pointer;"></i>
-            </div>
-            <div class="chat-messages" id="chat-messages">
-                <div class="message bot-message" data-i18n="bot-welcome">
-                    Namaste! 🙏 I'm your Smart Warehouse Assistant. Ask me about temperature, stock levels, or spoilage
-                    risks.
-                </div>
-            </div>
-            <div class="chat-input-area">
-                <input type="text" id="chat-input" placeholder="Ask anything..." data-i18n="chat-placeholder">
-                <button class="send-btn" id="send-chat"><i class="fas fa-paper-plane"></i></button>
-            </div>
-        </div>
-        <div id="chatbot-bubble"><i class="fas fa-comment-dots"></i></div>
-    </div>
-
-    <!-- VIDEO MODAL -->
-    <div id="video-modal" class="modal-overlay">
-        <div class="modal-content-video">
-            <button id="close-video"><i class="fas fa-times"></i></button>
-            <iframe id="video-iframe" src="" style="width:100%;height:100%;border:none;" allow="autoplay"
-                allowfullscreen></iframe>
-        </div>
-    </div>
-
-    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+    <!-- Optional JS -->
+    <script src="js/mobile-app.js"></script>
+    
+    <!-- Original Analytics and Language Logic (preserved as needed) -->
     <script>
-        AOS.init({ duration: 900, once: true, easing: 'ease-out-cubic' });
-
-        // Sticky header shadow
-        window.addEventListener('scroll', () => {
-            document.getElementById('site-header').classList.toggle('scrolled', window.scrollY > 20);
+        // Placeholder for language selection/i18n if integrated
+        document.getElementById('profile-trigger').addEventListener('click', () => {
+            window.location.href = 'farmer-login.html';
         });
-
-        // Login Dropdown Toggle
-        const loginDropdown = document.getElementById('login-dropdown');
-        const loginTrigger = document.getElementById('login-trigger');
-
-        if (loginTrigger && loginDropdown) {
-            loginTrigger.addEventListener('click', (e) => {
-                e.stopPropagation();
-                loginDropdown.classList.toggle('active');
-            });
-
-            document.addEventListener('click', (e) => {
-                if (!loginDropdown.contains(e.target)) {
-                    loginDropdown.classList.remove('active');
-                }
-            });
-        }
-
-        // Progress bars + counters on scroll
-        const animObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    const el = entry.target;
-                    if (el.classList.contains('progress-bar-fill')) {
-                        el.style.width = el.getAttribute('data-target') + '%';
-                    } else if (el.classList.contains('counter')) {
-                        animateCounter(el);
-                    }
-                    animObserver.unobserve(el);
-                }
-            });
-        }, { threshold: 0.5 });
-        document.querySelectorAll('.progress-bar-fill, .counter').forEach(el => animObserver.observe(el));
-
-        function animateCounter(el) {
-            const target = parseFloat(el.getAttribute('data-count'));
-            const start = performance.now();
-            (function update(now) {
-                const p = Math.min((now - start) / 2000, 1);
-                const ease = 1 - Math.pow(2, -10 * p);
-                const val = target * ease;
-                el.textContent = target % 1 !== 0 ? val.toFixed(1) : Math.floor(val).toString().padStart(target < 10 ? 2 : 1, '0');
-                if (p < 1) requestAnimationFrame(update);
-            })(start);
-        }
-
-        // Video Modal
-        const watchBtn = document.getElementById('watch-video-btn');
-        const videoModal = document.getElementById('video-modal');
-        const closeVideoBtn = document.getElementById('close-video');
-        const videoIframe = document.getElementById('video-iframe');
-        const videoUrl = "https://drive.google.com/file/d/1Ix0Js9_4lzxsixgwIcFtMnD16g46MtM_/preview";
-
-        watchBtn.addEventListener('click', () => {
-            videoIframe.src = videoUrl;
-            videoModal.style.display = 'flex';
-            document.body.style.overflow = 'hidden';
-        });
-        const hideVideo = () => {
-            videoModal.style.display = 'none';
-            videoIframe.src = '';
-            document.body.style.overflow = 'auto';
-        };
-        closeVideoBtn.addEventListener('click', hideVideo);
-        videoModal.addEventListener('click', e => { if (e.target === videoModal) hideVideo(); });
     </script>
-    <script src="js/chatbot.js"></script>
-    <script src="js/i18n.js"></script>
+
 </body>
 
 </html>
