@@ -143,21 +143,29 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
     text-decoration: none;
     color: var(--app-muted);
-    font-size: 0.75rem;
-    font-weight: 600;
-    transition: color 0.3s;
+    font-size: 0.7rem;
+    font-weight: 700;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     flex: 1;
+    text-align: center;
+    white-space: nowrap;
 }
 
 .nav-item i {
-    font-size: 1.4rem;
-    margin-bottom: 4px;
+    font-size: 1.3rem;
+    margin-bottom: 2px;
 }
 
 .nav-item.active {
     color: var(--app-primary);
+    transform: translateY(-2px);
+}
+
+.nav-item.active i {
+    transform: scale(1.1);
 }
 
 /* Sections */
